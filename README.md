@@ -31,3 +31,7 @@ Manually select features
 
 * Class style component syntax
 ```
+
+
+
+ignore="docs/.*|dev/.*|somefile\.js"
