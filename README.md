@@ -15,6 +15,19 @@ Ok to proceed? (y)
 
 Publishing git:
 
-"In Github veröffentlichen" in Visual Studio Code unten rechts
+"Publish in Github" in Visual Studio Code down left
 
 ### Vue
+```sudo npm i -g @vue/cli``` (if not installed)
+
+```vue create commander``` in another directory!
+
+```
+Manually select features
+* Choose Vue Version
+* Typescript
+
+* 2.x
+
+* Class style component syntax
+```
