@@ -1,5 +1,6 @@
 # Commander
-## Initial setup
+
+## How this project was created
 ### Electron
 ```
 npx create-electron-app commander
@@ -31,6 +32,16 @@ Manually select features
 
 * Class style component syntax
 ```
+
+### Merge Vue and Electron
+merge package.json
+merge .gitignore
+
+rename src to electron and adapt scripts
+
+Import tsconfig.json ans .browserlistrc, src and public
+
+Delete node_modules and type ```npm i```
 
 
 

@@ -2,14 +2,15 @@
   "name": "commander",
   "productName": "commander",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Commander, a file explorer",
   "main": "electron/index.js",
   "scripts": {
+    "servevue": "vue-cli-service serve",
+    "buildvue": "vue-cli-service build",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "publish": "electron-forge publish"
   },
   "keywords": [],
   "author": {
@@ -20,7 +21,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "ignore": "src|nix|README\\.md"
+        "ignore": "src|public|tsconfig\\.json|\\.browserlistrc"
       },
       "makers": [
         {
@@ -43,13 +44,20 @@
     }
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.4.2"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
     "@electron-forge/maker-deb": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "10.1.5"
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "electron": "10.1.5",
+    "typescript": "~3.9.3",
+    "vue-template-compiler": "^2.6.11"
   }
 }
