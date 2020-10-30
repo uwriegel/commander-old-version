@@ -20,7 +20,10 @@ const createWindow = () => {
 	//  mainWindow.loadURL(debug ? "http://localhost:8080" : "http://localhost:8080")
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools();
+
+	mainWindow.setAutoHideMenuBar(true)
+	mainWindow.setMenuBarVisibility(false)
 };
 
 // This method will be called when Electron has finished
