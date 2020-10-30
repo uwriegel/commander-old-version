@@ -44,11 +44,16 @@
     }
   },
   "dependencies": {
+    "dialogbox-vue": "^1.2.0",
     "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
+    "grid-splitter-vue": "^2.1.7",
+    "rxjs": "^6.6.3",
+    "virtual-table-vue": "^5.0.1",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^8.4.2"
+    "vue-property-decorator": "^8.4.2",
+    "vue-rx": "^6.2.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",

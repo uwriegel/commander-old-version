@@ -24,7 +24,7 @@ const createWindow = async () => {
 
 	const isLightMode = true
 
-	bounds.icon = path.join(__dirname, '..', 'kirk2.png')
+	bounds.icon = path.join(__dirname, '..', '..', 'public', 'kirk2.png')
 	bounds.backgroundColor = isLightMode ? "#fff" : "#1e1e1e" 
 	mainWindow = new BrowserWindow(bounds)
 
