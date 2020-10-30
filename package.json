@@ -3,11 +3,11 @@
   "productName": "commander",
   "version": "1.0.0",
   "description": "Commander, a file explorer",
-  "main": "electron/index.js",
+  "main": "electron/dist/main.js",
   "scripts": {
     "servevue": "vue-cli-service serve",
     "buildvue": "vue-cli-service build",
-    "start": "electron-forge start",
+    "start": "tsc -p electron/src && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish"
@@ -21,7 +21,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "ignore": "src|public|tsconfig\\.json|\\.browserlistrc"
+        "ignore": "src|public|electron/src|tsconfig\\.json|\\.browserlistrc"
       },
       "makers": [
         {
@@ -54,6 +54,7 @@
     "@electron-forge/maker-deb": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
+    "@types/node": "^14.14.6",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "electron": "10.1.5",
