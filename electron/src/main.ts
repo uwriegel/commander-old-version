@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from 'electron'
+import { createMenuBar } from './menu'
 import * as path from 'path'
 
 const debug = process.env.NODE_ENV == 'development'
@@ -22,6 +23,7 @@ const createWindow = () => {
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools();
 
+	createMenuBar(mainWindow)
 	mainWindow.setAutoHideMenuBar(true)
 	mainWindow.setMenuBarVisibility(false)
 };
