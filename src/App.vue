@@ -31,12 +31,6 @@ import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
 
-enum Theme {
-    blue,
-    yaru,
-    yarudark
-}
-
 interface CommanderMessage {
   	method: string
 }
@@ -64,6 +58,8 @@ interface OutMsg {
 
 var sendPathChanges = false
 
+const { ipcRenderer } = window.require('electron')
+
 @Component({
     components: {
         FolderView,
@@ -76,11 +72,11 @@ export default class App extends Vue {
     leftHasFocus = false
     showViewer = false
     showHidden = false
-    theme = Theme.blue
     selectedItem = ""
     basePath = ""
     dialogOpen = false
     keyDown$ = new Subject()
+    
 
     mounted() {
       	let i = 0
@@ -93,8 +89,7 @@ export default class App extends Vue {
 			this.getInactiveFolder().$emit("focus")
         })
 
-        // TODO:IPC
-        // const { ipcRenderer } = window.require('electron')
+        ipcRenderer.on("changeTheme", (event: any, theme: string) => this.changeTheme(theme))
         // for (let i = 0; i <= 1_000_000; i++)
         //     ipcRenderer.send('ping', i)
 
@@ -171,45 +166,23 @@ export default class App extends Vue {
     openSameFolder() {
         this.getInactiveFolder().$emit("path", this.basePath)
     }
-    //     changeTheme() {
-    //         const styleSheet = document.getElementById("theme")  
-    //         if (styleSheet)
-    //             styleSheet.remove()
-
-    //         const getTheme = () => {
-    //             switch (this.theme) {
-    //             case Theme.blue: 
-    //                 return "blue"
-    //             case Theme.yaru: 
-    //                 return "yaru"
-    //             case Theme.yarudark: 
-    //                 return "yarudark"
-    //             }
-    //         }
-
-    //         const head = document.getElementsByTagName('head')[0]
-    //         let link = document.createElement('link')
-    //         link.rel = 'stylesheet'
-    //         link.id = 'theme'
-    //         link.type = 'text/css'
-    //         link.href = `http://localhost:9865/assets/themes/${getTheme()}.css`
-    //         link.media = 'all'
-    //         head.appendChild(link)
-    //         this.folderLeftEventBus.$emit("themeChanged")
-    //         this.folderRightEventBus.$emit("themeChanged")
-
-    //         const theme = 
-    //             this.theme == Theme.yaru
-    //             ? "yaru"
-    //             : this.theme == Theme.yarudark
-    //                 ? "yarudark"
-    //                 : "blue"
-    //         const msg: OutMsg = {
-    //             case: OutMsgType.ThemeChanged,
-    //             fields: [theme]
-	// 		}
-    //       	this.ws.send(JSON.stringify(msg))
-    //     },
+    
+    changeTheme(theme: string) {
+        const styleSheet = document.getElementById("theme")  
+        if (styleSheet)
+            styleSheet.remove()
+        
+        const head = document.getElementsByTagName('head')[0]
+        let link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.id = 'theme'
+        link.type = 'text/css'
+        link.href = `assets/themes/${theme}.css`
+        link.media = 'all'
+        head.appendChild(link)
+        this.folderLeftEventBus.$emit("themeChanged")
+        this.folderRightEventBus.$emit("themeChanged")
+    }
 }
 </script>
 

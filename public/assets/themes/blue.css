@@ -1,0 +1,49 @@
+:root {
+    --main-background-color: #fcfcfc;
+    --main-color: #494646;
+    --selected-color: white;
+    --selected-background-color: blue;
+    --icon-color: #999;
+    --icon-selected-color: white;
+    --font-size: 85%;
+    --exif-color: blue;
+    --font-size: 85%;
+
+    --vue-menu-color: black;
+    --vue-menu-background-color: white;
+    --vue-menu-hover-color: lightblue;
+    --vue-menu-separator-color: #ddd;
+    --vue-menu-border-color: lightgray;
+    --vue-menu-shadow-color: rgba(0, 0, 0, 0.4);
+    --vue-menu-selected-background-color: var(--selected-background-color);
+    --vue-menu-selected-color: white;
+    
+    --tablevue-main-color: black;
+    --tablevue-main-background-color: white;
+    --tablevue-right-margin-scrollbar: 16px;
+
+    --tablevue-scrollbar-width: 16px;
+    --tablevue-scrollbar-border-width: 1px;
+    --tablevue-scrollbar-background-color: azure;    
+    --tablevue-scrollbar-border-color: gray;
+    --tablevue-scrollbar-grip-width: 100%;    
+    --tablevue-scrollbar-grip-color: rgb(209, 209, 209);
+    --tablevue-scrollbar-grip-hover-color: #bbb;
+    --tablevue-scrollbar-grip-active-color: #999;
+    --tablevue-scrollbar-button-color: #666;
+    --tablevue-scrollbar-button-hover-color: #555;
+    --tablevue-scrollbar-button-active-color: #444;
+    --tablevue-scrollbar-button-background-color: white;
+    --tablevue-scrollbar-button-hover-background-color: rgb(209, 209, 209);
+    --tablevue-scrollbar-button-active-background-color: #aaa;
+
+    --tablevue-selected-color:  white;
+    --tablevue-selected-background-color: blue;
+    --tablevue-columns-separator-color:  white;
+    --tablevue-selected-background-hover-color: #0063ff;
+    --tablevue-tr-selected-color: red;
+
+    --gridsplitter-grip-color: lightgray;
+    --gridsplitter-grip-hover-color: darkgray;
+    --gridsplitter-grip-active-color: #6b6969;
+}

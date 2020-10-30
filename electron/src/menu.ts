@@ -1,6 +1,19 @@
 import { BrowserWindow, Menu } from "electron"
 
+const THEME_BLUE = "blue"
+const THEME_YARU = "yaru"
+const THEME_YARUDARK = "yarudark"
+
+var theme = THEME_BLUE
+
 export function createMenuBar(win: BrowserWindow) {
+
+    function setTheme(themeToSet: string) {
+        // TODO: save electron setting
+        theme = themeToSet
+        win.webContents.send("changeTheme", theme)
+    }
+
     const menu = Menu.buildFromTemplate([
         {
             label: '&Datei',
@@ -17,18 +30,18 @@ export function createMenuBar(win: BrowserWindow) {
                 submenu: [{
                     label: '&Blau',
                     type: "radio",
-//                    checked: theme == themeBlue,
-  //                  click: evt => setTheme(themeBlue)
+                    checked: theme == THEME_BLUE,
+                    click: evt => setTheme(THEME_BLUE)
                 }, {
-                    label: '&Hellblau',
+                    label: '&Yaru',
                     type: "radio",
-//                    checked: theme == themeLightBlue,
-//                    click: evt => setTheme(themeLightBlue)
+                    checked: theme == THEME_YARU,
+                    click: evt => setTheme(THEME_YARU)
                 }, {
-                    label: '&Dunkel',
+                    label: 'Yaru &dark',
                     type: "radio",
-//                    checked: theme == themeDark,
-//                    click: evt => setTheme(themeDark)
+                    checked: theme == THEME_YARUDARK,
+                    click: evt => setTheme(THEME_YARUDARK)
                 }]
             }, {
                 type: 'separator'

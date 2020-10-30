@@ -1,19 +1,20 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { createMenuBar } from './menu'
 import * as path from 'path'
 import * as settings from 'electron-settings'
+const {  } = require('electron')
 
 const debug = process.env.NODE_ENV == 'development'
 let mainWindow: BrowserWindow
-// TODO: Import app from commander-fs
-// TODO: Set theme
-
 
 console.log("Starting electron app")
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 	app.quit()
+
+// ipcMain.on('ping', (event, arg) => {
+// })
 
 const createWindow = async () => { 
 	// Create the browser window.
@@ -24,6 +25,7 @@ const createWindow = async () => {
 
 	const isLightMode = true
 
+	bounds.webPreferences = { nodeIntegration: true }    
 	bounds.icon = path.join(__dirname, '..', '..', 'public', 'kirk2.png')
 	bounds.backgroundColor = isLightMode ? "#fff" : "#1e1e1e" 
 	mainWindow = new BrowserWindow(bounds)
