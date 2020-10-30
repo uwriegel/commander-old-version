@@ -4,10 +4,12 @@ import * as path from 'path'
 
 const debug = process.env.NODE_ENV == 'development'
 
+// TODO: Import app from commander-fs
+// TODO: Set theme
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 	app.quit();
-
 
 const createWindow = () => { 
 	// Create the browser window.
