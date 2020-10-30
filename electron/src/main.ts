@@ -19,9 +19,6 @@ ipcMain.on('ready', async (_, __) => {
 	mainWindow.webContents.send("changeTheme", theme)
 })
 
-var leftFolder = new Folder(ipcMain, "folderLeft")
-var rightFolder = new Folder(ipcMain, "folderRight")
-
 const createWindow = async () => { 
 	// Create the browser window.
     let bounds = (await settings.get("window-bounds") || { 
@@ -35,6 +32,9 @@ const createWindow = async () => {
 	bounds.icon = path.join(__dirname, '..', '..', 'public', 'kirk2.png')
 	bounds.backgroundColor = isLightMode ? "#fff" : "#1e1e1e" 
 	mainWindow = new BrowserWindow(bounds)
+
+	leftFolder = new Folder(ipcMain, mainWindow.webContents, "folderLeft")
+	rightFolder = new Folder(ipcMain, mainWindow.webContents, "folderRight")
 
 	if (debug)
         require('vue-devtools').install() 
@@ -75,4 +75,6 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+var leftFolder: Folder
+var rightFolder: Folder
 

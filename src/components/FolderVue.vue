@@ -43,23 +43,23 @@ var selectionChangedIndex = 0
 const { ipcRenderer } = window.require('electron')
 
 enum OutMsgType {
-    Init = "Init",
-    GetItems = "GetItems",
-    Action = "Action",
-    ColumnsWidths = "ColumnsWidths",
-    ShowHidden = "ShowHidden",
-    Refresh = "Refresh",
-    Sort = "Sort",
-    ChangePath = "ChangePath",
-    Restrict = "Restrict",
-    RestrictClose = "RestrictClose",
-    Backtrack = "Backtrack",
-    ToggleSelection = "ToggleSelection",
-    SelectAll = "SelectAll",
-    UnselectAll = "UnselectAll",
-    SelectTo = "SelectTo",
-    SelectFrom = "SelectFrom",
-    GetItemPath = "GetItemPath" 
+    Init,
+    // GetItems = "GetItems",
+    // Action = "Action",
+    // ColumnsWidths = "ColumnsWidths",
+    // ShowHidden = "ShowHidden",
+    // Refresh = "Refresh",
+    // Sort = "Sort",
+    // ChangePath = "ChangePath",
+    // Restrict = "Restrict",
+    // RestrictClose = "RestrictClose",
+    // Backtrack = "Backtrack",
+    // ToggleSelection = "ToggleSelection",
+    // SelectAll = "SelectAll",
+    // UnselectAll = "UnselectAll",
+    // SelectTo = "SelectTo",
+    // SelectFrom = "SelectFrom",
+    // GetItemPath = "GetItemPath" 
 }
 
 interface Range {
@@ -81,8 +81,8 @@ interface Sort {
 }
 
 interface OutMsg {
-    case: OutMsgType
-    fields: string[] | Range[] | number[] | (string[])[] | ShowHidden[] | Sort[] | boolean[]
+    method: OutMsgType
+    fields?: string[] | Range[] | number[] | (string[])[] | ShowHidden[] | Sort[] | boolean[] | undefined
 }
 
 enum InMsgType {
@@ -188,40 +188,40 @@ export default class FolderVue extends FolderVueProps {
         this.$subscribeTo(backSpaces$, (evt: any) => this.onBacktrack(evt.event.ctrlKey ? true : false))
 
         this.$subscribeTo(inserts$, () => {
-            const msg: OutMsg = {
-                case: OutMsgType.ToggleSelection,
-                fields: [this.selectedIndex]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.ToggleSelection,
+            //     fields: [this.selectedIndex]
+            // }
             //this.ws.send(JSON.stringify(msg))
             if (this.selectedIndex < this.itemsSource.count - 1)
                 this.selectedIndex++
         })
         this.$subscribeTo(pluses$, () => {
-            const msg: OutMsg = {
-                case: OutMsgType.SelectAll,
-                fields: []
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.SelectAll,
+            //     fields: []
+            // }
             //this.ws.send(JSON.stringify(msg))
         })        
         this.$subscribeTo(minuses$, () => {
-            const msg: OutMsg = {
-                case: OutMsgType.UnselectAll,
-                fields: []
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.UnselectAll,
+            //     fields: []
+            // }
             //this.ws.send(JSON.stringify(msg))
         })        
         this.$subscribeTo(shiftHomes$, () => {
-            const msg: OutMsg = {
-                case: OutMsgType.SelectTo,
-                fields: [this.selectedIndex]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.SelectTo,
+            //     fields: [this.selectedIndex]
+            // }
             //this.ws.send(JSON.stringify(msg))
         })     
         this.$subscribeTo(shiftEnds$, () => {
-            const msg: OutMsg = {
-                case: OutMsgType.SelectFrom,
-                fields: [this.selectedIndex]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.SelectFrom,
+            //     fields: [this.selectedIndex]
+            // }
             //this.ws.send(JSON.stringify(msg))
         })     
         this.eventBus.$on('focus', () => this.focus ())
@@ -230,34 +230,34 @@ export default class FolderVue extends FolderVueProps {
         this.eventBus.$on('themeChanged', () => 
             setTimeout(() => this.tableEventBus.$emit("themeChanged"), 300))
         this.eventBus.$on('showHidden', (showHidden: boolean) => {
-            const msg: OutMsg = {
-                case: OutMsgType.ShowHidden,
-                fields: [{show: showHidden ? true : false, selectedIndex: this.selectedIndex}]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.ShowHidden,
+            //     fields: [{show: showHidden ? true : false, selectedIndex: this.selectedIndex}]
+            // }
             //this.ws.send(JSON.stringify(msg))
         })
         this.eventBus.$on('refresh', () => {
-            const msg: OutMsg = {
-                case: OutMsgType.Refresh,
-                fields: [this.selectedIndex]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.Refresh,
+            //     fields: [this.selectedIndex]
+            // }
             //this.ws.send(JSON.stringify(msg))
         })
         this.eventBus.$on('selectionChanged', (index: number) => {
-            const msg: OutMsg = {
-                case: OutMsgType.GetItemPath,
-                fields: [index]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.GetItemPath,
+            //     fields: [index]
+            // }
             //this.ws.send(JSON.stringify(msg))
         })
         
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
             return new Promise<any[]>((res, rej) => {
-                const msg: OutMsg = {
-                    case: OutMsgType.GetItems,
-                    fields: [{ reqId: ++reqId, startRange, endRange }]
-                }
+                // const msg: OutMsg = {
+                //     case: OutMsgType.GetItems,
+                //     fields: [{ reqId: ++reqId, startRange, endRange }]
+                // }
                 resolves.set(reqId, res)
                 //this.ws.send(JSON.stringify(msg))
             })
@@ -266,10 +266,6 @@ export default class FolderVue extends FolderVueProps {
         // this.ws.onmessage = m => { 
         //     var msg = JSON.parse(m.data) as InMsg
         //     switch (msg.method) {
-        //         case InMsgType.SetColumns:
-        //             const colmsg = msg as ColumnsMsg
-        //             this.columns = colmsg.value
-        //             break
         //         case InMsgType.ItemsSource:
         //             const itemsSource = msg as ItemsSource
         //             this.basePath = itemsSource.path
@@ -308,8 +304,19 @@ export default class FolderVue extends FolderVueProps {
         //     }
         // }
 
-        //ipcRenderer.send(this.name, 'ready')
-        ipcRenderer.send(this.name, { method: 'ready', count: 3})
+        ipcRenderer.on(this.name, (_: any, msg: InMsg) => {
+            switch (msg.method) {
+                case InMsgType.SetColumns:
+                    const colmsg = msg as ColumnsMsg
+                    this.columns = colmsg.value
+                    break
+            }
+        })
+
+        const msg: OutMsg = {
+            method: OutMsgType.Init,
+        }
+        ipcRenderer.send(this.name, msg)
     }
 
     get totalCount() {
@@ -332,40 +339,40 @@ export default class FolderVue extends FolderVueProps {
     }
 
     onColumnsWidthChanged(widths: string[]) {
-        const msg: OutMsg = {
-            case: OutMsgType.ColumnsWidths,
-            fields: [ widths ]
-        }
+        // const msg: OutMsg = {
+        //     case: OutMsgType.ColumnsWidths,
+        //     fields: [ widths ]
+        // }
         // this.ws.send(JSON.stringify(msg))
     }
 
     onColumnClick(index: number, descending: boolean, subItem: boolean) {
-        const msg: OutMsg = {
-            case: OutMsgType.Sort,
-            fields: [ {
-                column: index,
-                descending,
-                subItem,
-                selectedIndex: this.selectedIndex
-            } ]
-        }
+        // const msg: OutMsg = {
+        //     case: OutMsgType.Sort,
+        //     fields: [ {
+        //         column: index,
+        //         descending,
+        //         subItem,
+        //         selectedIndex: this.selectedIndex
+        //     } ]
+        // }
         // this.ws.send(JSON.stringify(msg))
     }
     
     onEnter() {
-        const msg: OutMsg = {
-            case: OutMsgType.Action,
-            fields: [this.selectedIndex]
-        }
+        // const msg: OutMsg = {
+        //     case: OutMsgType.Action,
+        //     fields: [this.selectedIndex]
+        // }
         // this.ws.send(JSON.stringify(msg))
     }
 
     onBacktrack(directionBack: boolean) {
         if (!this.restrictValue) {
-            const msg: OutMsg = {
-                case: OutMsgType.Backtrack,
-                fields: [ directionBack ]
-            }
+            // const msg: OutMsg = {
+            //     case: OutMsgType.Backtrack,
+            //     fields: [ directionBack ]
+            // }
             // this.ws.send(JSON.stringify(msg))
         }
     }
@@ -389,21 +396,21 @@ export default class FolderVue extends FolderVueProps {
     }
 
     setPath(path: string) {
-        const msg: OutMsg = {
-            case: OutMsgType.ChangePath,
-            fields: [ path ]
-        }
-        console.log("setPath", msg)
+        // const msg: OutMsg = {
+        //     case: OutMsgType.ChangePath,
+        //     fields: [ path ]
+        // }
+        //console.log("setPath", msg)
         // this.ws.send(JSON.stringify(msg))
     }
 
     focus() { this.tableEventBus.$emit("focus") }
     
     restrictTo(evt: KeyboardEvent) {   
-        const msg: OutMsg = {
-            case: OutMsgType.Restrict,
-            fields: [ this.restrictValue + evt.key ]
-        }
+        // const msg: OutMsg = {
+        //     case: OutMsgType.Restrict,
+        //     fields: [ this.restrictValue + evt.key ]
+        // }
         // this.ws.send(JSON.stringify(msg))
     }
 
@@ -413,10 +420,10 @@ export default class FolderVue extends FolderVueProps {
             if (this.restrictValue.length == 0) 
                 this.restrictClose()            
             else {
-                const msg: OutMsg = {
-                    case: OutMsgType.Restrict,
-                    fields: [ this.restrictValue ]
-                }
+                // const msg: OutMsg = {
+                //     case: OutMsgType.Restrict,
+                //     fields: [ this.restrictValue ]
+                // }
                 // this.ws.send(JSON.stringify(msg))
             }
         }
