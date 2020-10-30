@@ -8,6 +8,10 @@ export class Folder {
         ipcMain.on(name, async (_, args) => {
             console.log("Arks", args)
             console.log("Arks", args.method, args.count)
+
+            // TODO: | Init folderName -> 
+            // TODO: session <- init folderName session 
+            // TODO: changePath session.Path None true            
         })
     }
 
