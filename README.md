@@ -1,5 +1,14 @@
 # Commander
 
+## Setup
+In Visual Studio Code open terminal and type:
+
+```npm i```
+
+## Debug
+In Visual Studio Code press ```F5```
+
+
 ## How this project was created
 ### Electron
 ```
