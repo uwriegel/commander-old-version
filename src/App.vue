@@ -77,9 +77,7 @@ export default class App extends Vue {
     dialogOpen = false
     keyDown$ = new Subject()
     
-
     mounted() {
-      	let i = 0
 		this.folderLeftEventBus.$emit("focus") 
 
         const tabs$ = this.keyDown$.pipe(filter((evt: any) => evt.event.which == 9 && !evt.event.shiftKey))
@@ -96,29 +94,9 @@ export default class App extends Vue {
       	// this.ws.onmessage = m => {
 		// 	let msg = JSON.parse(m.data) as CommanderMessage
 		// 	switch (msg.method) {
-        //         case "changeTheme":
-        //             const themeMsg = msg as ThemeMsg
-        //             const getTheme = () => {
-        //                 switch (themeMsg.theme) {
-        //                 case "yaru":
-        //                     return Theme.yaru
-        //                 case "yarudark": 
-        //                     return Theme.yarudark 
-        //                 default:
-        //                     return Theme.blue
-        //                 }
-        //             }
-
-        //             this.theme = getTheme()
-        //             this.changeTheme()
-        //             break
 		// 		case "wantPathChanges":
 		// 			sendPathChanges = true
 		// 			break
-		// 		default:
-		// 			console.log("Msg", msg)
-		// 			break
-		// 	}
 	    // }
     }
 
