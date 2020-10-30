@@ -1,4 +1,3 @@
-import { platform } from "os"
 import { platformMethods } from "../platforms/platform"
 import { IProcessor } from "./processor"
 

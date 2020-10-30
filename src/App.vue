@@ -31,6 +31,7 @@ import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
 
+// TODO: to model
 interface CommanderMessage {
   	method: string
 }

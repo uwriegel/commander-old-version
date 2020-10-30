@@ -37,105 +37,16 @@ import FolderIcon from '../icons/FolderIcon.vue'
 import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
+import { RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
 const { ipcRenderer } = window.require('electron')
 
-enum OutMsgType {
-    Init,
-    // GetItems = "GetItems",
-    // Action = "Action",
-    // ColumnsWidths = "ColumnsWidths",
-    // ShowHidden = "ShowHidden",
-    // Refresh = "Refresh",
-    // Sort = "Sort",
-    // ChangePath = "ChangePath",
-    // Restrict = "Restrict",
-    // RestrictClose = "RestrictClose",
-    // Backtrack = "Backtrack",
-    // ToggleSelection = "ToggleSelection",
-    // SelectAll = "SelectAll",
-    // UnselectAll = "UnselectAll",
-    // SelectTo = "SelectTo",
-    // SelectFrom = "SelectFrom",
-    // GetItemPath = "GetItemPath" 
-}
-
 interface Range {
     reqId: number
     startRange: number, 
     endRange: number
-}
-
-interface ShowHidden {
-    show: boolean
-    selectedIndex: number
-}
-
-interface Sort {
-    column: number
-    descending: boolean
-    subItem: boolean
-    selectedIndex: number
-}
-
-interface OutMsg {
-    method: OutMsgType
-    fields?: string[] | Range[] | number[] | (string[])[] | ShowHidden[] | Sort[] | boolean[] | undefined
-}
-
-enum InMsgType {
-    SetColumns = 1,
-    ItemsSource,
-    Items,
-    RefreshView,
-    Restrict,
-    RestrictClose,
-    BacktrackEnd,
-    SendPath
-}
-
-interface InMsg {
-    method: InMsgType
-}
-
-interface Column {
-    name: string,
-    isSortable: boolean,
-    width: string,
-    rightAligned: boolean
-    isExif: boolean
-}
-
-interface ColumnsMsg extends InMsg {
-    value: Column[]
-}
-
-interface ItemsSource extends InMsg {
-    path: string,
-    count: number
-    indexToSelect: number
-}
-
-interface Items extends InMsg {
-    reqId: number
-    path: string,
-    isHidden: boolean
-    items: any[]
-}
-
-interface RestrictResult extends InMsg {
-    restrictValue: string
-    itemsCount: number
-}
-
-interface RestrictClose extends InMsg {
-    itemsCount: number
-}
-
-interface SendPath extends InMsg {
-    path: string
 }
 
 var reqId = 0
@@ -304,17 +215,17 @@ export default class FolderVue extends FolderVueProps {
         //     }
         // }
 
-        ipcRenderer.on(this.name, (_: any, msg: InMsg) => {
+        ipcRenderer.on(this.name, (_: any, msg: RendererMsg) => {
             switch (msg.method) {
-                case InMsgType.SetColumns:
+                case RendererMsgType.SetColumns:
                     const colmsg = msg as ColumnsMsg
                     this.columns = colmsg.value
                     break
             }
         })
 
-        const msg: OutMsg = {
-            method: OutMsgType.Init,
+        const msg: MainMsg = {
+            method: MainMsgType.Init,
         }
         ipcRenderer.send(this.name, msg)
     }

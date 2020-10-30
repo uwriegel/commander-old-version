@@ -1,4 +1,4 @@
-import { Column } from "../processors/interfaces"
+import { Column } from "../model/model"
 import { Linux } from "./linux"
 
 export interface IPlatform {

@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts">
+// TODO convert to component class
 import Vue from 'vue'
 
 export default Vue.extend({

@@ -1,32 +1,9 @@
 import { IpcMain } from "electron"
+import { MainMsg, MainMsgType, RendererMsgType } from "./model/model"
 import { IProcessor } from "./processors/processor"
 import { Root } from "./processors/root"
 
 const ROOT = "root"
-
-enum InMethod {
-    Init
-}
-
-interface IncomingMsg {
-    method: InMethod
-}
-
-enum OutMsgType {
-    SetColumns = 1,
-    ItemsSource,
-    Items,
-    RefreshView,
-    Restrict,
-    RestrictClose,
-    BacktrackEnd,
-    SendPath
-}
-
-interface OutMsg {
-    method: OutMsgType
-}
-
 
 export class Folder {
     constructor(ipcMain: IpcMain, webContents: Electron.WebContents, name: string) {
@@ -34,9 +11,9 @@ export class Folder {
         this.webContents = webContents
         this.name = name
 
-        ipcMain.on(name, async (_, args: IncomingMsg) => {
+        ipcMain.on(name, async (_, args: MainMsg) => {
             switch (args.method) {
-                case InMethod.Init:
+                case MainMsgType.Init:
                     this.init()
                     break 
             }
@@ -52,7 +29,7 @@ export class Folder {
             case ROOT:
                 this.processor = new Root()
                 const cols = this.processor.getColumns()
-                this.webContents.send(this.name, { method: OutMsgType.SetColumns, value: cols})
+                this.webContents.send(this.name, { method: RendererMsgType.SetColumns, value: cols})
                 break
         }
     }
