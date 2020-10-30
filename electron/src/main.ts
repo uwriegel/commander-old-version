@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import { createMenuBar, THEME_DEFAULT } from './menu'
 import * as path from 'path'
 import * as settings from 'electron-settings'
+import { Folder } from './folder'
 const {  } = require('electron')
 
 const debug = process.env.NODE_ENV == 'development'
@@ -17,6 +18,9 @@ ipcMain.on('ready', async (_, __) => {
 	const theme = await settings.get("theme") || THEME_DEFAULT
 	mainWindow.webContents.send("changeTheme", theme)
 })
+
+var leftFolder = new Folder("left")
+var rightFolder = new Folder("right")
 
 const createWindow = async () => { 
 	// Create the browser window.

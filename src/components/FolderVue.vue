@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Component, Vue } from 'vue-property-decorator'
 import { map, filter } from "rxjs/operators"
-import { Observable } from 'rxjs'
+import { Observable, Subject } from 'rxjs'
 import FolderIcon from '../icons/FolderIcon.vue'
 import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
@@ -138,40 +138,41 @@ interface SendPath extends InMsg {
 
 var reqId = 0
 
-export default Vue.extend({
+const FolderVueProps = Vue.extend({
+    props: {
+        eventBus: { type: Object, default: () => new Vue() },
+        name: String
+    }
+})
+
+@Component({
     components: {
         FileIcon,
         FolderIcon,
         DriveIcon,
         ParentIcon
-    },
-    props: {
-        eventBus: { type: Object, default: () => new Vue() },
-        name: String
-    },
-    data() {
-        return {
-            tableEventBus: new Vue(),
-            selectedIndex: 0,
-            columns: [ { name: "Name" } ] as Column[],
-            basePath: "",
-            restrictValue: "",
-            itemsSource: { count: 0, getItems: (async () => await []) as (n: number, m: number)=>Promise<any[]>, indexToSelect: 0},
-            ws: new WebSocket("ws://localhost:9865/folder"),
-            isBacktrackEnd: false
-        }
-    },
-    domStreams: ["keyDown$"],
-    mounted: function () {
-        const shiftTabs$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
-        const inputChars$ = (this as any).keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && !n.event.shiftKey && n.event.key.length > 0 && n.event.key.length < 2))
-        const backSpaces$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 8))
-        const escapes$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 27))
-        const inserts$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 45))
-        const pluses$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 107))
-        const minuses$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 109))
-        const shiftEnds$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 35 && n.event.shiftKey))
-        const shiftHomes$ = (this as any).keyDown$.pipe(filter((n: any) => n.event.which == 36 && n.event.shiftKey))
+    }
+})
+export default class FolderVue extends FolderVueProps {
+    tableEventBus = new Vue()
+    selectedIndex = 0
+    columns = [ { name: "Name" } ] as Column[]
+    basePath = ""
+    restrictValue = ""
+    itemsSource = { count: 0, getItems: (async () => await []) as (n: number, m: number)=>Promise<any[]>, indexToSelect: 0}
+    isBacktrackEnd = false
+    keyDown$ = new Subject()
+
+    mounted() {
+        const shiftTabs$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
+        const inputChars$ = this.keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && !n.event.shiftKey && n.event.key.length > 0 && n.event.key.length < 2))
+        const backSpaces$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 8))
+        const escapes$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 27))
+        const inserts$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 45))
+        const pluses$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 107))
+        const minuses$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 109))
+        const shiftEnds$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 35 && n.event.shiftKey))
+        const shiftHomes$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 36 && n.event.shiftKey))
 
         this.$subscribeTo(shiftTabs$, (evt: any) => {
             (this.$refs as any).input.focus()
@@ -188,7 +189,7 @@ export default Vue.extend({
                 case: OutMsgType.ToggleSelection,
                 fields: [this.selectedIndex]
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
             if (this.selectedIndex < this.itemsSource.count - 1)
                 this.selectedIndex++
         })
@@ -197,28 +198,28 @@ export default Vue.extend({
                 case: OutMsgType.SelectAll,
                 fields: []
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })        
         this.$subscribeTo(minuses$, () => {
             const msg: OutMsg = {
                 case: OutMsgType.UnselectAll,
                 fields: []
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })        
         this.$subscribeTo(shiftHomes$, () => {
             const msg: OutMsg = {
                 case: OutMsgType.SelectTo,
                 fields: [this.selectedIndex]
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })     
         this.$subscribeTo(shiftEnds$, () => {
             const msg: OutMsg = {
                 case: OutMsgType.SelectFrom,
                 fields: [this.selectedIndex]
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })     
         this.eventBus.$on('focus', () => this.focus ())
         this.eventBus.$on('resize', () => this.tableEventBus.$emit('resize'))
@@ -230,30 +231,30 @@ export default Vue.extend({
                 case: OutMsgType.ShowHidden,
                 fields: [{show: showHidden ? true : false, selectedIndex: this.selectedIndex}]
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })
         this.eventBus.$on('refresh', () => {
             const msg: OutMsg = {
                 case: OutMsgType.Refresh,
                 fields: [this.selectedIndex]
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })
         this.eventBus.$on('selectionChanged', (index: number) => {
             const msg: OutMsg = {
                 case: OutMsgType.GetItemPath,
                 fields: [index]
             }
-            this.ws.send(JSON.stringify(msg))
+            //this.ws.send(JSON.stringify(msg))
         })
-        let i = 0
-        this.ws.onopen = () => {
-            const init: OutMsg = {
-                case: OutMsgType.Init,
-                fields: [this.name]
-            }
-            this.ws.send(JSON.stringify(init))
-        }
+        
+        // this.ws.onopen = () => {
+        //     const init: OutMsg = {
+        //         case: OutMsgType.Init,
+        //         fields: [this.name]
+        //     }
+        //     this.ws.send(JSON.stringify(init))
+        // }
 
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
@@ -263,162 +264,169 @@ export default Vue.extend({
                     fields: [{ reqId: ++reqId, startRange, endRange }]
                 }
                 resolves.set(reqId, res)
-                this.ws.send(JSON.stringify(msg))
+                //this.ws.send(JSON.stringify(msg))
             })
         }
 
-        this.ws.onmessage = m => { 
-            var msg = JSON.parse(m.data) as InMsg
-            switch (msg.method) {
-                case InMsgType.SetColumns:
-                    const colmsg = msg as ColumnsMsg
-                    this.columns = colmsg.value
-                    break
-                case InMsgType.ItemsSource:
-                    const itemsSource = msg as ItemsSource
-                    this.basePath = itemsSource.path
-                    this.itemsSource = { count: itemsSource.count, getItems, indexToSelect: itemsSource.indexToSelect }
-                    break
-                case InMsgType.Items:
-                    const items = msg as Items
-                    let resolve = resolves.get(items.reqId)
-                    if (resolve) {
-                        resolves.delete(items.reqId)
-                        resolve(items.items)
-                    }
-                    break
-                case InMsgType.RefreshView:
-                    this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: this.selectedIndex }
-                    break
-                case InMsgType.Restrict:
-                    const restrictMsg = msg as RestrictResult
-                    this.restrictValue = restrictMsg.restrictValue      
-                    this.itemsSource = { count: restrictMsg.itemsCount, getItems, indexToSelect: Math.min(this.selectedIndex, restrictMsg.itemsCount - 1) }
-                    break
-                case InMsgType.RestrictClose:
-                    const restrictCloseMsg = msg as RestrictClose
-                    this.itemsSource.count = restrictCloseMsg.itemsCount
-                    this.restrictValue = ""
-                    this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: 0 }
-                    break
-                case InMsgType.BacktrackEnd:
-                    this.isBacktrackEnd = true
-                    setTimeout(() => this.isBacktrackEnd = false, 300)
-                    break
-                case InMsgType.SendPath:
-                    const pathMsg = msg as SendPath
-                    this.$emit("pathChanged", pathMsg.path, this.basePath) 
-                    break
+        // this.ws.onmessage = m => { 
+        //     var msg = JSON.parse(m.data) as InMsg
+        //     switch (msg.method) {
+        //         case InMsgType.SetColumns:
+        //             const colmsg = msg as ColumnsMsg
+        //             this.columns = colmsg.value
+        //             break
+        //         case InMsgType.ItemsSource:
+        //             const itemsSource = msg as ItemsSource
+        //             this.basePath = itemsSource.path
+        //             this.itemsSource = { count: itemsSource.count, getItems, indexToSelect: itemsSource.indexToSelect }
+        //             break
+        //         case InMsgType.Items:
+        //             const items = msg as Items
+        //             let resolve = resolves.get(items.reqId)
+        //             if (resolve) {
+        //                 resolves.delete(items.reqId)
+        //                 resolve(items.items)
+        //             }
+        //             break
+        //         case InMsgType.RefreshView:
+        //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: this.selectedIndex }
+        //             break
+        //         case InMsgType.Restrict:
+        //             const restrictMsg = msg as RestrictResult
+        //             this.restrictValue = restrictMsg.restrictValue      
+        //             this.itemsSource = { count: restrictMsg.itemsCount, getItems, indexToSelect: Math.min(this.selectedIndex, restrictMsg.itemsCount - 1) }
+        //             break
+        //         case InMsgType.RestrictClose:
+        //             const restrictCloseMsg = msg as RestrictClose
+        //             this.itemsSource.count = restrictCloseMsg.itemsCount
+        //             this.restrictValue = ""
+        //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: 0 }
+        //             break
+        //         case InMsgType.BacktrackEnd:
+        //             this.isBacktrackEnd = true
+        //             setTimeout(() => this.isBacktrackEnd = false, 300)
+        //             break
+        //         case InMsgType.SendPath:
+        //             const pathMsg = msg as SendPath
+        //             this.$emit("pathChanged", pathMsg.path, this.basePath) 
+        //             break
+        //     }
+        // }
+    }
+
+    get totalCount() {
+        return this.itemsSource.count
+    }
+
+    onfocusIn() { 
+        this.$emit("focus-in") 
+        this.onSelectionChanged(this.selectedIndex) 
+    }
+
+    onSelectionChanged(index: number) {
+        this.selectedIndex = index 
+        let currentIndex = ++selectionChangedIndex
+        setTimeout(() => {
+            if (currentIndex == selectionChangedIndex) {
+                this.$emit('selection-changed', index)  
             }
+        }, 300)
+    }
+
+    onColumnsWidthChanged(widths: string[]) {
+        const msg: OutMsg = {
+            case: OutMsgType.ColumnsWidths,
+            fields: [ widths ]
         }
-    },
-    computed: {
-        totalCount(): number {
-            return this.itemsSource.count
+        // this.ws.send(JSON.stringify(msg))
+    }
+
+    onColumnClick(index: number, descending: boolean, subItem: boolean) {
+        const msg: OutMsg = {
+            case: OutMsgType.Sort,
+            fields: [ {
+                column: index,
+                descending,
+                subItem,
+                selectedIndex: this.selectedIndex
+            } ]
         }
-    },
-    methods: {
-        onfocusIn() { 
-            this.$emit("focus-in") 
-            this.onSelectionChanged(this.selectedIndex) 
-        },
-        onSelectionChanged(index: number) {
-            this.selectedIndex = index 
-            let currentIndex = ++selectionChangedIndex
-            setTimeout(() => {
-                if (currentIndex == selectionChangedIndex) {
-                    this.$emit('selection-changed', index)  
-                }
-            }, 300)
-            
-        },
-        onColumnsWidthChanged(widths: string[]) {
+        // this.ws.send(JSON.stringify(msg))
+    }
+    
+    onEnter() {
+        const msg: OutMsg = {
+            case: OutMsgType.Action,
+            fields: [this.selectedIndex]
+        }
+        // this.ws.send(JSON.stringify(msg))
+    }
+
+    onBacktrack(directionBack: boolean) {
+        if (!this.restrictValue) {
             const msg: OutMsg = {
-                case: OutMsgType.ColumnsWidths,
-                fields: [ widths ]
+                case: OutMsgType.Backtrack,
+                fields: [ directionBack ]
             }
-            this.ws.send(JSON.stringify(msg))
-        },
-        onColumnClick(index: number, descending: boolean, subItem: boolean) {
-            const msg: OutMsg = {
-                case: OutMsgType.Sort,
-                fields: [ {
-                    column: index,
-                    descending,
-                    subItem,
-                    selectedIndex: this.selectedIndex
-                } ]
-            }
-            this.ws.send(JSON.stringify(msg))
-        },
-        onEnter() {
-            const msg: OutMsg = {
-                case: OutMsgType.Action,
-                fields: [this.selectedIndex]
-            }
-            this.ws.send(JSON.stringify(msg))
-        },
-        onBacktrack(directionBack: boolean) {
-            if (!this.restrictValue) {
-                const msg: OutMsg = {
-                    case: OutMsgType.Backtrack,
-                    fields: [ directionBack ]
-                }
-                this.ws.send(JSON.stringify(msg))
-            }
-        },        
-        onInputKeyDown(evt: KeyboardEvent) {
-            switch (evt.which) {
-                case 9: // TAB
-                    this.focus()
-                    evt.stopPropagation()
-                    evt.preventDefault()
-                    break
-                case 13: // enter
-                    const path = (this as any).$refs.input.value
-                    this.setPath(path)
-                    this.focus()
-                    break
-                default:
-                    return // exit this handler for other keys
-            }
-            evt.preventDefault() // prevent
-        },
-        setPath(path: string) {
-            const msg: OutMsg = {
-                case: OutMsgType.ChangePath,
-                fields: [ path ]
-            }
-            console.log("setPath", msg)
-            this.ws.send(JSON.stringify(msg))
-        },
-        focus() { this.tableEventBus.$emit("focus") },
-        restrictTo(evt: KeyboardEvent) {   
-            const msg: OutMsg = {
-                case: OutMsgType.Restrict,
-                fields: [ this.restrictValue + evt.key ]
-            }
-            this.ws.send(JSON.stringify(msg))
-        },
-        restrictBack() {
-            if (this.restrictValue.length > 0) {
-                this.restrictValue = this.restrictValue.substr(0, this.restrictValue.length - 1);
-                if (this.restrictValue.length == 0) 
-                    this.restrictClose()            
-                else {
-                    const msg: OutMsg = {
-                        case: OutMsgType.Restrict,
-                        fields: [ this.restrictValue ]
-                    }
-                    this.ws.send(JSON.stringify(msg))
-                }
-            }
-        },
-        restrictClose() { 
-            this.ws.send(JSON.stringify({ case: OutMsgType.RestrictClose })) 
+            // this.ws.send(JSON.stringify(msg))
         }
     }
-})
+
+    onInputKeyDown(evt: KeyboardEvent) {
+        switch (evt.which) {
+            case 9: // TAB
+                this.focus()
+                evt.stopPropagation()
+                evt.preventDefault()
+                break
+            case 13: // enter
+                const path = (this as any).$refs.input.value
+                this.setPath(path)
+                this.focus()
+                break
+            default:
+                return // exit this handler for other keys
+        }
+        evt.preventDefault() // prevent
+    }
+
+    setPath(path: string) {
+        const msg: OutMsg = {
+            case: OutMsgType.ChangePath,
+            fields: [ path ]
+        }
+        console.log("setPath", msg)
+        // this.ws.send(JSON.stringify(msg))
+    }
+
+    focus() { this.tableEventBus.$emit("focus") }
+    
+    restrictTo(evt: KeyboardEvent) {   
+        const msg: OutMsg = {
+            case: OutMsgType.Restrict,
+            fields: [ this.restrictValue + evt.key ]
+        }
+        // this.ws.send(JSON.stringify(msg))
+    }
+
+    restrictBack() {
+        if (this.restrictValue.length > 0) {
+            this.restrictValue = this.restrictValue.substr(0, this.restrictValue.length - 1);
+            if (this.restrictValue.length == 0) 
+                this.restrictClose()            
+            else {
+                const msg: OutMsg = {
+                    case: OutMsgType.Restrict,
+                    fields: [ this.restrictValue ]
+                }
+                // this.ws.send(JSON.stringify(msg))
+            }
+        }
+    }
+    restrictClose() { 
+        // this.ws.send(JSON.stringify({ case: OutMsgType.RestrictClose })) 
+    }
+}
 </script>
 
 <style scoped>
