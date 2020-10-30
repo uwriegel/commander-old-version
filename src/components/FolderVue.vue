@@ -40,6 +40,8 @@ import ParentIcon from '../icons/ParentIcon.vue'
 
 var selectionChangedIndex = 0
 
+const { ipcRenderer } = window.require('electron')
+
 enum OutMsgType {
     Init = "Init",
     GetItems = "GetItems",
@@ -164,6 +166,8 @@ export default class FolderVue extends FolderVueProps {
     keyDown$ = new Subject()
 
     mounted() {
+        console.log("Name", this.name)
+
         const shiftTabs$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
         const inputChars$ = this.keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && !n.event.shiftKey && n.event.key.length > 0 && n.event.key.length < 2))
         const backSpaces$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 8))
@@ -173,7 +177,6 @@ export default class FolderVue extends FolderVueProps {
         const minuses$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 109))
         const shiftEnds$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 35 && n.event.shiftKey))
         const shiftHomes$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 36 && n.event.shiftKey))
-
         this.$subscribeTo(shiftTabs$, (evt: any) => {
             (this.$refs as any).input.focus()
             evt.event.stopPropagation()
@@ -248,14 +251,6 @@ export default class FolderVue extends FolderVueProps {
             //this.ws.send(JSON.stringify(msg))
         })
         
-        // this.ws.onopen = () => {
-        //     const init: OutMsg = {
-        //         case: OutMsgType.Init,
-        //         fields: [this.name]
-        //     }
-        //     this.ws.send(JSON.stringify(init))
-        // }
-
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
             return new Promise<any[]>((res, rej) => {
@@ -312,6 +307,9 @@ export default class FolderVue extends FolderVueProps {
         //             break
         //     }
         // }
+
+        //ipcRenderer.send(this.name, 'ready')
+        ipcRenderer.send(this.name, { method: 'ready', count: 3})
     }
 
     get totalCount() {

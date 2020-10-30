@@ -19,8 +19,8 @@ ipcMain.on('ready', async (_, __) => {
 	mainWindow.webContents.send("changeTheme", theme)
 })
 
-var leftFolder = new Folder("left")
-var rightFolder = new Folder("right")
+var leftFolder = new Folder(ipcMain, "folderLeft")
+var rightFolder = new Folder(ipcMain, "folderRight")
 
 const createWindow = async () => { 
 	// Create the browser window.
