@@ -1,29 +1,43 @@
 import { app, BrowserWindow } from 'electron'
 import { createMenuBar } from './menu'
 import * as path from 'path'
+import * as settings from 'electron-settings'
 
 const debug = process.env.NODE_ENV == 'development'
-
+let mainWindow: BrowserWindow
 // TODO: Import app from commander-fs
 // TODO: Set theme
 
+
+console.log("Starting electron app")
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
-	app.quit();
+	app.quit()
 
-const createWindow = () => { 
+const createWindow = async () => { 
 	// Create the browser window.
-	const mainWindow = new BrowserWindow({
-		width: 800,
-		height: 600,
-	})
+    let bounds = (await settings.get("window-bounds") || { 
+        width: 600,
+        height: 800,
+	}) as Electron.BrowserWindowConstructorOptions
 
-	// and load the index.html of the app.
-	mainWindow.loadFile(path.join(__dirname, '..', 'index.html'))
-	//  mainWindow.loadURL(debug ? "http://localhost:8080" : "http://localhost:8080")
+	const isLightMode = true
 
-	// Open the DevTools.
-	// mainWindow.webContents.openDevTools();
+	bounds.icon = path.join(__dirname, '..', 'kirk2.png')
+	bounds.backgroundColor = isLightMode ? "#fff" : "#1e1e1e" 
+	mainWindow = new BrowserWindow(bounds)
+
+	if (debug)
+        require('vue-devtools').install() 
+
+	mainWindow.loadURL(debug ? "http://localhost:8080" : "http://localhost:8080")
+    mainWindow.on('close', () => {
+        if (!mainWindow.isMaximized()) {
+            const bounds = mainWindow.getBounds()
+            settings.setSync("window-bounds", bounds as any)
+        }
+    })
 
 	createMenuBar(mainWindow)
 	mainWindow.setAutoHideMenuBar(true)
@@ -33,20 +47,20 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', createWindow)
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-	if (process.platform !== 'darwin') 
+	if (process.platform != 'darwin') 
 		app.quit()
 })
 
 app.on('activate', () => {
 	// On OS X it's common to re-create a window in the app when the
 	// dock icon is clicked and there are no other windows open.
-	if (BrowserWindow.getAllWindows().length === 0) 
+	if (BrowserWindow.getAllWindows().length == 0) 
 		createWindow()
 	
 })

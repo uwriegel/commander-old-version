@@ -13,6 +13,7 @@
             "runtimeArgs": [
                 "run-script", "start"
             ],
+            "env": {"NODE_ENV": "development"},
             "port": 5858
         }
     ]
