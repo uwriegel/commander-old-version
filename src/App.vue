@@ -90,8 +90,7 @@ export default class App extends Vue {
         })
 
         ipcRenderer.on("changeTheme", (event: any, theme: string) => this.changeTheme(theme))
-        // for (let i = 0; i <= 1_000_000; i++)
-        //     ipcRenderer.send('ping', i)
+        ipcRenderer.send('ready')
 
         // let index = 0
       	// this.ws.onmessage = m => {

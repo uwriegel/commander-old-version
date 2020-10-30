@@ -1,17 +1,19 @@
 import { BrowserWindow, Menu } from "electron"
+import * as settings from 'electron-settings'
 
 const THEME_BLUE = "blue"
 const THEME_YARU = "yaru"
 const THEME_YARUDARK = "yarudark"
+export const THEME_DEFAULT = THEME_BLUE
 
-var theme = THEME_BLUE
+var theme = settings.getSync("theme") || THEME_DEFAULT
 
 export function createMenuBar(win: BrowserWindow) {
 
     function setTheme(themeToSet: string) {
-        // TODO: save electron setting
         theme = themeToSet
         win.webContents.send("changeTheme", theme)
+        settings.set("theme", theme)
     }
 
     const menu = Menu.buildFromTemplate([

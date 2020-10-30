@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { createMenuBar } from './menu'
+import { createMenuBar, THEME_DEFAULT } from './menu'
 import * as path from 'path'
 import * as settings from 'electron-settings'
 const {  } = require('electron')
@@ -13,8 +13,10 @@ console.log("Starting electron app")
 if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 	app.quit()
 
-// ipcMain.on('ping', (event, arg) => {
-// })
+ipcMain.on('ready', async (_, __) => {
+	const theme = await settings.get("theme") || THEME_DEFAULT
+	mainWindow.webContents.send("changeTheme", theme)
+})
 
 const createWindow = async () => { 
 	// Create the browser window.
