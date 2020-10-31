@@ -21,7 +21,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "ignore": "src|public|electron/src|\\.vscode|tsconfig\\.json|\\.browserlistrc"
+        "ignore": "src|public|electron/src|\\.vscode|tsconfig\\.json|\\.browserlistrc|cpp-plugins|\\*\\.js\\.map"
       },
       "makers": [
         {

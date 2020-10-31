@@ -34,6 +34,15 @@ export class Folder {
         }
     }
 
+
+    // TODO: const process = spawn('python',["./assets/python/icons.py", request])
+    //process.stdout.on('data', (data: Buffer) => {
+//        const icon = data.toString('utf8').trim()
+  //      if (icon != "None") 
+    //        response.sendFile(icon)
+      //  else
+//        response.sendFile(Path.join(__dirname, "../../images/fault.png"))
+
     // TODO: change column widths
     // TODO: retrieve column widths
     // TODO: Columns on windows
