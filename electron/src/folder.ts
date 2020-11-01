@@ -1,9 +1,7 @@
 import { IpcMain } from "electron"
-import { MainMsg, MainMsgType, RendererMsgType } from "./model/model"
+import { ColumnsMsg, GetItems, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
 import { IProcessor } from "./processors/processor"
-import { Root } from "./processors/root"
-
-const ROOT = "root"
+import { ROOT, Root } from "./processors/root"
 
 export class Folder {
     constructor(ipcMain: IpcMain, webContents: Electron.WebContents, name: string) {
@@ -16,20 +14,28 @@ export class Folder {
                 case MainMsgType.Init:
                     this.init()
                     break 
+                case MainMsgType.GetItems:
+                    const msg = args as GetItems
+                    break
             }
             // TODO: changePath session.Path None true            
         })
     }
 
-    init() {
+    async init() {
         console.log("init")
         // TODO: save path
         const path = ROOT
         switch (path) {
             case ROOT:
-                this.processor = new Root()
+                this.processor = await Root.create()
                 const cols = this.processor.getColumns()
-                this.webContents.send(this.name, { method: RendererMsgType.SetColumns, value: cols})
+                this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
+                this.sendToMain({ 
+                    method: RendererMsgType.ItemsSource, 
+                    path: this.processor.getPath(),
+                    count: this.processor.getItemsCount()
+                } as ItemsSource)
                 break
         }
     }
@@ -46,6 +52,9 @@ export class Folder {
     // TODO: change column widths
     // TODO: retrieve column widths
     // TODO: Columns on windows
+
+    sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
+
     processor: IProcessor
     ipcMain: IpcMain
     webContents: Electron.WebContents

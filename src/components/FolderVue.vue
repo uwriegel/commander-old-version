@@ -37,7 +37,7 @@ import FolderIcon from '../icons/FolderIcon.vue'
 import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
-import { RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg } from "../../electron/src/model/model"
+import { RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, ItemsSource, GetItems } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -164,24 +164,22 @@ export default class FolderVue extends FolderVueProps {
         
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
+            console.log("Guten Abend", startRange, endRange)
             return new Promise<any[]>((res, rej) => {
-                // const msg: OutMsg = {
-                //     case: OutMsgType.GetItems,
-                //     fields: [{ reqId: ++reqId, startRange, endRange }]
-                // }
+                const msg: GetItems = {
+                    method: MainMsgType.GetItems,
+                    reqId: ++reqId, 
+                    startRange, 
+                    endRange 
+                }
                 resolves.set(reqId, res)
-                //this.ws.send(JSON.stringify(msg))
+                ipcRenderer.send(this.name, msg)
             })
         }
 
         // this.ws.onmessage = m => { 
         //     var msg = JSON.parse(m.data) as InMsg
         //     switch (msg.method) {
-        //         case InMsgType.ItemsSource:
-        //             const itemsSource = msg as ItemsSource
-        //             this.basePath = itemsSource.path
-        //             this.itemsSource = { count: itemsSource.count, getItems, indexToSelect: itemsSource.indexToSelect }
-        //             break
         //         case InMsgType.Items:
         //             const items = msg as Items
         //             let resolve = resolves.get(items.reqId)
@@ -220,6 +218,11 @@ export default class FolderVue extends FolderVueProps {
                 case RendererMsgType.SetColumns:
                     const colmsg = msg as ColumnsMsg
                     this.columns = colmsg.value
+                    break
+                case RendererMsgType.ItemsSource:
+                    const itemsSource = msg as ItemsSource
+                    this.basePath = itemsSource.path
+                    this.itemsSource = { count: itemsSource.count, getItems, indexToSelect: itemsSource.indexToSelect }
                     break
             }
         })
