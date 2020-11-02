@@ -1,5 +1,5 @@
 import { IpcMain } from "electron"
-import { ColumnsMsg, GetItems, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
+import { ColumnsMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
 import { IProcessor } from "./processors/processor"
 import { ROOT, Root } from "./processors/root"
 
@@ -16,6 +16,8 @@ export class Folder {
                     break 
                 case MainMsgType.GetItems:
                     const msg = args as GetItems
+                    const items = this.processor.getItems(msg.startRange, msg.endRange)
+                    this.sendToMain({ method: RendererMsgType.Items, items, reqId: msg.reqId } as ItemsMsg)
                     break
             }
             // TODO: changePath session.Path None true            
@@ -40,6 +42,8 @@ export class Folder {
         }
     }
 
+    // TODO: Sort root items
+    // TODO: selection overflow
 
     // TODO: const process = spawn('python',["./assets/python/icons.py", request])
     //process.stdout.on('data', (data: Buffer) => {

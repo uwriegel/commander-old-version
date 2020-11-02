@@ -37,7 +37,7 @@ import FolderIcon from '../icons/FolderIcon.vue'
 import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
-import { RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, ItemsSource, GetItems } from "../../electron/src/model/model"
+import { RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, ItemsSource, GetItems, ItemsMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -180,14 +180,6 @@ export default class FolderVue extends FolderVueProps {
         // this.ws.onmessage = m => { 
         //     var msg = JSON.parse(m.data) as InMsg
         //     switch (msg.method) {
-        //         case InMsgType.Items:
-        //             const items = msg as Items
-        //             let resolve = resolves.get(items.reqId)
-        //             if (resolve) {
-        //                 resolves.delete(items.reqId)
-        //                 resolve(items.items)
-        //             }
-        //             break
         //         case InMsgType.RefreshView:
         //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: this.selectedIndex }
         //             break
@@ -223,6 +215,14 @@ export default class FolderVue extends FolderVueProps {
                     const itemsSource = msg as ItemsSource
                     this.basePath = itemsSource.path
                     this.itemsSource = { count: itemsSource.count, getItems, indexToSelect: itemsSource.indexToSelect }
+                    break
+                case RendererMsgType.Items:
+                    const items = msg as ItemsMsg
+                    const resolve = resolves.get(items.reqId)
+                    if (resolve) {
+                        resolves.delete(items.reqId)
+                        resolve(items.items)
+                    }
                     break
             }
         })

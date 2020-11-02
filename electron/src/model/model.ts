@@ -9,6 +9,25 @@ export enum RendererMsgType {
     SendPath
 }
 
+export enum ItemType {
+    Parent = 1,
+    Drive,
+    Folder,
+    File
+}
+
+export interface Item {
+//    iconPath
+    isSelected: boolean
+    type: ItemType
+    index: number
+    name: string
+    display: string
+    isHidden: boolean
+//    isExif: boolean
+    columns: string[]
+}
+
 export interface ShowHidden {
     show: boolean
     selectedIndex: number
@@ -56,6 +75,11 @@ export interface GetItems extends MainMsg {
 
 export interface ColumnsMsg extends RendererMsg {
     value: Column[]
+}
+
+export interface ItemsMsg extends RendererMsg {
+    items: Item[]
+    reqId: number
 }
 
 export interface ItemsSource extends RendererMsg {
