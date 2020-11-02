@@ -42,9 +42,7 @@ export class Folder {
         }
     }
 
-    // TODO: Sort root items
-    // TODO: selection overflow
-
+    // TODO: drive types
     // TODO: const process = spawn('python',["./assets/python/icons.py", request])
     //process.stdout.on('data', (data: Buffer) => {
 //        const icon = data.toString('utf8').trim()

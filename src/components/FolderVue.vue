@@ -77,8 +77,6 @@ export default class FolderVue extends FolderVueProps {
     keyDown$ = new Subject()
 
     mounted() {
-        console.log("Name", this.name)
-
         const shiftTabs$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
         const inputChars$ = this.keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && !n.event.shiftKey && n.event.key.length > 0 && n.event.key.length < 2))
         const backSpaces$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 8))
@@ -164,7 +162,6 @@ export default class FolderVue extends FolderVueProps {
         
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
-            console.log("Guten Abend", startRange, endRange)
             return new Promise<any[]>((res, rej) => {
                 const msg: GetItems = {
                     method: MainMsgType.GetItems,
