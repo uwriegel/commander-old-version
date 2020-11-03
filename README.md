@@ -10,6 +10,8 @@ In Visual Studio Code open terminal and type:
 ```npm i```
 
 ## Debug
+Before Debugging first run script ```start```. This rebuilds native addon.
+
 In Visual Studio Code press ```F5```
 
 
