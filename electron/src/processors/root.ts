@@ -1,6 +1,6 @@
 import { platformMethods } from "../platforms/platform"
 import { ItemType } from "../model/model"
-import { formatSize, IProcessor } from "./processor"
+import { IProcessor } from "./processor"
 
 export enum RootType {
     HardDrive,
@@ -13,8 +13,8 @@ export interface Drive {
     name: string
     description: string
     type: RootType
-    mountPoint: string
-    driveType: string
+    mountPoint?: string
+    driveType?: string
     size: number
 }
 
@@ -26,8 +26,7 @@ export class Root implements IProcessor {
 
     constructor(drives: Drive[]) { 
         this.drives = 
-            drives
-                .filter(n => n.mountPoint)
+            drives                
                 .sort((a, b) => a.name.localeCompare(b.name)) 
     }
 
@@ -49,19 +48,11 @@ export class Root implements IProcessor {
                 name: n.name,
                 display: n.name,
                 isHidden: false,
-                columns: this.getColumnItems(n)
+                columns: platformMethods.getColumnItems(n)
             }})
     }
 
     getPath() { return ROOT }
-
-    getColumnItems(item: Drive) {
-        return [
-            item.description,
-            item.mountPoint,
-            formatSize(item.size)
-        ]
-    }
 
     drives: Drive[]
 }

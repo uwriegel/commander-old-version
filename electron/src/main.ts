@@ -3,7 +3,6 @@ import { createMenuBar, THEME_DEFAULT } from './menu'
 import * as path from 'path'
 import * as settings from 'electron-settings'
 import { Folder } from './folder'
-const {  } = require('electron')
 
 const debug = process.env.NODE_ENV == 'development'
 let mainWindow: BrowserWindow

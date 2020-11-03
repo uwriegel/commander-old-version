@@ -1,4 +1,5 @@
-import { RootType } from "../processors/root"
+import { formatSize } from "../processors/processor"
+import { Drive, RootType } from "../processors/root"
 import { IPlatform, runCmd } from "./platform"
 
 export class Linux implements IPlatform {
@@ -40,7 +41,7 @@ export class Linux implements IPlatform {
             return {
                 name: takeOr(getString(2, 3), mount),
                 description: trimName(getString(1, 2)),
-                type: RootType.HardDrive,
+                type: RootType.HardDrive, // TODO: Drive types
                 mountPoint: mount,
                 driveType: driveString.substring(columnsPositions[4]).trim(),
                 size: parseInt(getString(0, 1), 10)
@@ -49,8 +50,15 @@ export class Linux implements IPlatform {
 
         return driveStrings
             .slice(1)
-            .filter(n => n)
             .map(constructDrives)
             .filter(n => n.mountPoint && !n.mountPoint.startsWith("/snap"))        
+    }
+
+    getColumnItems(item: Drive) {
+        return [
+            item.description,
+            item.mountPoint,
+            formatSize(item.size)
+        ]
     }
 }

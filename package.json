@@ -47,6 +47,7 @@
     "dialogbox-vue": "^1.2.0",
     "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
+    "filesystem-utilities": "^0.2.0",
     "grid-splitter-vue": "^2.1.7",
     "rxjs": "^6.6.3",
     "virtual-table-vue": "^5.0.1",
