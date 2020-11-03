@@ -1,6 +1,10 @@
 # Commander
 
+## Hint on Windows
+Node.js Version 15 is not supported by currently used Electron, so install node.js 14!
+
 ## Setup
+
 In Visual Studio Code open terminal and type:
 
 ```npm i```
