@@ -1,6 +1,6 @@
 import { platformMethods } from "../platforms/platform"
 import { ItemType } from "../model/model"
-import { IProcessor } from "./processor"
+import { changeProcessor, IProcessor } from "./processor"
 
 export enum RootType {
     HardDrive,
@@ -52,7 +52,7 @@ export class Root implements IProcessor {
         const path = this.drives[index].name
         const processor = 
             (path != ROOT) 
-            ? this
+            ? changeProcessor(path)
             : this
         return { processor,  path }
     }

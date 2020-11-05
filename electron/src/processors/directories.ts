@@ -2,7 +2,7 @@ import { Column } from "model/model"
 import { platformMethods } from "../platforms/platform"
 import { CheckedPath, IProcessor } from "./processor"
 
-export class Drives implements IProcessor {
+export class Directories implements IProcessor {
     getColumns() { 
         const widths = platformMethods.getInitialDirectoryWidths()
         return platformMethods.getDirectoryColumns(widths)
