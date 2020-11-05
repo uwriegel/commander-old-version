@@ -1,6 +1,6 @@
 import { IpcMain } from "electron"
-import { ColumnsMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
-import { IProcessor } from "./processors/processor"
+import { ActionMsg, ColumnsMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
+import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT, Root } from "./processors/root"
 
 export class Folder {
@@ -19,27 +19,39 @@ export class Folder {
                     const items = this.processor.getItems(msg.startRange, msg.endRange)
                     this.sendToMain({ method: RendererMsgType.Items, items, reqId: msg.reqId } as ItemsMsg)
                     break
+                case MainMsgType.Action:
+                    const actionmsg = args as ActionMsg
+                    this.changePath(actionmsg.selectedIndex)
+                    break
             }
-            // TODO: changePath session.Path None true            
         })
     }
 
     async init() {
-        console.log("init")
         // TODO: save path
         const path = ROOT
-        switch (path) {
-            case ROOT:
-                this.processor = await Root.create()
-                const cols = this.processor.getColumns()
-                this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
-                this.sendToMain({ 
-                    method: RendererMsgType.ItemsSource, 
-                    path: this.processor.getPath(),
-                    count: this.processor.getItemsCount()
-                } as ItemsSource)
-                break
+        this.changePathWithCheckedPath({ processor: changeProcessor(path), path })
+    }
+
+    async changePath(index: number) {
+        // TODO: changePath session.Path None true            
+        const checkedPath = this.processor.checkPath(index)
+        this.changePathWithCheckedPath(checkedPath)
+    }
+
+    async changePathWithCheckedPath(checkedPath: CheckedPath) {
+        // TODO: changePath session.Path None true            
+        if (checkedPath.processor != this.processor) {
+            const cols = checkedPath.processor.getColumns()
+            this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
+            this.processor = checkedPath.processor
         }
+        await this.processor.changePath(checkedPath.path)
+        this.sendToMain({ 
+            method: RendererMsgType.ItemsSource, 
+            path: this.processor.getPath(),
+            count: this.processor.getItemsCount()
+        } as ItemsSource)
     }
 
     // TODO: drive types

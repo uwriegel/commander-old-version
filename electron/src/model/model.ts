@@ -44,7 +44,7 @@ export interface Sort {
 export enum MainMsgType {
     Init,
     GetItems,
-    // Action = "Action",
+    Action,
     // ColumnsWidths = "ColumnsWidths",
     // ShowHidden = "ShowHidden",
     // Refresh = "Refresh",
@@ -71,6 +71,10 @@ export interface GetItems extends MainMsg {
     reqId: number,
     startRange: number,
     endRange: number
+}
+
+export interface ActionMsg extends MainMsg {
+    selectedIndex: number
 }
 
 export interface ColumnsMsg extends RendererMsg {

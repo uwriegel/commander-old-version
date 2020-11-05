@@ -19,20 +19,16 @@ export interface Drive {
 }
 
 export class Root implements IProcessor {
-
-    static async create() {
-        return new Root(await platformMethods.getDrives()) 
-    }
-
-    constructor(drives: Drive[]) { 
-        this.drives = 
-            drives                
-                .sort((a, b) => a.name.localeCompare(b.name)) 
-    }
-
     getColumns() {
         const widths = platformMethods.getInitialDrivesWidths()
         return platformMethods.getDrivesColumns(widths)
+    }
+
+    async changePath(path: string) {
+        const drives = await platformMethods.getDrives()
+        this.drives = 
+            drives                
+            .sort((a, b) => a.name.localeCompare(b.name)) 
     }
 
     getItemsCount() { return this.drives.length }
@@ -50,6 +46,15 @@ export class Root implements IProcessor {
                 isHidden: false,
                 columns: platformMethods.getColumnItems(n)
             }})
+    }
+
+    checkPath(index: number) {
+        const path = this.drives[index].name
+        const processor = 
+            (path != ROOT) 
+            ? this
+            : this
+        return { processor,  path }
     }
 
     getPath() { return ROOT }

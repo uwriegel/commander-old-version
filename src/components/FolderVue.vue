@@ -37,7 +37,9 @@ import FolderIcon from '../icons/FolderIcon.vue'
 import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
-import { RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, ItemsSource, GetItems, ItemsMsg } from "../../electron/src/model/model"
+import { 
+    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -271,11 +273,11 @@ export default class FolderVue extends FolderVueProps {
     }
     
     onEnter() {
-        // const msg: OutMsg = {
-        //     case: OutMsgType.Action,
-        //     fields: [this.selectedIndex]
-        // }
-        // this.ws.send(JSON.stringify(msg))
+        const msg: ActionMsg = {
+            method: MainMsgType.Action,
+            selectedIndex: this.selectedIndex
+        }
+        ipcRenderer.send(this.name, msg)
     }
 
     onBacktrack(directionBack: boolean) {
