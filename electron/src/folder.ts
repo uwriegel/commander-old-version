@@ -55,7 +55,7 @@ export class Folder {
     }
 
     // TODO: drive types
-    // TODO: const process = spawn('python',["./assets/python/icons.py", request])
+    // TODO: const process = spawn('python3',["../assets/python/getIcon.py", request])
     //process.stdout.on('data', (data: Buffer) => {
 //        const icon = data.toString('utf8').trim()
   //      if (icon != "None") 
