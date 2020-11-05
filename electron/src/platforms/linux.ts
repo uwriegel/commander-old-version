@@ -23,6 +23,7 @@ export class Linux implements IPlatform {
         ]
     } 
     
+    // TODO: to filesystem-utilites?
     async getDrives() {
         const drivesString = await runCmd('lsblk --bytes --output SIZE,NAME,LABEL,MOUNTPOINT,FSTYPE')
         const driveStrings = drivesString.split("\n")
