@@ -1,8 +1,12 @@
 import { Column } from "model/model"
+import { platformMethods } from "../platforms/platform"
 import { CheckedPath, IProcessor } from "./processor"
 
 export class Drives implements IProcessor {
-    getColumns() { return [] as Column[] }
+    getColumns() { 
+        const widths = platformMethods.getInitialDirectoryWidths()
+        return platformMethods.getDirectoryColumns(widths)
+    }
     getItemsCount() { return 0 }
     getPath(){ return "" }
     getItems(startRange: number, endRange: number) { return [] }

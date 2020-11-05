@@ -17,8 +17,10 @@ const PLATFORM = (() =>
 
 export interface IPlatform {
     getInitialDrivesWidths(): string[]
+    getInitialDirectoryWidths(): string[]
     getDrives(): Promise<Drive[]>
     getDrivesColumns(width: string[]): Column[]
+    getDirectoryColumns(width: string[]): Column[]
     getColumnItems(item: Drive): string[]
 }
 
