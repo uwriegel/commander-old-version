@@ -1,6 +1,6 @@
 import { getDrives } from "filesystem-utilities"
 import { Column, Item } from "../model/model"
-import { Directories } from "./directories"
+import { Directory } from "./directory"
 import { Root, ROOT } from "./root"
 
 export interface IProcessor {
@@ -20,7 +20,7 @@ export interface CheckedPath {
 export const changeProcessor = (path: string) => 
     path == ROOT
     ? new Root()
-    : new Directories()
+    : new Directory()
 
 
 export const formatSize = (size: number) => size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 

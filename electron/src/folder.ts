@@ -1,7 +1,7 @@
 import { IpcMain } from "electron"
 import { ActionMsg, ColumnsMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
-import { ROOT, Root } from "./processors/root"
+import { ROOT } from "./processors/root"
 
 export class Folder {
     constructor(ipcMain: IpcMain, webContents: Electron.WebContents, name: string) {
