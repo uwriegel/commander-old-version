@@ -9,17 +9,17 @@ export class Linux implements IPlatform {
 
     getDrivesColumns(widths: string[]) {
         return [
-            { name: "Name", isSortable: true, width: widths[0], rightAligned: false, isExif: false, subItem: "Erw." },
-            { name: "Datum", isSortable: true, width: widths[1], rightAligned: false, isExif: true},
-            { name: "Größe", isSortable: true, width: widths[2], rightAligned: true, isExif: false }            
+            { name: "Beschreibung", isSortable: false, width: widths[0], rightAligned: false, isExif: false },
+            { name: "Name", isSortable: false, width: widths[1], rightAligned: false, isExif: false },
+            { name: "Größe", isSortable: false, width: widths[3], rightAligned: true, isExif: false }            
         ]
     } 
 
     getDirectoryColumns(widths: string[]) {
         return [
-            { name: "Beschreibung", isSortable: false, width: widths[0], rightAligned: false, isExif: false },
-            { name: "Name", isSortable: false, width: widths[1], rightAligned: false, isExif: false },
-            { name: "Größe", isSortable: false, width: widths[3], rightAligned: true, isExif: false }            
+            { name: "Name", isSortable: true, width: widths[0], rightAligned: false, isExif: false, subItem: "Erw." },
+            { name: "Datum", isSortable: true, width: widths[1], rightAligned: false, isExif: true},
+            { name: "Größe", isSortable: true, width: widths[2], rightAligned: true, isExif: false }            
         ]
     } 
     
@@ -65,10 +65,17 @@ export class Linux implements IPlatform {
             .filter(n => n.mountPoint && !n.mountPoint.startsWith("/snap"))        
     }
 
-    getColumnItems(item: Drive) {
+    getDriveColumnItems(item: Drive) {
         return [
             item.description,
             item.mountPoint,
+            formatSize(item.size)
+        ]
+    }
+
+    getDirectoryColumnItems(item: FileItem) {
+        return [
+            item.time.toString(),
             formatSize(item.size)
         ]
     }

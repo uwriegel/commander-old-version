@@ -21,7 +21,8 @@ export interface IPlatform {
     getDrives(): Promise<Drive[]>
     getDrivesColumns(width: string[]): Column[]
     getDirectoryColumns(width: string[]): Column[]
-    getColumnItems(item: Drive): string[]
+    getDriveColumnItems(item: Drive): string[]
+    getDirectoryColumnItems(item: FileItem): string[]
 }
 
 export const platformMethods: IPlatform = 

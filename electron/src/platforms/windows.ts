@@ -36,9 +36,17 @@ export class Windows implements IPlatform {
             }})
     }
 
-    getColumnItems(item: Drive) {
+    getDriveColumnItems(item: Drive) {
         return [
             item.description,
+            formatSize(item.size)
+        ]
+    }
+
+    getDirectoryColumnItems(item: FileItem) {
+        return [
+            item.name,
+            item.time.toString(),
             formatSize(item.size)
         ]
     }

@@ -44,7 +44,7 @@ export class Root implements IProcessor {
                 name: n.name,
                 display: n.name,
                 isHidden: false,
-                columns: platformMethods.getColumnItems(n)
+                columns: platformMethods.getDriveColumnItems(n)
             }})
     }
 
