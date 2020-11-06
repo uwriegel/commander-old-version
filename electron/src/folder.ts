@@ -54,6 +54,10 @@ export class Folder {
         } as ItemsSource)
     }
 
+    // TODO: Sort
+    // TODO: Backtrace
+    // TODO: Restrict
+    // TODO: select
     // TODO: drive types
     // TODO: const process = spawn('python3',["../assets/python/getIcon.py", request])
     //process.stdout.on('data', (data: Buffer) => {

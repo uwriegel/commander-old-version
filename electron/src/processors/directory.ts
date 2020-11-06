@@ -59,6 +59,11 @@ export class Directory implements IProcessor {
             }})
     }
     
+    // TODO: Icons
+    // TODO: Erw.
+    // TODO: Version
+    // TODO: exif
+
     checkPath(index: number) { 
         const path = this.items[index].name
         const absolutePath = ioPath.join(this.path, path)

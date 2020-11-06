@@ -33,6 +33,7 @@ export class Windows implements IPlatform {
 
     getDirectoryColumnItems(item: FileItem) {
         return [
+            // TODO: Filename without extension, extension
             item.name,
             item.time ? formatDate(item.time) : "",
             item.size ? formatSize(item.size) : ""
