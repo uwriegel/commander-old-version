@@ -65,7 +65,6 @@ export class Folder {
 
     // TODO: change column widths
     // TODO: retrieve column widths
-    // TODO: Columns on windows
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 
