@@ -1,5 +1,5 @@
 import { IPlatform } from "./platform"
-import { formatSize } from "../processors/processor"
+import { formatDate, formatSize } from "../processors/processor"
 
 export class Windows implements IPlatform {
     getInitialDrivesWidths() { return ["33%", "34%", "33%"] }
@@ -34,8 +34,8 @@ export class Windows implements IPlatform {
     getDirectoryColumnItems(item: FileItem) {
         return [
             item.name,
-            item.time.toString(),
-            formatSize(item.size)
+            item.time ? formatDate(item.time) : "",
+            item.size ? formatSize(item.size) : ""
         ]
     }
 }
