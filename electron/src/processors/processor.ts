@@ -3,6 +3,16 @@ import { Column, Item } from "../model/model"
 import { Directory } from "./directory"
 import { Root, ROOT } from "./root"
 
+const dateFormat = Intl.DateTimeFormat("de-DE", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+})
+const timeFormat = Intl.DateTimeFormat("de-DE", {
+    hour: "2-digit",
+    minute: "2-digit"
+})
+
 export interface IProcessor {
     getColumns(): Column[]
     getItemsCount(): number
@@ -24,3 +34,5 @@ export const changeProcessor = (path: string) =>
 
 
 export const formatSize = (size: number) => size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
+
+export const formatDate = (date: Date) => dateFormat.format(date) + " " + timeFormat.format(date)

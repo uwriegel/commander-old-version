@@ -29,25 +29,24 @@ export class Folder {
     }
 
     async init() {
-        // TODO: save path
         const path = ROOT
         this.changePathWithCheckedPath({ processor: changeProcessor(path), path })
     }
 
     async changePath(index: number) {
-        // TODO: changePath session.Path None true            
         const checkedPath = this.processor.checkPath(index)
         this.changePathWithCheckedPath(checkedPath)
     }
 
     async changePathWithCheckedPath(checkedPath: CheckedPath) {
-        // TODO: changePath session.Path None true            
+        // TODO: changePath backtrack: path != selectedPath, not refresh
         if (checkedPath.processor != this.processor) {
             const cols = checkedPath.processor.getColumns()
             this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
             this.processor = checkedPath.processor
         }
         await this.processor.changePath(checkedPath.path)
+        // TODO: save normalized path to settings
         this.sendToMain({ 
             method: RendererMsgType.ItemsSource, 
             path: this.processor.getPath(),

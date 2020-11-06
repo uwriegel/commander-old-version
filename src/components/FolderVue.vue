@@ -45,12 +45,6 @@ var selectionChangedIndex = 0
 
 const { ipcRenderer } = window.require('electron')
 
-interface Range {
-    reqId: number
-    startRange: number, 
-    endRange: number
-}
-
 var reqId = 0
 
 const FolderVueProps = Vue.extend({

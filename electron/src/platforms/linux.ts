@@ -1,4 +1,4 @@
-import { formatSize } from "../processors/processor"
+import { formatDate, formatSize } from "../processors/processor"
 import { IPlatform } from "./platform"
 
 export class Linux implements IPlatform {
@@ -32,8 +32,7 @@ export class Linux implements IPlatform {
 
     getDirectoryColumnItems(item: FileItem) {
         return [
-            // TODO: time format
-            item.time ? item.time.toString() : "",
+            item.time ? formatDate(item.time) : "",
             item.size ? formatSize(item.size) : ""
         ]
     }
