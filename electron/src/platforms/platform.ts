@@ -1,5 +1,4 @@
 import { exec } from "child_process"
-import { Drive } from "processors/root"
 import { Column } from "../model/model"
 import { Linux } from "./linux"
 import * as process from "process"
@@ -18,10 +17,9 @@ const PLATFORM = (() =>
 export interface IPlatform {
     getInitialDrivesWidths(): string[]
     getInitialDirectoryWidths(): string[]
-    getDrives(): Promise<Drive[]>
     getDrivesColumns(width: string[]): Column[]
     getDirectoryColumns(width: string[]): Column[]
-    getDriveColumnItems(item: Drive): string[]
+    getDriveColumnItems(item: DriveItem): string[]
     getDirectoryColumnItems(item: FileItem): string[]
 }
 

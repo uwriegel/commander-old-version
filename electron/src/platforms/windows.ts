@@ -1,5 +1,3 @@
-import { getDrives } from 'filesystem-utilities'
-import { Drive, RootType } from "../processors/root"
 import { IPlatform } from "./platform"
 import { formatSize } from "../processors/processor"
 
@@ -26,17 +24,7 @@ export class Windows implements IPlatform {
         ]
     } 
 
-    async getDrives() {
-        return (await getDrives())
-            .map(n => { return {
-                name: n.name,
-                description: n.description,
-                type: RootType.CdRom, // TODO: Drive types
-                size: n.size
-            }})
-    }
-
-    getDriveColumnItems(item: Drive) {
+    getDriveColumnItems(item: DriveItem) {
         return [
             item.description,
             formatSize(item.size)

@@ -1,22 +1,9 @@
 import { platformMethods } from "../platforms/platform"
 import { ItemType } from "../model/model"
 import { changeProcessor, IProcessor } from "./processor"
-
-export enum RootType {
-    HardDrive,
-    CdRom
-}
+import { getDrives } from "filesystem-utilities"
 
 export const ROOT = "root"
-
-export interface Drive {
-    name: string
-    description: string
-    type: RootType
-    mountPoint?: string
-    driveType?: string
-    size: number
-}
 
 export class Root implements IProcessor {
     getColumns() {
@@ -25,7 +12,7 @@ export class Root implements IProcessor {
     }
 
     async changePath(path: string) {
-        const drives = await platformMethods.getDrives()
+        const drives = await getDrives()
         this.drives = 
             drives                
             .sort((a, b) => a.name.localeCompare(b.name)) 
@@ -59,5 +46,5 @@ export class Root implements IProcessor {
 
     getPath() { return ROOT }
 
-    drives: Drive[]
+    drives: DriveItem[]
 }
