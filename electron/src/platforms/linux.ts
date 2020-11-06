@@ -1,5 +1,5 @@
 import { formatSize } from "../processors/processor"
-import { IPlatform, runCmd } from "./platform"
+import { IPlatform } from "./platform"
 
 export class Linux implements IPlatform {
     getInitialDrivesWidths() { return ["25%", "25%", "25%", "25%"] }
