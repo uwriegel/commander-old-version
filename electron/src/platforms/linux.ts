@@ -32,8 +32,9 @@ export class Linux implements IPlatform {
 
     getDirectoryColumnItems(item: FileItem) {
         return [
-            item.time.toString(),
-            formatSize(item.size)
+            // TODO: time format
+            item.time ? item.time.toString() : "",
+            item.size ? formatSize(item.size) : ""
         ]
     }
 }

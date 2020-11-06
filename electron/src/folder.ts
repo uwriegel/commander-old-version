@@ -21,6 +21,7 @@ export class Folder {
                     break
                 case MainMsgType.Action:
                     const actionmsg = args as ActionMsg
+                    // TODO: ask processor what to do: changePath or action
                     this.changePath(actionmsg.selectedIndex)
                     break
             }
