@@ -31,32 +31,6 @@ import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
 
-// TODO: to model
-interface CommanderMessage {
-  	method: string
-}
-
-interface ThemeMsg extends CommanderMessage {
-  	theme: string
-}
-
-interface ShowViewerMsg extends CommanderMessage {
-  	showViewer: boolean
-}
-
-enum OutMsgType {
-	PathChanged = "PathChanged",
-    ThemeChanged = "ThemeChanged",
-    ShowDevTools = "ShowDevTools",
-    ToggleFullScreen = "ToggleFullScreen",
-    Exit = "Exit"
-}
-
-interface OutMsg {
-    case: OutMsgType
-    fields: string[]
-}
-
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -123,12 +97,12 @@ export default class App extends Vue {
 	}
     
     pathChanged(path: string, basePath: string) {
-        this.selectedItem = path
-        this.basePath = basePath
-        const msg: OutMsg = {
-            case: OutMsgType.PathChanged,
-            fields: [path]
-        }
+        // this.selectedItem = path
+        // this.basePath = basePath
+        // const msg: OutMsg = {
+        //     case: OutMsgType.PathChanged,
+        //     fields: [path]
+        // }
         // if (sendPathChanges)
         //     this.ws.send(JSON.stringify(msg))
     }
