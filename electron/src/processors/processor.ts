@@ -1,4 +1,3 @@
-import { getDrives } from "filesystem-utilities"
 import { Column, Item } from "../model/model"
 import { Directory } from "./directory"
 import { Root, ROOT } from "./root"
@@ -36,3 +35,13 @@ export const changeProcessor = (path: string) =>
 export const formatSize = (size: number) => size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
 
 export const formatDate = (date: Date) => dateFormat.format(date) + " " + timeFormat.format(date)
+
+export const splitFilename = (name: string) => {
+    if (name.length < 3)
+        return [ name, "" ]
+    
+    const index = name.lastIndexOf('.')
+    return index > 0
+    ? [ name.substring(0, index), name.substr(index) ]
+    : [ name, "" ]
+}

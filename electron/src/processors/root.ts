@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 import { platformMethods } from "../platforms/platform"
 import { ItemType } from "../model/model"
 import { changeProcessor, IProcessor } from "./processor"
@@ -23,16 +24,23 @@ export class Root implements IProcessor {
     getItems(startRange: number, endRange: number) {
         startRange = Math.min(startRange, this.drives.length - 1)
         endRange = Math.min(endRange, this.drives.length - 1)
-        return this.drives.slice(startRange, endRange + 1)
-            .map((n, i) => { return {
+
+        const getItem = (item: DriveItem, index: number) => {
+            const columns = platformMethods.getDriveColumnItems(item)
+            return {
                 isSelected: false,
                 type: ItemType.Drive,
-                index: i + startRange,
-                name: n.name,
-                display: n.name,
+                index: index + startRange,
                 isHidden: false,
-                columns: platformMethods.getDriveColumnItems(n)
-            }})
+                name: item.name,
+                display: columns.display,
+                columns: columns.columns
+            }
+        }
+        
+        return _.
+            slice(this.drives, startRange, endRange + 1)
+            .map(getItem)
     }
 
     checkPath(index: number) {

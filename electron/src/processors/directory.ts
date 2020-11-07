@@ -1,9 +1,9 @@
 import { getFiles } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
-import { Column, ItemType } from "../model/model"
+import { ItemType } from "../model/model"
 import { platformMethods } from "../platforms/platform"
-import { CheckedPath, IProcessor } from "./processor"
+import { IProcessor } from "./processor"
 
 interface Parent extends FileItem {
 
@@ -43,24 +43,30 @@ export class Directory implements IProcessor {
     getItems(startRange: number, endRange: number) { 
         startRange = Math.min(startRange, this.items.length - 1)
         endRange = Math.min(endRange, this.items.length - 1)
-        return this.items.slice(startRange, endRange + 1)
-            .map((n, i) => { return {
+
+        const getItem = (item: FileItem, index: number) => {
+            const columns = platformMethods.getDirectoryColumnItems(item)                        
+            return {
                 isSelected: false,
-                type: i == 0 
+                type: index == 0 
                         ? ItemType.Parent
-                        : n.isDirectory 
+                        : item.isDirectory 
                             ? ItemType.Folder 
                             : ItemType.File,
-                index: i + startRange,
-                name: n.name,
-                display: n.name,
-                isHidden: n.isHidden,
-                columns: platformMethods.getDirectoryColumnItems(n)
-            }})
+                index: index + startRange,
+                isHidden: item.isHidden,
+                name: item.name,
+                display: columns.display,
+                columns: columns.columns
+            }
+        }
+
+        return _
+            .slice(this.items, startRange, endRange + 1)
+            .map(getItem)
     }
     
     // TODO: Icons
-    // TODO: Erw.
     // TODO: Version
     // TODO: exif
 

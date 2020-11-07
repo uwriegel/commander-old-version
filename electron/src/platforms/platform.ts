@@ -14,13 +14,18 @@ const PLATFORM = (() =>
     ? Platform.Linux 
     : Platform.Windows)()
 
+interface ColumnItem {
+    display: string
+    columns: string[]
+}
+
 export interface IPlatform {
     getInitialDrivesWidths(): string[]
     getInitialDirectoryWidths(): string[]
     getDrivesColumns(width: string[]): Column[]
     getDirectoryColumns(width: string[]): Column[]
-    getDriveColumnItems(item: DriveItem): string[]
-    getDirectoryColumnItems(item: FileItem): string[]
+    getDriveColumnItems(item: DriveItem): ColumnItem
+    getDirectoryColumnItems(item: FileItem): ColumnItem
 }
 
 export const platformMethods: IPlatform = 

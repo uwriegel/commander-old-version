@@ -1,5 +1,5 @@
 import { IPlatform } from "./platform"
-import { formatDate, formatSize } from "../processors/processor"
+import { formatDate, formatSize, splitFilename } from "../processors/processor"
 
 export class Windows implements IPlatform {
     getInitialDrivesWidths() { return ["33%", "34%", "33%"] }
@@ -25,18 +25,24 @@ export class Windows implements IPlatform {
     } 
 
     getDriveColumnItems(item: DriveItem) {
-        return [
-            item.description,
-            formatSize(item.size)
-        ]
+        return {
+            display: item.name,
+            columns: [
+                item.description,
+                formatSize(item.size)
+            ]
+        }
     }
 
     getDirectoryColumnItems(item: FileItem) {
-        return [
-            // TODO: Filename without extension, extension
-            item.name,
-            item.time ? formatDate(item.time) : "",
-            item.size ? formatSize(item.size) : ""
-        ]
+        const [name, ext] = splitFilename(item.name)
+        return {
+            display: name,
+            columns: [
+                ext,
+                item.time ? formatDate(item.time) : "",
+                item.size ? formatSize(item.size) : ""
+            ]
+        }
     }
 }

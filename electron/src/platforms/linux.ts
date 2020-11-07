@@ -23,17 +23,23 @@ export class Linux implements IPlatform {
     } 
 
     getDriveColumnItems(item: DriveItem) {
-        return [
-            item.description,
-            item.mountPoint,
-            formatSize(item.size)
-        ]
+        return { 
+            display: item.name, 
+            columns: [
+                item.description,
+                item.mountPoint,
+                formatSize(item.size)
+            ]
+        }
     }
 
     getDirectoryColumnItems(item: FileItem) {
-        return [
-            item.time ? formatDate(item.time) : "",
-            item.size ? formatSize(item.size) : ""
-        ]
+        return {
+            display: item.name, 
+            columns: [
+                item.time ? formatDate(item.time) : "",
+                item.size ? formatSize(item.size) : ""
+            ]
+        }
     }
 }
