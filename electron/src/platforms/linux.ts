@@ -1,7 +1,7 @@
 import { Protocol } from 'electron'
 import { getIcon } from 'filesystem-utilities'
 import { ICON_SCHEME } from '../model/model'
-import * as path from 'path'
+import * as ioPath from 'path'
 import { formatDate, formatSize } from "../processors/processor"
 import { IPlatform } from "./platform"
 
@@ -31,9 +31,9 @@ export class Linux implements IPlatform {
         ]
     })
 
-    getDirectoryColumnItems = (item: FileItem) => ({
+    getDirectoryColumnItems = (item: FileItem, path: string) => ({
         display: item.name, 
-        icon: path.extname(item.name) || "unknown",
+        icon: `icon?path=${encodeURIComponent(ioPath.extname(item.name) || "unknown")}` ,
         columns: [
             item.time ? formatDate(item.time) : "",
             item.size ? formatSize(item.size) : ""
@@ -43,11 +43,11 @@ export class Linux implements IPlatform {
     registerIconServer = (protocol: Protocol) => {
         protocol.registerFileProtocol(ICON_SCHEME, async (request, callback) => {
 
-            const getDefaultIcon = () => callback(path.join(__dirname, "../../assets/images/fault.png"))
+            const getDefaultIcon = () => callback(ioPath.join(__dirname, "../../assets/images/fault.png"))
 
             try {
-                const icon = request.url.substring(ICON_SCHEME.length + 3, request.url.length - 1)
-                const result = await getIcon(icon) as string
+                const path = decodeURIComponent(request.url.substring(18))
+                const result = await getIcon(path) as string
                 if (result != "None") 
                     callback(result)
                 else

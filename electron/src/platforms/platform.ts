@@ -27,7 +27,7 @@ export interface IPlatform {
     getDrivesColumns(width: string[]): Column[]
     getDirectoryColumns(width: string[]): Column[]
     getDriveColumnItems(item: DriveItem): ColumnItem
-    getDirectoryColumnItems(item: FileItem): ColumnItem
+    getDirectoryColumnItems(item: FileItem, path: string): ColumnItem
     registerIconServer(protocol: Protocol): void
 }
 

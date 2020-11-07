@@ -1,6 +1,9 @@
 import { Protocol } from "electron"
+import { getIcon } from 'filesystem-utilities'
+import * as ioPath from 'path'
 import { IPlatform } from "./platform"
 import { formatDate, formatSize, splitFilename } from "../processors/processor"
+import { ICON_SCHEME } from "../model/model"
 
 export class Windows implements IPlatform {
     getInitialDrivesWidths = () => ["33%", "34%", "33%"] 
@@ -29,10 +32,11 @@ export class Windows implements IPlatform {
         ]
     })
 
-    getDirectoryColumnItems = (item: FileItem) => {
+    getDirectoryColumnItems = (item: FileItem, path: string) => {
         const [name, ext] = splitFilename(item.name)
         return {
             display: name,
+            icon: `icon?path=${encodeURIComponent(ioPath.join(path, item.name))}`,
             columns: [
                 ext,
                 item.time ? formatDate(item.time) : "",
@@ -42,5 +46,10 @@ export class Windows implements IPlatform {
     }
 
     registerIconServer = (protocol: Protocol) => {
+        protocol.registerBufferProtocol(ICON_SCHEME, async (request, callback) => {
+            const path = decodeURIComponent(request.url.substring(18))
+            const img = await getIcon(path) as Buffer
+            callback(img)
+        })
     }
 }

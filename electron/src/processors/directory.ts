@@ -45,7 +45,7 @@ export class Directory implements IProcessor {
         endRange = Math.min(endRange, this.items.length - 1)
 
         const getItem = (item: FileItem, index: number) => {
-            const columns = platformMethods.getDirectoryColumnItems(item)                        
+            const columns = platformMethods.getDirectoryColumnItems(item, this.path)                        
             return {
                 isSelected: false,
                 type: index == 0 
