@@ -54,6 +54,7 @@ export class Folder {
         } as ItemsSource)
     }
 
+    // TODO: Show/hide hidden
     // TODO: Sort
     // TODO: Backtrace
     // TODO: set selection

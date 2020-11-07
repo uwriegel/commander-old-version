@@ -67,7 +67,8 @@ export class Directory implements IProcessor {
             .map(getItem)
     }
     
-    // TODO: Icons : new node addon for electron, first linux in this project
+    // TODO: Icons: move getIcon to filesystem-utilities with python script
+    // TODO: Icons: create getIcon for Windows in filesystem-utilities
     // TODO: exif: in filesystem-utilities
     // TODO: Version: in filesystem-utilities,only for windows
 

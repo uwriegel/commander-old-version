@@ -1,3 +1,4 @@
+import { Protocol } from "electron"
 import { exec } from "child_process"
 import { Column } from "../model/model"
 import { Linux } from "./linux"
@@ -27,6 +28,7 @@ export interface IPlatform {
     getDirectoryColumns(width: string[]): Column[]
     getDriveColumnItems(item: DriveItem): ColumnItem
     getDirectoryColumnItems(item: FileItem): ColumnItem
+    registerIconServer(protocol: Protocol): void
 }
 
 export const platformMethods: IPlatform = 

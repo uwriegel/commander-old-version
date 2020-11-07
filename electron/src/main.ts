@@ -1,10 +1,10 @@
 import { app, BrowserWindow, ipcMain, protocol } from 'electron'
-import { createMenuBar, THEME_DEFAULT } from './menu'
-import * as path from 'path'
 import * as settings from 'electron-settings'
+import * as path from 'path'
+import { createMenuBar, THEME_DEFAULT } from './menu'
 import { Folder } from './folder'
 import { ICON_SCHEME } from './model/model'
-import { spawn } from 'child_process'
+import { platformMethods } from './platforms/platform'
 
 const debug = process.env.NODE_ENV == 'development'
 let mainWindow: BrowserWindow
@@ -38,20 +38,7 @@ const createWindow = async () => {
 	bounds.backgroundColor = isLightMode ? "#fff" : "#1e1e1e" 
 	mainWindow = new BrowserWindow(bounds)
 
-	protocol.registerFileProtocol(ICON_SCHEME, (request, callback) => {
-		const icon = request.url.substring(ICON_SCHEME.length + 3, request.url.length - 1)
-		const process = spawn('python3',[ path.join(__dirname, "../assets/python/getIcon.py"), icon ])
-    	process.stdout.on('data', (data: Buffer) => {
-	        const icon = data.toString('utf8').trim()
-  			if (icon != "None") 
-				callback(icon)
-        	else
-				callback(path.join(__dirname, "../assets/images/fault.png"))
-		})
-		process.stderr.on('data', (data: Buffer) => 
-			console.error("get icon", data.toString('utf8').trim())
-		)
-	})
+	platformMethods.registerIconServer(protocol)
 
 	leftFolder = new Folder(ipcMain, mainWindow.webContents, "folderLeft")
 	rightFolder = new Folder(ipcMain, mainWindow.webContents, "folderRight")
