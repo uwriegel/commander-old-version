@@ -1,5 +1,5 @@
-import { spawn } from 'child_process'
 import { Protocol } from 'electron'
+import { getIcon } from 'filesystem-utilities'
 import { ICON_SCHEME } from '../model/model'
 import * as path from 'path'
 import { formatDate, formatSize } from "../processors/processor"
@@ -43,20 +43,11 @@ export class Linux implements IPlatform {
     registerIconServer = (protocol: Protocol) => {
         protocol.registerFileProtocol(ICON_SCHEME, async (request, callback) => {
 
-            const getIcon = (icon: string) => new Promise<string>((res, rej) => {
-                const process = spawn('python3',[ path.join(__dirname, "../../assets/python/getIcon.py"), icon ])
-                process.stdout.on('data', (data: Buffer) => {
-                    const icon = data.toString('utf8').trim()
-                    res(icon)
-                })
-                process.stderr.on('data', (data: Buffer) =>  rej(data.toString('utf8').trim()))
-            })
-
             const getDefaultIcon = () => callback(path.join(__dirname, "../../assets/images/fault.png"))
 
             try {
                 const icon = request.url.substring(ICON_SCHEME.length + 3, request.url.length - 1)
-                const result = await getIcon(icon)
+                const result = await getIcon(icon) as string
                 if (result != "None") 
                     callback(result)
                 else
