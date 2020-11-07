@@ -1,3 +1,5 @@
+export const ICON_SCHEME = 'icon'
+
 export enum RendererMsgType {
     SetColumns = 1,
     ItemsSource,
@@ -17,13 +19,13 @@ export enum ItemType {
 }
 
 export interface Item {
-//    iconPath
     isSelected: boolean
     type: ItemType
     index: number
     name: string
     display: string
     isHidden: boolean
+    iconPath?: string
 //    isExif: boolean
     columns: string[]
 }
@@ -115,9 +117,9 @@ export interface SendPath extends RendererMsg {
 export interface Column {
     name: string,
     subItem?: string | null
-    isSortable: boolean,
+    isSortable?: boolean,
     width: string,
-    rightAligned: boolean
-    isExif: boolean
+    rightAligned?: boolean
+    isExif?: boolean
 }
 

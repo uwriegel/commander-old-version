@@ -59,16 +59,10 @@ export class Folder {
     // TODO: set selection
     // TODO: Restrict
     // TODO: drive types
-    // TODO: const process = spawn('python3',["../assets/python/getIcon.py", request])
-    //process.stdout.on('data', (data: Buffer) => {
-//        const icon = data.toString('utf8').trim()
-  //      if (icon != "None") 
-    //        response.sendFile(icon)
-      //  else
-//        response.sendFile(Path.join(__dirname, "../../images/fault.png"))
-
     // TODO: change column widths
     // TODO: retrieve column widths
+    // TODO: Save commander-fs fs-files in fstools, then delete folder
+    // TODO: Save commander-node electron files in this project, then delete folder
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 

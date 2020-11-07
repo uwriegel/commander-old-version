@@ -1,7 +1,7 @@
 import { getFiles } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
-import { ItemType } from "../model/model"
+import { ICON_SCHEME, ItemType } from "../model/model"
 import { platformMethods } from "../platforms/platform"
 import { IProcessor } from "./processor"
 
@@ -15,7 +15,7 @@ export class Directory implements IProcessor {
         return platformMethods.getDirectoryColumns(widths)
     }
 
-    async changePath(path: string) {
+    changePath = async (path: string) => {
         const items = this.items = await getFiles(path)
         this.path = ioPath.normalize(path)
 
@@ -36,11 +36,11 @@ export class Directory implements IProcessor {
         this.items = _.concat(parent, dirs, files)
     }
     
-    getItemsCount() { return this.items.length }
+    getItemsCount = () => this.items.length 
     
-    getPath(){ return this.path }
+    getPath = () => this.path
     
-    getItems(startRange: number, endRange: number) { 
+    getItems = (startRange: number, endRange: number) => { 
         startRange = Math.min(startRange, this.items.length - 1)
         endRange = Math.min(endRange, this.items.length - 1)
 
@@ -55,6 +55,7 @@ export class Directory implements IProcessor {
                             : ItemType.File,
                 index: index + startRange,
                 isHidden: item.isHidden,
+                iconPath: `${ICON_SCHEME}://${columns.icon}`,
                 name: item.name,
                 display: columns.display,
                 columns: columns.columns
@@ -66,11 +67,11 @@ export class Directory implements IProcessor {
             .map(getItem)
     }
     
-    // TODO: Icons
-    // TODO: Version
-    // TODO: exif
+    // TODO: Icons : new node addon for electron, first linux in this project
+    // TODO: exif: in filesystem-utilities
+    // TODO: Version: in filesystem-utilities,only for windows
 
-    checkPath(index: number) { 
+    checkPath = (index: number) => { 
         const path = this.items[index].name
         const absolutePath = ioPath.join(this.path, path)
         return { processor: this, path: absolutePath } 

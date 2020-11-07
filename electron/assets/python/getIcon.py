@@ -3,6 +3,7 @@ from gi.repository import Gio
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import mimetypes
+import sys
 
 def get_icon_path(extension, size=16):
     type_, encoding = mimetypes.guess_type('x.' + extension)
@@ -13,4 +14,4 @@ def get_icon_path(extension, size=16):
         if info:
             return info.get_filename()
 
-print(get_icon_path(".js"))
+print(get_icon_path(sys.argv[1]))

@@ -16,6 +16,7 @@ const PLATFORM = (() =>
 
 interface ColumnItem {
     display: string
+    icon?: string
     columns: string[]
 }
 

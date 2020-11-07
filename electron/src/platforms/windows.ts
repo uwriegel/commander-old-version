@@ -8,19 +8,19 @@ export class Windows implements IPlatform {
 
     getDrivesColumns(widths: string[]) {
         return [
-            { name: "Beschreibung", isSortable: false, width: widths[0], rightAligned: false, isExif: false },
-            { name: "Name", isSortable: false, width: widths[1], rightAligned: false, isExif: false },
-            { name: "Größe", isSortable: false, width: widths[3], rightAligned: true, isExif: false }            
+            { name: "Beschreibung", width: widths[0] },
+            { name: "Name", width: widths[1] },
+            { name: "Größe", width: widths[3] }            
         ]
     } 
 
     getDirectoryColumns(widths: string[]) {
         return [
-            { name: "Name", isSortable: true, width: widths[0], rightAligned: false, isExif: false },
-            { name: "Erw.", isSortable: true, width: widths[1], rightAligned: false, isExif: false },
-            { name: "Datum", isSortable: true, width: widths[2], rightAligned: false, isExif: true },            
-            { name: "Größe", isSortable: true, width: widths[3], rightAligned: true, isExif: false },           
-            { name: "Version", isSortable: true, width: widths[4], rightAligned: false, isExif: false }            
+            { name: "Name", isSortable: true, width: widths[0] },
+            { name: "Erw.", isSortable: true, width: widths[1] },
+            { name: "Datum", isSortable: true, width: widths[2], isExif: true },            
+            { name: "Größe", isSortable: true, width: widths[3], rightAligned: true },           
+            { name: "Version", isSortable: true, width: widths[4] }            
         ]
     } 
 
