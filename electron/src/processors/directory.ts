@@ -67,8 +67,6 @@ export class Directory implements IProcessor {
             .map(getItem)
     }
     
-    // TODO: Version: in filesystem-utilities,only for windows
-
     checkPath = (index: number) => { 
         const path = this.items[index].name
         const absolutePath = ioPath.join(this.path, path)
