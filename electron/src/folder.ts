@@ -54,6 +54,9 @@ export class Folder {
         } as ItemsSource)
     }
 
+    // TODO: Refresh
+    // TODO: getExtendedInfo, first with exifDate
+    // TODO: getExtendedInfo, with Version in Windows
     // TODO: Show/hide hidden
     // TODO: Sort
     // TODO: Backtrace

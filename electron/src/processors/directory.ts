@@ -67,8 +67,6 @@ export class Directory implements IProcessor {
             .map(getItem)
     }
     
-    // TODO: Icons: create getIcon for Windows in filesystem-utilities
-    // TODO: exif: in filesystem-utilities
     // TODO: Version: in filesystem-utilities,only for windows
 
     checkPath = (index: number) => { 
