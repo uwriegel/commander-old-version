@@ -67,6 +67,7 @@ export class Folder {
     // TODO: retrieve column widths
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
+    // TODO: Default folder for dark theme (Linux)
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 

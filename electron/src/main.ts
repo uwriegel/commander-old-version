@@ -6,6 +6,8 @@ import { Folder } from './folder'
 import { CHANNEL_TO_RENDERER, ICON_SCHEME, MainAppMsgType } from './model/model'
 import { platformMethods } from './platforms/platform'
 
+export var sendToApp: (msg: MainAppMsgType, ...args: any[])=>void
+
 const debug = process.env.NODE_ENV == 'development'
 let mainWindow: BrowserWindow
 
@@ -21,7 +23,8 @@ if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 
 ipcMain.on('ready', async () => {
 	const theme = await settings.get("theme") || THEME_DEFAULT
-	mainWindow.webContents.send(CHANNEL_TO_RENDERER, MainAppMsgType.SetTheme, theme)
+	sendToApp(MainAppMsgType.SetTheme, theme)
+	mainWindow.show() 
 })
 
 const createWindow = async () => { 
@@ -31,12 +34,12 @@ const createWindow = async () => {
         height: 800,
 	}) as Electron.BrowserWindowConstructorOptions
 
-	const isLightMode = true
-
 	bounds.webPreferences = { nodeIntegration: true }    
+	bounds.show = false 
 	bounds.icon = path.join(__dirname, '..', '..', 'public', 'kirk2.png')
-	bounds.backgroundColor = isLightMode ? "#fff" : "#1e1e1e" 
+	bounds.backgroundColor = "#fff"
 	mainWindow = new BrowserWindow(bounds)
+	sendToApp = (msg: MainAppMsgType, ...args: any[])=> mainWindow.webContents.send(CHANNEL_TO_RENDERER, msg, args)
 
 	platformMethods.registerIconServer(protocol)
 

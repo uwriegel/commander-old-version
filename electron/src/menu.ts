@@ -1,5 +1,6 @@
 import { BrowserWindow, Menu } from "electron"
 import * as settings from 'electron-settings'
+import { sendToApp } from "./main"
 import { CHANNEL_TO_RENDERER, MainAppMsgType } from "./model/model"
 
 const THEME_BLUE = "blue"
@@ -13,7 +14,7 @@ export function createMenuBar(win: BrowserWindow) {
 
     function setTheme(themeToSet: string) {
         theme = themeToSet
-        win.webContents.send(CHANNEL_TO_RENDERER, MainAppMsgType.SetTheme, theme)
+        sendToApp(MainAppMsgType.SetTheme, theme)
         settings.set("theme", theme)
     }
 
