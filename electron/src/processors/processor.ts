@@ -17,9 +17,9 @@ export interface IProcessor {
     getItemsCount(): number
     getPath(): string
     getItems(startRange: number, endRange: number): Item[]
-    checkPath(index: number): CheckedPath
-    changePath(path: string): Promise<void>
     getItemPath(index: number)
+    checkPath(path: string): CheckedPath
+    changePath(path: string): Promise<void>
 }
 
 export interface CheckedPath {

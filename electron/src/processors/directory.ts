@@ -3,10 +3,11 @@ import * as _ from 'lodash'
 import * as ioPath from 'path'
 import { ICON_SCHEME, ItemType } from "../model/model"
 import { platformMethods } from "../platforms/platform"
-import { IProcessor } from "./processor"
+import { changeProcessor, IProcessor } from "./processor"
+import { ROOT } from './root'
 
 interface Parent extends FileItem {
-
+    // TODO:Check root
 }
 
 export class Directory implements IProcessor {
@@ -67,13 +68,15 @@ export class Directory implements IProcessor {
             .map(getItem)
     }
     
-    checkPath = (index: number) => { 
-        const path = this.items[index].name
-        const absolutePath = ioPath.join(this.path, path)
-        return { processor: this, path: absolutePath } 
-    }
-
     getItemPath = (index: number) => ioPath.join(this.path, this.items[index].name) 
+
+    checkPath = (path: string) => { 
+        const processor = 
+            path == ROOT 
+            ? changeProcessor(path)
+            : this
+        return { processor, path } 
+    }
 
     items: FileItem[]
     path: string

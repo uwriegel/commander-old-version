@@ -39,7 +39,7 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -141,13 +141,7 @@ export default class FolderVue extends FolderVueProps {
             // }
             //this.ws.send(JSON.stringify(msg))
         })
-        this.eventBus.$on('refresh', () => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.Refresh,
-            //     fields: [this.selectedIndex]
-            // }
-            //this.ws.send(JSON.stringify(msg))
-        })
+        this.eventBus.$on('refresh', () => ipcRenderer.send(this.name, { method: MainMsgType.Refresh }))
         this.eventBus.$on('selectionChanged', (index: number) => {
             const msg: GetItemPathMsg = {
                 method: MainMsgType.GetItemPath,
@@ -303,12 +297,11 @@ export default class FolderVue extends FolderVueProps {
     }
 
     setPath(path: string) {
-        // const msg: OutMsg = {
-        //     case: OutMsgType.ChangePath,
-        //     fields: [ path ]
-        // }
-        //console.log("setPath", msg)
-        // this.ws.send(JSON.stringify(msg))
+        const msg: ChangePathMsg = {
+            method: MainMsgType.ChangePath,
+            path
+        }
+        ipcRenderer.send(this.name, msg)
     }
 
     focus() { this.tableEventBus.$emit("focus") }

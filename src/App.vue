@@ -68,6 +68,9 @@ export default class App extends Vue {
                 case MainAppMsgType.SetTheme:
                     this.changeTheme(args[0])
                     break
+                case MainAppMsgType.Refresh:
+                    this.getActiveFolder().$emit("refresh")
+                    break
             }
         })
         ipcRenderer.send('ready')
@@ -97,11 +100,11 @@ export default class App extends Vue {
     
     getInactiveFolder() {
         return this.leftHasFocus ? this.folderRightEventBus : this.folderLeftEventBus
-	}
-
- 	selectionChanged(index: number) {
-	 		this.getActiveFolder().$emit("selectionChanged", index)
-	}
+    }
+    
+    selectionChanged(index: number) { 
+        this.getActiveFolder().$emit("selectionChanged", index) 
+    }	
     
     pathChanged(path: string, basePath: string) {
         this.selectedItem = path
@@ -127,7 +130,7 @@ export default class App extends Vue {
         this.getInactiveFolder().$emit("path", this.basePath)
     }
     
-    changeTheme(theme: string) {
+    changeTheme = (theme: string) => {
         const styleSheet = document.getElementById("theme")  
         if (styleSheet)
             styleSheet.remove()

@@ -1,5 +1,5 @@
 import { IpcMain } from "electron"
-import { ActionMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType, SendPath } from "./model/model"
+import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType, SendPath } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 
@@ -22,14 +22,22 @@ export class Folder {
                 case MainMsgType.Action:
                     const actionmsg = args as ActionMsg
                     // TODO: ask processor what to do: changePath or action
-                    this.changePath(actionmsg.selectedIndex)
+                    this.changePathFromIndex(actionmsg.selectedIndex)
                     break
                 case MainMsgType.GetItemPath:
                     const getItemPathMsg = args as GetItemPathMsg
                     const path = this.processor.getItemPath(getItemPathMsg.selectedIndex)
                     this.sendToMain({ method: RendererMsgType.SendPath, path } as SendPath)
                     break
-                }
+                case MainMsgType.ChangePath:
+                    const changePathMsg = args as ChangePathMsg
+                    const checkedPath = this.processor.checkPath(changePathMsg.path)
+                    this.changePathWithCheckedPath(checkedPath)
+                    break
+                case MainMsgType.Refresh:
+                    this.refresh()
+                    break
+            }
         })
     }
 
@@ -38,8 +46,9 @@ export class Folder {
         this.changePathWithCheckedPath({ processor: changeProcessor(path), path })
     }
 
-    async changePath(index: number) {
-        const checkedPath = this.processor.checkPath(index)
+    async changePathFromIndex(index: number) {
+        const path = this.processor.getItemPath(index)
+        const checkedPath = this.processor.checkPath(path)
         this.changePathWithCheckedPath(checkedPath)
     }
 
@@ -59,8 +68,15 @@ export class Folder {
         } as ItemsSource)
     }
 
-    // TODO: SetPath from input
-    // TODO: Refresh
+    async refresh() {
+        await this.processor.changePath(this.processor.getPath())
+        this.sendToMain({ 
+            method: RendererMsgType.ItemsSource, 
+            path: this.processor.getPath(),
+            count: this.processor.getItemsCount()
+        } as ItemsSource)
+    }
+
     // TODO: getExtendedInfo, first with exifDate
     // TODO: getExtendedInfo, with Version in Windows
     // TODO: Show/hide hidden

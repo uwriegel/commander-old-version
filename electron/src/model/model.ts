@@ -2,7 +2,8 @@ export const ICON_SCHEME = 'icon'
 export const CHANNEL_TO_RENDERER = "RENDERER"
 
 export enum MainAppMsgType {
-    SetTheme = 1
+    SetTheme = 1,
+    Refresh
 } 
 
 export enum RendererMsgType {
@@ -52,12 +53,12 @@ export enum MainMsgType {
     Init,
     GetItems,
     Action,
-    GetItemPath
+    GetItemPath,
+    ChangePath,
+    Refresh
     // ColumnsWidths = "ColumnsWidths",
     // ShowHidden = "ShowHidden",
-    // Refresh = "Refresh",
     // Sort = "Sort",
-    // ChangePath = "ChangePath",
     // Restrict = "Restrict",
     // RestrictClose = "RestrictClose",
     // Backtrack = "Backtrack",
@@ -86,6 +87,10 @@ export interface ActionMsg extends MainMsg {
 
 export interface GetItemPathMsg extends MainMsg {
     selectedIndex: number
+}
+
+export interface ChangePathMsg extends MainMsg {
+    path: string
 }
 
 export interface ColumnsMsg extends RendererMsg {

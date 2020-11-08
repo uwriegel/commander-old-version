@@ -1,7 +1,7 @@
 import { BrowserWindow, Menu } from "electron"
 import * as settings from 'electron-settings'
 import { sendToApp } from "./main"
-import { CHANNEL_TO_RENDERER, MainAppMsgType } from "./model/model"
+import { MainAppMsgType } from "./model/model"
 
 const THEME_BLUE = "blue"
 const THEME_YARU = "yaru"
@@ -10,9 +10,9 @@ export const THEME_DEFAULT = THEME_BLUE
 
 var theme = settings.getSync("theme") || THEME_DEFAULT
 
-export function createMenuBar(win: BrowserWindow) {
+export const createMenuBar = (win: BrowserWindow) => {
 
-    function setTheme(themeToSet: string) {
+    const setTheme = (themeToSet: string) => {
         theme = themeToSet
         sendToApp(MainAppMsgType.SetTheme, theme)
         settings.set("theme", theme)
@@ -29,23 +29,29 @@ export function createMenuBar(win: BrowserWindow) {
         }, {
             label: '&Ansicht',
             submenu: [{
+                label: '&Aktualisieren',
+                accelerator: 'Ctrl+R',
+                click: () => sendToApp(MainAppMsgType.Refresh)
+            }, {
+                type: 'separator'
+            }, {
                 label: '&Themen',
                 type: "submenu",
                 submenu: [{
                     label: '&Blau',
                     type: "radio",
                     checked: theme == THEME_BLUE,
-                    click: evt => setTheme(THEME_BLUE)
+                    click: () => setTheme(THEME_BLUE)
                 }, {
                     label: '&Yaru',
                     type: "radio",
                     checked: theme == THEME_YARU,
-                    click: evt => setTheme(THEME_YARU)
+                    click: () => setTheme(THEME_YARU)
                 }, {
                     label: 'Yaru &dark',
                     type: "radio",
                     checked: theme == THEME_YARUDARK,
-                    click: evt => setTheme(THEME_YARUDARK)
+                    click: () => setTheme(THEME_YARUDARK)
                 }]
             }, {
                 type: 'separator'
