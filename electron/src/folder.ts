@@ -76,7 +76,6 @@ export class Folder {
             indexToSelect 
         } as ItemsSource)
 
-    // TODO: getExtendedInfo: refresh has to select last index, refresh every 50 item
     // TODO: Show/hide hidden
     // TODO: .. => select last folder
     // TODO: Restrict

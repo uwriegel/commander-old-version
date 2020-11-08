@@ -47,6 +47,8 @@ export class Directory implements IProcessor {
             for (let i = 0; i < jpgs.length; i++) {
                 const jpg = jpgs[i]
                 jpg.exifDate = await getExifDate(ioPath.join(this.path, jpg.name))
+                if (i % 50 == 0)
+                    refresh()        
             }
             refresh()
         }
