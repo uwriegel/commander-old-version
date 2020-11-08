@@ -73,6 +73,8 @@ export class Directory implements IProcessor {
         return { processor: this, path: absolutePath } 
     }
 
+    getItemPath = (index: number) => ioPath.join(this.path, this.items[index].name) 
+
     items: FileItem[]
     path: string
 }

@@ -1,5 +1,5 @@
 import { IpcMain } from "electron"
-import { ActionMsg, ColumnsMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType } from "./model/model"
+import { ActionMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType, SendPath } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 
@@ -24,7 +24,12 @@ export class Folder {
                     // TODO: ask processor what to do: changePath or action
                     this.changePath(actionmsg.selectedIndex)
                     break
-            }
+                case MainMsgType.GetItemPath:
+                    const getItemPathMsg = args as GetItemPathMsg
+                    const path = this.processor.getItemPath(getItemPathMsg.selectedIndex)
+                    this.sendToMain({ method: RendererMsgType.SendPath, path } as SendPath)
+                    break
+                }
         })
     }
 
@@ -54,14 +59,16 @@ export class Folder {
         } as ItemsSource)
     }
 
+    // TODO: SetPath from input
     // TODO: Refresh
     // TODO: getExtendedInfo, first with exifDate
     // TODO: getExtendedInfo, with Version in Windows
     // TODO: Show/hide hidden
     // TODO: Sort
-    // TODO: Backtrace
+    // TODO: Backtrack
     // TODO: set selection
     // TODO: Restrict
+    // TODO: Viewer
     // TODO: drive types
     // TODO: change column widths
     // TODO: retrieve column widths

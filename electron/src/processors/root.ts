@@ -43,7 +43,7 @@ export class Root implements IProcessor {
             .map(getItem)
     }
 
-    checkPath(index: number) {
+    checkPath = (index: number) => {
         const path = this.drives[index].name
         const processor = 
             (path != ROOT) 
@@ -52,7 +52,9 @@ export class Root implements IProcessor {
         return { processor,  path }
     }
 
-    getPath() { return ROOT }
+    getPath = () => ROOT
+
+    getItemPath = (index: number) => this.drives[index].name
 
     drives: DriveItem[]
 }

@@ -39,7 +39,7 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -149,11 +149,11 @@ export default class FolderVue extends FolderVueProps {
             //this.ws.send(JSON.stringify(msg))
         })
         this.eventBus.$on('selectionChanged', (index: number) => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.GetItemPath,
-            //     fields: [index]
-            // }
-            //this.ws.send(JSON.stringify(msg))
+            const msg: GetItemPathMsg = {
+                method: MainMsgType.GetItemPath,
+                selectedIndex: this.selectedIndex
+            }
+            ipcRenderer.send(this.name, msg)
         })
         
         let resolves = new Map<number, (items: any[])=>void>()
@@ -191,10 +191,6 @@ export default class FolderVue extends FolderVueProps {
         //             this.isBacktrackEnd = true
         //             setTimeout(() => this.isBacktrackEnd = false, 300)
         //             break
-        //         case InMsgType.SendPath:
-        //             const pathMsg = msg as SendPath
-        //             this.$emit("pathChanged", pathMsg.path, this.basePath) 
-        //             break
         //     }
         // }
 
@@ -216,6 +212,10 @@ export default class FolderVue extends FolderVueProps {
                         resolves.delete(items.reqId)
                         resolve(items.items)
                     }
+                    break
+                case RendererMsgType.SendPath:
+                    const pathMsg = msg as SendPath
+                    this.$emit("pathChanged", pathMsg.path, this.basePath) 
                     break
             }
         })

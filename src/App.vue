@@ -104,8 +104,9 @@ export default class App extends Vue {
 	}
     
     pathChanged(path: string, basePath: string) {
-        // this.selectedItem = path
-        // this.basePath = basePath
+        this.selectedItem = path
+        this.basePath = basePath
+        // TODO: 
         // const msg: OutMsg = {
         //     case: OutMsgType.PathChanged,
         //     fields: [path]

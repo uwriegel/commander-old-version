@@ -31,7 +31,7 @@ export interface Item {
     display: string
     isHidden: boolean
     iconPath?: string
-//    isExif: boolean
+    isExif?: boolean
     columns: string[]
 }
 
@@ -52,6 +52,7 @@ export enum MainMsgType {
     Init,
     GetItems,
     Action,
+    GetItemPath
     // ColumnsWidths = "ColumnsWidths",
     // ShowHidden = "ShowHidden",
     // Refresh = "Refresh",
@@ -65,7 +66,6 @@ export enum MainMsgType {
     // UnselectAll = "UnselectAll",
     // SelectTo = "SelectTo",
     // SelectFrom = "SelectFrom",
-    // GetItemPath = "GetItemPath" 
 }
 
 export interface RendererMsg {
@@ -81,6 +81,10 @@ export interface GetItems extends MainMsg {
 }
 
 export interface ActionMsg extends MainMsg {
+    selectedIndex: number
+}
+
+export interface GetItemPathMsg extends MainMsg {
     selectedIndex: number
 }
 
