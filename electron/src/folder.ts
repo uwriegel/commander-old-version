@@ -77,6 +77,7 @@ export class Folder {
 
     // TODO: getExtendedInfo, with Version in Windows
     // TODO: Show/hide hidden
+    // TODO: .. => select last folder
     // TODO: Restrict
     // TODO: Sort
     // TODO: Backtrack
