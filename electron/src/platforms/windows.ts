@@ -24,6 +24,8 @@ export class Windows implements IPlatform {
         { name: "Version", isSortable: true, width: widths[4] }            
     ]
 
+    getDriveItemPath = (item: DriveItem) => item.name
+
     getDriveColumnItems = (item: DriveItem) => ({
         display: item.name,
         columns: [

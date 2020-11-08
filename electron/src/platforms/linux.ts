@@ -17,6 +17,8 @@ export class Linux implements IPlatform {
         { name: "Größe", width: widths[3], rightAligned: true }            
     ]
 
+    getDriveItemPath = (item: DriveItem) => item.mountPoint
+
     getDirectoryColumns = (widths: string[]) => [
         { name: "Name", isSortable: true, width: widths[0], subItem: "Erw." },
         { name: "Datum", isSortable: true, width: widths[1], isExif: true},
