@@ -64,10 +64,10 @@ export class Folder {
     // TODO: getExtendedInfo, first with exifDate
     // TODO: getExtendedInfo, with Version in Windows
     // TODO: Show/hide hidden
+    // TODO: Restrict
     // TODO: Sort
     // TODO: Backtrack
     // TODO: set selection
-    // TODO: Restrict
     // TODO: Viewer
     // TODO: drive types
     // TODO: change column widths
