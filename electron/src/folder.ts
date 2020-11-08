@@ -59,20 +59,21 @@ export class Folder {
             this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
             this.processor = checkedPath.processor
         }
-        await this.processor.changePath(checkedPath.path, () => this.refreshView())
+        await this.processor.changePath(checkedPath.path, () => this.refreshView(-1))
         // TODO: save normalized path to settings
         this.refreshView()
     }
 
     refresh = async () => {
-        await this.processor.changePath(this.processor.getPath(), () => this.refreshView())
+        await this.processor.changePath(this.processor.getPath(), () => this.refreshView(-1))
         this.refreshView()
     }
 
-    refreshView = () => this.sendToMain({ 
+    refreshView = (indexToSelect = 0) => this.sendToMain({ 
             method: RendererMsgType.ItemsSource, 
             path: this.processor.getPath(),
-            count: this.processor.getItemsCount()
+            count: this.processor.getItemsCount(),
+            indexToSelect 
         } as ItemsSource)
 
     // TODO: getExtendedInfo: refresh has to select last index, refresh every 50 item

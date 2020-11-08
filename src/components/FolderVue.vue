@@ -197,7 +197,11 @@ export default class FolderVue extends FolderVueProps {
                 case RendererMsgType.ItemsSource:
                     const itemsSource = msg as ItemsSource
                     this.basePath = itemsSource.path
-                    this.itemsSource = { count: itemsSource.count, getItems, indexToSelect: itemsSource.indexToSelect }
+                    this.itemsSource = { 
+                        count: itemsSource.count, 
+                        getItems, 
+                        indexToSelect: itemsSource.indexToSelect != -1 ? itemsSource.indexToSelect : this.selectedIndex
+                    }
                     break
                 case RendererMsgType.Items:
                     const items = msg as ItemsMsg
