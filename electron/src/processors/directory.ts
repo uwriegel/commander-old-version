@@ -1,4 +1,4 @@
-import { getFiles } from 'filesystem-utilities'
+import { getFiles, getExifDate } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
 import { ICON_SCHEME, ItemType } from "../model/model"
@@ -10,13 +10,18 @@ interface Parent extends FileItem {
     // TODO:Check root
 }
 
+export interface DirectoryItem extends FileItem {
+    exifDate?: Date
+}
+
+
 export class Directory implements IProcessor {
     getColumns() { 
         const widths = platformMethods.getInitialDirectoryWidths()
         return platformMethods.getDirectoryColumns(widths)
     }
 
-    changePath = async (path: string) => {
+    changePath = async (path: string, refresh: ()=>void) => {
         const items = this.items = await getFiles(path)
         this.path = ioPath.normalize(path)
 
@@ -35,6 +40,16 @@ export class Directory implements IProcessor {
             .sort(sortName)
         
         this.items = _.concat(parent, dirs, files)
+        
+        const getExtendedInfos = async () => {
+            const jpgs = this.items.filter(n => n.name.toLowerCase().endsWith(".jpg"))
+            for (let i = 0; i < jpgs.length; i++) {
+                const jpg = jpgs[i]
+                jpg.exifDate = await getExifDate(ioPath.join(this.path, jpg.name))
+            }
+            refresh()
+        }
+        getExtendedInfos()
     }
     
     getItemsCount = () => this.items.length 
@@ -45,7 +60,7 @@ export class Directory implements IProcessor {
         startRange = Math.min(startRange, this.items.length - 1)
         endRange = Math.min(endRange, this.items.length - 1)
 
-        const getItem = (item: FileItem, index: number) => {
+        const getItem = (item: DirectoryItem, index: number) => {
             const columns = platformMethods.getDirectoryColumnItems(item, this.path)                        
             return {
                 isSelected: false,
@@ -56,6 +71,7 @@ export class Directory implements IProcessor {
                             : ItemType.File,
                 index: index + startRange,
                 isHidden: item.isHidden,
+                isExif: !!item.exifDate,
                 iconPath: `${ICON_SCHEME}://${columns.icon}`,
                 name: item.name,
                 display: columns.display,
@@ -78,6 +94,6 @@ export class Directory implements IProcessor {
         return { processor, path } 
     }
 
-    items: FileItem[]
+    items: DirectoryItem[]
     path: string
 }

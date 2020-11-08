@@ -41,43 +41,40 @@ export class Folder {
         })
     }
 
-    async init() {
+    init = async () => {
         const path = ROOT
         this.changePathWithCheckedPath({ processor: changeProcessor(path), path })
     }
 
-    async changePathFromIndex(index: number) {
+    changePathFromIndex = async (index: number) => {
         const path = this.processor.getItemPath(index)
         const checkedPath = this.processor.checkPath(path)
         this.changePathWithCheckedPath(checkedPath)
     }
 
-    async changePathWithCheckedPath(checkedPath: CheckedPath) {
+    changePathWithCheckedPath = async (checkedPath: CheckedPath) => {
         // TODO: changePath backtrack: path != selectedPath, not refresh
         if (checkedPath.processor != this.processor) {
             const cols = checkedPath.processor.getColumns()
             this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
             this.processor = checkedPath.processor
         }
-        await this.processor.changePath(checkedPath.path)
+        await this.processor.changePath(checkedPath.path, () => this.refreshView())
         // TODO: save normalized path to settings
-        this.sendToMain({ 
+        this.refreshView()
+    }
+
+    refresh = async () => {
+        await this.processor.changePath(this.processor.getPath(), () => this.refreshView())
+        this.refreshView()
+    }
+
+    refreshView = () => this.sendToMain({ 
             method: RendererMsgType.ItemsSource, 
             path: this.processor.getPath(),
             count: this.processor.getItemsCount()
         } as ItemsSource)
-    }
 
-    async refresh() {
-        await this.processor.changePath(this.processor.getPath())
-        this.sendToMain({ 
-            method: RendererMsgType.ItemsSource, 
-            path: this.processor.getPath(),
-            count: this.processor.getItemsCount()
-        } as ItemsSource)
-    }
-
-    // TODO: getExtendedInfo, first with exifDate
     // TODO: getExtendedInfo, with Version in Windows
     // TODO: Show/hide hidden
     // TODO: Restrict

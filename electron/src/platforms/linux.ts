@@ -4,6 +4,7 @@ import { ICON_SCHEME } from '../model/model'
 import * as ioPath from 'path'
 import { formatDate, formatSize } from "../processors/processor"
 import { IPlatform } from "./platform"
+import { DirectoryItem } from 'processors/directory'
 
 export class Linux implements IPlatform {
     getInitialDrivesWidths = () => [ "25%", "25%", "25%", "25%"] 
@@ -31,11 +32,15 @@ export class Linux implements IPlatform {
         ]
     })
 
-    getDirectoryColumnItems = (item: FileItem, path: string) => ({
+    getDirectoryColumnItems = (item: DirectoryItem, path: string) => ({
         display: item.name, 
         icon: `icon?path=${encodeURIComponent(ioPath.extname(item.name) || "unknown")}` ,
         columns: [
-            item.time ? formatDate(item.time) : "",
+            item.exifDate 
+            ? formatDate(item.exifDate)
+            : item.time 
+                ? formatDate(item.time) 
+                : "",
             item.size ? formatSize(item.size) : ""
         ]
     })
