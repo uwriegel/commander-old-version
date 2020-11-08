@@ -1,4 +1,9 @@
 export const ICON_SCHEME = 'icon'
+export const CHANNEL_TO_RENDERER = "RENDERER"
+
+export enum MainAppMsgType {
+    SetTheme = 1
+} 
 
 export enum RendererMsgType {
     SetColumns = 1,

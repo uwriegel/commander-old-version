@@ -3,7 +3,7 @@ import * as settings from 'electron-settings'
 import * as path from 'path'
 import { createMenuBar, THEME_DEFAULT } from './menu'
 import { Folder } from './folder'
-import { ICON_SCHEME } from './model/model'
+import { CHANNEL_TO_RENDERER, ICON_SCHEME, MainAppMsgType } from './model/model'
 import { platformMethods } from './platforms/platform'
 
 const debug = process.env.NODE_ENV == 'development'
@@ -19,9 +19,9 @@ protocol.registerSchemesAsPrivileged([{
 if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 	app.quit()
 
-ipcMain.on('ready', async (_, __) => {
+ipcMain.on('ready', async () => {
 	const theme = await settings.get("theme") || THEME_DEFAULT
-	mainWindow.webContents.send("changeTheme", theme)
+	mainWindow.webContents.send(CHANNEL_TO_RENDERER, MainAppMsgType.SetTheme, theme)
 })
 
 const createWindow = async () => { 

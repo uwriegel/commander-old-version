@@ -30,6 +30,7 @@ import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
+import { CHANNEL_TO_RENDERER, MainAppMsgType } from '../electron/src/model/model'
 
 var sendPathChanges = false
 
@@ -62,7 +63,13 @@ export default class App extends Vue {
 			this.getInactiveFolder().$emit("focus")
         })
 
-        ipcRenderer.on("changeTheme", (event: any, theme: string) => this.changeTheme(theme))
+        ipcRenderer.on(CHANNEL_TO_RENDERER, (event: any, msg: MainAppMsgType, ...args: any[]) => {
+            switch (msg) {
+                case MainAppMsgType.SetTheme:
+                    this.changeTheme(args[0])
+                    break
+            }
+        })
         ipcRenderer.send('ready')
 
         // let index = 0
