@@ -65,4 +65,6 @@ export class Linux implements IPlatform {
             }
         })
     }
+
+    getExtendedInfos = (items: DirectoryItem[], path: string, refresh: ()=>void) => {}
 }

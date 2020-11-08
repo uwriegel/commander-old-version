@@ -75,7 +75,7 @@ export class Folder {
             count: this.processor.getItemsCount()
         } as ItemsSource)
 
-    // TODO: getExtendedInfo, with Version in Windows
+    // TODO: getExtendedInfo: refresh has to select last index, refresh every 50 item
     // TODO: Show/hide hidden
     // TODO: .. => select last folder
     // TODO: Restrict

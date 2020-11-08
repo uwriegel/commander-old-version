@@ -1,9 +1,10 @@
 import { Protocol } from "electron"
-import { getIcon } from 'filesystem-utilities'
+import { getIcon, getFileVersion } from 'filesystem-utilities'
 import * as ioPath from 'path'
 import { IPlatform } from "./platform"
 import { formatDate, formatSize, splitFilename } from "../processors/processor"
 import { ICON_SCHEME } from "../model/model"
+import { DirectoryItem } from "../processors/directory"
 
 export class Windows implements IPlatform {
     getInitialDrivesWidths = () => ["33%", "34%", "33%"] 
@@ -34,7 +35,7 @@ export class Windows implements IPlatform {
         ]
     })
 
-    getDirectoryColumnItems = (item: FileItem, path: string) => {
+    getDirectoryColumnItems = (item: DirectoryItem, path: string) => {
         const [name, ext] = splitFilename(item.name)
         return {
             display: name,
@@ -42,7 +43,8 @@ export class Windows implements IPlatform {
             columns: [
                 ext,
                 item.time ? formatDate(item.time) : "",
-                item.size ? formatSize(item.size) : ""
+                item.size ? formatSize(item.size) : "",
+                item.version ? `${item.version.major}.${item.version.minor}.${item.version.patch}${item.version.build}` : ""
             ]
         }
     }
@@ -54,4 +56,13 @@ export class Windows implements IPlatform {
             callback(img)
         })
     }
+
+    getExtendedInfos = async (items: DirectoryItem[], path: string, refresh: ()=>void) => {
+        const exes = items.filter(n => n.name.toLowerCase().endsWith(".dll") || n.name.toLowerCase().endsWith(".exe"))
+        for (let i = 0; i < exes.length; i++) {
+            const exe = exes[i]
+            exe.version = await getFileVersion(ioPath.join(path, exe.name))
+        }
+        refresh()
+    }    
 }

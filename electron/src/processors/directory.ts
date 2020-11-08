@@ -12,6 +12,7 @@ interface Parent extends FileItem {
 
 export interface DirectoryItem extends FileItem {
     exifDate?: Date
+    version?: VersionInfo
 }
 
 
@@ -50,6 +51,7 @@ export class Directory implements IProcessor {
             refresh()
         }
         getExtendedInfos()
+        platformMethods.getExtendedInfos(this.items, this.path, refresh)
     }
     
     getItemsCount = () => this.items.length 

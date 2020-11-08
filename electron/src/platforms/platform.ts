@@ -4,6 +4,7 @@ import { Column } from "../model/model"
 import { Linux } from "./linux"
 import * as process from "process"
 import { Windows } from "./windows"
+import { DirectoryItem } from "processors/directory"
 
 enum Platform {
     Linux,
@@ -30,6 +31,7 @@ export interface IPlatform {
     getDriveColumnItems(item: DriveItem): ColumnItem
     getDirectoryColumnItems(item: FileItem, path: string): ColumnItem
     registerIconServer(protocol: Protocol): void
+    getExtendedInfos(items: DirectoryItem[], path: string, refresh: ()=>void): void
 }
 
 export const platformMethods: IPlatform = 
