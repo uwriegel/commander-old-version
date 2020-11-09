@@ -7,10 +7,6 @@ import { platformMethods } from "../platforms/platform"
 import { changeProcessor, IProcessor } from "./processor"
 import { ROOT } from './root'
 
-interface Parent extends FileItem {
-    // TODO:Check root
-}
-
 export interface DirectoryItem extends FileItem {
     exifDate?: Date
     version?: VersionInfo
@@ -91,7 +87,10 @@ export class Directory implements IProcessor {
             .map(getItem)
     }
     
-    getItemPath = (index: number) => ioPath.join(this.path, this.items[index].name) 
+    getItemPath = (index: number) => {
+        const path =  ioPath.join(this.path, this.items[index].name) 
+        return path != this.path ? path : "root"
+    }
 
     checkPath = (path: string) => { 
         const processor = 
