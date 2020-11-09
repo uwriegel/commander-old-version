@@ -6,6 +6,9 @@ import { Folder } from './folder'
 import { CHANNEL_TO_RENDERER, ICON_SCHEME, MainAppMsgType } from './model/model'
 import { platformMethods } from './platforms/platform'
 
+export var leftFolder: Folder
+export var rightFolder: Folder
+
 export var sendToApp: (msg: MainAppMsgType, ...args: any[])=>void
 
 const debug = process.env.NODE_ENV == 'development'
@@ -83,8 +86,4 @@ app.on('activate', () => {
 	
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-var leftFolder: Folder
-var rightFolder: Folder
 

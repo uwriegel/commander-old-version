@@ -1,6 +1,6 @@
 import { BrowserWindow, Menu } from "electron"
 import * as settings from 'electron-settings'
-import { sendToApp } from "./main"
+import { leftFolder, rightFolder, sendToApp } from "./main"
 import { MainAppMsgType } from "./model/model"
 
 const THEME_BLUE = "blue"
@@ -9,7 +9,7 @@ const THEME_YARUDARK = "yarudark"
 export const THEME_DEFAULT = THEME_BLUE
 
 var theme = settings.getSync("theme") || THEME_DEFAULT
-var showHidden = false
+export var showHidden = false
 
 export const createMenuBar = (win: BrowserWindow) => {
 
@@ -36,7 +36,8 @@ export const createMenuBar = (win: BrowserWindow) => {
                 accelerator: 'Ctrl+H',
                 click: () => {
                     showHidden = !showHidden
-                    sendToApp(MainAppMsgType.ShowHidden, showHidden)
+                    leftFolder.refresh()
+                    rightFolder.refresh()
                 }
             }, {
                 label: '&Aktualisieren',

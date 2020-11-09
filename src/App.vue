@@ -47,7 +47,6 @@ export default class App extends Vue {
     folderRightEventBus = new Vue()
     leftHasFocus = false
     showViewer = false
-    showHidden = false
     selectedItem = ""
     basePath = ""
     dialogOpen = false
@@ -70,9 +69,6 @@ export default class App extends Vue {
                     break
                 case MainAppMsgType.Refresh:
                     this.getActiveFolder().$emit("refresh")
-                    break
-                case MainAppMsgType.ShowHidden:
-                    console.log("ShowHidden", args[0])
                     break
             }
         })

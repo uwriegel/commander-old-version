@@ -76,7 +76,6 @@ export class Folder {
             indexToSelect 
         } as ItemsSource)
 
-    // TODO: Show/hide hidden
     // TODO: .. => select last folder
     // TODO: Restrict
     // TODO: Sort

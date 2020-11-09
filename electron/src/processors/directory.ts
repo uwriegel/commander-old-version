@@ -1,6 +1,7 @@
 import { getFiles, getExifDate } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
+import { showHidden } from '../menu'
 import { ICON_SCHEME, ItemType } from "../model/model"
 import { platformMethods } from "../platforms/platform"
 import { changeProcessor, IProcessor } from "./processor"
@@ -23,7 +24,9 @@ export class Directory implements IProcessor {
     }
 
     changePath = async (path: string, refresh: ()=>void) => {
-        const items = this.items = await getFiles(path)
+        const items = 
+            (await getFiles(path))
+            .filter(n => showHidden ? true : !n.isHidden)
         this.path = ioPath.normalize(path)
 
         const filterDirectories = (item: FileItem) => item.isDirectory
