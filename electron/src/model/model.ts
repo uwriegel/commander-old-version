@@ -3,7 +3,8 @@ export const CHANNEL_TO_RENDERER = "RENDERER"
 
 export enum MainAppMsgType {
     SetTheme = 1,
-    Refresh
+    Refresh,
+    ShowHidden
 } 
 
 export enum RendererMsgType {

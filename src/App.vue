@@ -71,18 +71,12 @@ export default class App extends Vue {
                 case MainAppMsgType.Refresh:
                     this.getActiveFolder().$emit("refresh")
                     break
+                case MainAppMsgType.ShowHidden:
+                    console.log("ShowHidden", args[0])
+                    break
             }
         })
         ipcRenderer.send('ready')
-
-        // let index = 0
-      	// this.ws.onmessage = m => {
-		// 	let msg = JSON.parse(m.data) as CommanderMessage
-		// 	switch (msg.method) {
-		// 		case "wantPathChanges":
-		// 			sendPathChanges = true
-		// 			break
-	    // }
     }
 
  	onLeftFocus() { 
@@ -109,13 +103,6 @@ export default class App extends Vue {
     pathChanged(path: string, basePath: string) {
         this.selectedItem = path
         this.basePath = basePath
-        // TODO: 
-        // const msg: OutMsg = {
-        //     case: OutMsgType.PathChanged,
-        //     fields: [path]
-        // }
-        // if (sendPathChanges)
-        //     this.ws.send(JSON.stringify(msg))
     }
     
 	viewerHeightChanged() {

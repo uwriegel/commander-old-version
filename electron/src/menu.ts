@@ -9,6 +9,7 @@ const THEME_YARUDARK = "yarudark"
 export const THEME_DEFAULT = THEME_BLUE
 
 var theme = settings.getSync("theme") || THEME_DEFAULT
+var showHidden = false
 
 export const createMenuBar = (win: BrowserWindow) => {
 
@@ -29,6 +30,15 @@ export const createMenuBar = (win: BrowserWindow) => {
         }, {
             label: '&Ansicht',
             submenu: [{
+                label: '&Versteckte Dateien',
+                type: "checkbox",
+                checked: showHidden,
+                accelerator: 'Ctrl+H',
+                click: () => {
+                    showHidden = !showHidden
+                    sendToApp(MainAppMsgType.ShowHidden, showHidden)
+                }
+            }, {
                 label: '&Aktualisieren',
                 accelerator: 'Ctrl+R',
                 click: () => sendToApp(MainAppMsgType.Refresh)
