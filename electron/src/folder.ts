@@ -1,4 +1,5 @@
 import { IpcMain } from "electron"
+import _ = require("lodash")
 import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType, SendPath } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
@@ -32,7 +33,7 @@ export class Folder {
                 case MainMsgType.ChangePath:
                     const changePathMsg = args as ChangePathMsg
                     const checkedPath = this.processor.checkPath(changePathMsg.path)
-                    this.changePathWithCheckedPath(checkedPath)
+                    this.changePathWithCheckedPath(checkedPath, null)
                     break
                 case MainMsgType.Refresh:
                     this.refresh()
@@ -43,16 +44,21 @@ export class Folder {
 
     init = async () => {
         const path = ROOT
-        this.changePathWithCheckedPath({ processor: changeProcessor(path), path })
+        this.changePathWithCheckedPath({ processor: changeProcessor(path), path }, null)
     }
 
     changePathFromIndex = async (index: number) => {
+        const lastPath = this.processor.getPath()
         const path = this.processor.getItemPath(index)
+        const folderToSelect = 
+            lastPath.includes(path) 
+            ? _.trimStart(lastPath.substr(path.length), "/\\")
+            : null
         const checkedPath = this.processor.checkPath(path)
-        this.changePathWithCheckedPath(checkedPath)
+        this.changePathWithCheckedPath(checkedPath, folderToSelect)
     }
 
-    changePathWithCheckedPath = async (checkedPath: CheckedPath) => {
+    changePathWithCheckedPath = async (checkedPath: CheckedPath, folderToSelect: string) => {
         // TODO: changePath backtrack: path != selectedPath, not refresh
         if (checkedPath.processor != this.processor) {
             const cols = checkedPath.processor.getColumns()
@@ -61,7 +67,7 @@ export class Folder {
         }
         await this.processor.changePath(checkedPath.path, () => this.refreshView(-1))
         // TODO: save normalized path to settings
-        this.refreshView()
+        this.refreshView(this.processor.getIndexOfName(folderToSelect))
     }
 
     refresh = async () => {
@@ -76,7 +82,6 @@ export class Folder {
             indexToSelect 
         } as ItemsSource)
 
-    // TODO: .. => select last folder
     // TODO: Restrict
     // TODO: Sort
     // TODO: Backtrack

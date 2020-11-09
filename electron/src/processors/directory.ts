@@ -92,6 +92,11 @@ export class Directory implements IProcessor {
         return path != this.path ? path : "root"
     }
 
+    getIndexOfName = (name: string) => 
+        name 
+        ? this.items.findIndex(n => n.name == name)
+        : 0
+
     checkPath = (path: string) => { 
         const processor = 
             path == ROOT 
