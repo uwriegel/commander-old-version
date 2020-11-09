@@ -67,4 +67,8 @@ export class Linux implements IPlatform {
     }
 
     getExtendedInfos = (items: DirectoryItem[], path: string, refresh: ()=>void) => {}
+
+    getSelectedFolder = (lastPath: string, path: string) => null
+
+    getDriveID = (drive: DriveItem) => drive.mountPoint
 }

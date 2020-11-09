@@ -32,6 +32,8 @@ export interface IPlatform {
     getDirectoryColumnItems(item: FileItem, path: string): ColumnItem
     registerIconServer(protocol: Protocol): void
     getExtendedInfos(items: DirectoryItem[], path: string, refresh: ()=>void): void
+    getSelectedFolder(lastPath: string, path: string): string
+    getDriveID(drive: DriveItem): string
 }
 
 export const platformMethods: IPlatform = 

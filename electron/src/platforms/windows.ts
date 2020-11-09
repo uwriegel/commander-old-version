@@ -5,6 +5,7 @@ import { IPlatform } from "./platform"
 import { formatDate, formatSize, splitFilename } from "../processors/processor"
 import { ICON_SCHEME } from "../model/model"
 import { DirectoryItem } from "../processors/directory"
+import { ROOT } from "../processors/root"
 
 export class Windows implements IPlatform {
     getInitialDrivesWidths = () => ["33%", "34%", "33%"] 
@@ -65,4 +66,8 @@ export class Windows implements IPlatform {
         }
         refresh()
     }    
+    
+    getSelectedFolder = (lastPath: string, path: string) => path == ROOT ? lastPath : null
+
+    getDriveID = (drive: DriveItem) => drive.name
 }

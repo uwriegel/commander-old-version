@@ -1,5 +1,6 @@
 import { IpcMain } from "electron"
 import _ = require("lodash")
+import { platformMethods } from "./platforms/platform"
 import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType, SendPath } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
@@ -53,7 +54,8 @@ export class Folder {
         const folderToSelect = 
             lastPath.includes(path) 
             ? _.trimStart(lastPath.substr(path.length), "/\\")
-            : null
+            : platformMethods.getSelectedFolder(lastPath, path)
+        
         const checkedPath = this.processor.checkPath(path)
         this.changePathWithCheckedPath(checkedPath, folderToSelect)
     }

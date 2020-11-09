@@ -45,7 +45,7 @@ export class Root implements IProcessor {
 
     getItemPath = (index: number) => platformMethods.getDriveItemPath(this.drives[index])
 
-    getIndexOfName = (name: string) => 0
+    getIndexOfName = (name: string) => this.drives.findIndex(n => platformMethods.getDriveID(n) == name)
 
     checkPath = (path: string) => {
         const processor = 
