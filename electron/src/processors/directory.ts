@@ -39,7 +39,8 @@ export class Directory implements IProcessor {
             .filter(filterFiles)
             .sort(sortName)
         
-        this.items = _.concat(parent, dirs, files)
+        this.originalItems = _.concat(parent, dirs, files)
+        this.items = this.originalItems
         
         const getExtendedInfos = async () => {
             const jpgs = this.items.filter(n => n.name.toLowerCase().endsWith(".jpg"))
@@ -67,7 +68,7 @@ export class Directory implements IProcessor {
             const columns = platformMethods.getDirectoryColumnItems(item, this.path)                        
             return {
                 isSelected: false,
-                type: index == 0 
+                type: item.name == ".."
                         ? ItemType.Parent
                         : item.isDirectory 
                             ? ItemType.Folder 
@@ -105,6 +106,27 @@ export class Directory implements IProcessor {
         return { processor, path } 
     }
 
+    restrict = (value: string) => {
+        const restrictedItems = this.originalItems.filter(n => 
+                n.name
+                    .substr(0, value.length)
+                    .toLocaleLowerCase()
+                    .localeCompare(value) == 0)
+        if (restrictedItems.length > 0)
+            this.items = restrictedItems
+        return restrictedItems.length
+    }
+
+    restrictClose = () => {
+        if (this.items.length != this.originalItems.length) {
+            this.items = this.originalItems
+            return true
+        }
+        else    
+            return false
+    }
+
+    originalItems : DirectoryItem[]
     items: DirectoryItem[]
     path: string
 }

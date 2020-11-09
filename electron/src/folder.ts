@@ -1,7 +1,9 @@
 import { IpcMain } from "electron"
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
-import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, MainMsg, MainMsgType, RendererMsg, RendererMsgType, SendPath } from "./model/model"
+import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
+    MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
+    RestrictClose, RestrictMsg, RestrictResult, SendPath } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 
@@ -39,6 +41,20 @@ export class Folder {
                 case MainMsgType.Refresh:
                     this.refresh()
                     break
+                case MainMsgType.Restrict:
+                    const restrictMsg = args as RestrictMsg
+                    const count = this.processor.restrict(restrictMsg.value)
+                    if (count > 0) {
+                        this.sendToMain({ 
+                            method: RendererMsgType.Restrict, 
+                            restrictValue: restrictMsg.value, 
+                            itemsCount: count 
+                        } as RestrictResult)
+                    }
+                    break
+                case MainMsgType.RestrictClose:
+                    this.restrictClose()
+                    break
             }
         })
     }
@@ -61,6 +77,7 @@ export class Folder {
     }
 
     changePathWithCheckedPath = async (checkedPath: CheckedPath, folderToSelect: string) => {
+        this.restrictClose()
         // TODO: changePath backtrack: path != selectedPath, not refresh
         if (checkedPath.processor != this.processor) {
             const cols = checkedPath.processor.getColumns()
@@ -73,6 +90,7 @@ export class Folder {
     }
 
     refresh = async () => {
+        this.restrictClose()
         await this.processor.changePath(this.processor.getPath(), () => this.refreshView(-1))
         this.refreshView()
     }
@@ -84,7 +102,11 @@ export class Folder {
             indexToSelect 
         } as ItemsSource)
 
-    // TODO: Restrict
+    restrictClose = () => {
+        if (this.processor && this.processor.restrictClose())
+            this.sendToMain({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
+    }
+
     // TODO: Sort
     // TODO: Backtrack
     // TODO: set selection

@@ -21,6 +21,8 @@ export interface IProcessor {
     getIndexOfName(name: string): number
     checkPath(path: string): CheckedPath
     changePath(path: string, refresh: (()=>void)): Promise<void>
+    restrict(value: string): number
+    restrictClose(): boolean
 }
 
 export interface CheckedPath {

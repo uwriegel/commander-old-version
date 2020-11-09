@@ -39,7 +39,7 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -74,7 +74,7 @@ export default class FolderVue extends FolderVueProps {
 
     mounted() {
         const shiftTabs$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
-        const inputChars$ = this.keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && !n.event.shiftKey && n.event.key.length > 0 && n.event.key.length < 2))
+        const inputChars$ = this.keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && n.event.key.length > 0 && n.event.key.length < 2))
         const backSpaces$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 8))
         const escapes$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 27))
         const inserts$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 45))
@@ -170,17 +170,6 @@ export default class FolderVue extends FolderVueProps {
         //         case InMsgType.RefreshView:
         //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: this.selectedIndex }
         //             break
-        //         case InMsgType.Restrict:
-        //             const restrictMsg = msg as RestrictResult
-        //             this.restrictValue = restrictMsg.restrictValue      
-        //             this.itemsSource = { count: restrictMsg.itemsCount, getItems, indexToSelect: Math.min(this.selectedIndex, restrictMsg.itemsCount - 1) }
-        //             break
-        //         case InMsgType.RestrictClose:
-        //             const restrictCloseMsg = msg as RestrictClose
-        //             this.itemsSource.count = restrictCloseMsg.itemsCount
-        //             this.restrictValue = ""
-        //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: 0 }
-        //             break
         //         case InMsgType.BacktrackEnd:
         //             this.isBacktrackEnd = true
         //             setTimeout(() => this.isBacktrackEnd = false, 300)
@@ -214,6 +203,21 @@ export default class FolderVue extends FolderVueProps {
                 case RendererMsgType.SendPath:
                     const pathMsg = msg as SendPath
                     this.$emit("pathChanged", pathMsg.path, this.basePath) 
+                    break
+                case RendererMsgType.Restrict:
+                    const restrictResult = msg as RestrictResult
+                    this.restrictValue = restrictResult.restrictValue      
+                    this.itemsSource = { 
+                        count: restrictResult.itemsCount, 
+                        getItems, 
+                        indexToSelect: Math.min(this.selectedIndex, restrictResult.itemsCount - 1)
+                    }
+                    break
+                case RendererMsgType.RestrictClose:
+                    const restrictCloseMsg = msg as RestrictClose
+                    this.itemsSource.count = restrictCloseMsg.itemsCount
+                    this.restrictValue = ""
+                    this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: 0 }
                     break
             }
         })
@@ -311,11 +315,11 @@ export default class FolderVue extends FolderVueProps {
     focus() { this.tableEventBus.$emit("focus") }
     
     restrictTo(evt: KeyboardEvent) {   
-        // const msg: OutMsg = {
-        //     case: OutMsgType.Restrict,
-        //     fields: [ this.restrictValue + evt.key ]
-        // }
-        // this.ws.send(JSON.stringify(msg))
+        const msg: RestrictMsg = {
+            method: MainMsgType.Restrict,
+            value: this.restrictValue + evt.key
+        }
+        ipcRenderer.send(this.name, msg)
     }
 
     restrictBack() {
@@ -324,16 +328,16 @@ export default class FolderVue extends FolderVueProps {
             if (this.restrictValue.length == 0) 
                 this.restrictClose()            
             else {
-                // const msg: OutMsg = {
-                //     case: OutMsgType.Restrict,
-                //     fields: [ this.restrictValue ]
-                // }
-                // this.ws.send(JSON.stringify(msg))
+                const msg: RestrictMsg = {
+                    method: MainMsgType.Restrict,
+                    value: this.restrictValue
+                }
+                ipcRenderer.send(this.name, msg)
             }
         }
     }
     restrictClose() { 
-        // this.ws.send(JSON.stringify({ case: OutMsgType.RestrictClose })) 
+        ipcRenderer.send(this.name, { method: MainMsgType.RestrictClose })
     }
 }
 </script>

@@ -14,9 +14,10 @@ export class Root implements IProcessor {
 
     async changePath(path: string) {
         const drives = await getDrives()
-        this.drives = 
+        this.originalDrives = 
             drives                
             .sort((a, b) => a.name.localeCompare(b.name)) 
+        this.drives = this.originalDrives
     }
 
     getItemsCount() { return this.drives.length }
@@ -43,9 +44,15 @@ export class Root implements IProcessor {
             .map(getItem)
     }
 
-    getItemPath = (index: number) => platformMethods.getDriveItemPath(this.drives[index])
+    getItemPath = (index: number) => 
+        index  != -1
+        ? platformMethods.getDriveItemPath(this.drives[index])
+        : null
 
-    getIndexOfName = (name: string) => this.drives.findIndex(n => platformMethods.getDriveID(n) == name)
+    getIndexOfName = (name: string) => 
+        name 
+        ? this.drives.findIndex(n => platformMethods.getDriveID(n) == name)
+        : 0
 
     checkPath = (path: string) => {
         const processor = 
@@ -57,5 +64,26 @@ export class Root implements IProcessor {
 
     getPath = () => ROOT
 
+    restrict = (value: string) => {
+        const restrictedItems = this.originalDrives.filter(n => 
+                n.name
+                    .substr(0, value.length)
+                    .toLocaleLowerCase()
+                    .localeCompare(value) == 0)
+        if (restrictedItems.length > 0)
+            this.drives = restrictedItems
+        return restrictedItems.length
+    }
+
+    restrictClose = () => {
+        if (this.drives.length != this.originalDrives.length) {
+            this.drives = this.originalDrives
+            return true
+        }
+        else    
+            return false
+    }
+
     drives: DriveItem[]
+    originalDrives: DriveItem[]
 }

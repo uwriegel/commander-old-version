@@ -14,7 +14,7 @@ export enum RendererMsgType {
     Restrict,
     RestrictClose,
     BacktrackEnd,
-    SendPath
+    SendPath,
 }
 
 export enum ItemType {
@@ -55,12 +55,13 @@ export enum MainMsgType {
     Action,
     GetItemPath,
     ChangePath,
-    Refresh
+    Refresh,
+    Restrict,
+    RestrictClose
     // ColumnsWidths = "ColumnsWidths",
     // ShowHidden = "ShowHidden",
     // Sort = "Sort",
     // Restrict = "Restrict",
-    // RestrictClose = "RestrictClose",
     // Backtrack = "Backtrack",
     // ToggleSelection = "ToggleSelection",
     // SelectAll = "SelectAll",
@@ -91,6 +92,10 @@ export interface GetItemPathMsg extends MainMsg {
 
 export interface ChangePathMsg extends MainMsg {
     path: string
+}
+
+export interface RestrictMsg extends MainMsg {
+    value: string
 }
 
 export interface ColumnsMsg extends RendererMsg {
