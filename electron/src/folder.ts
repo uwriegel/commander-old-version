@@ -113,7 +113,6 @@ export class Folder {
             this.sendToMain({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: Sort
     // TODO: Backtrack
     // TODO: set selection
     // TODO: Viewer
@@ -124,6 +123,8 @@ export class Folder {
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
     // TODO: Default folder for dark theme (Linux)
+    // TODO: Sort: Select last item
+    // TODO: change Folder: clear stort or sort
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 

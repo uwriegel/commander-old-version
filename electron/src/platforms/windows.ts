@@ -76,14 +76,27 @@ export class Windows implements IPlatform {
         switch (sort.column) {
             case 0:
                 return _.orderBy(files, [file => file.name.toLowerCase()], [sort.descending ? 'desc' : 'asc'])
-            
-            
+            case 1:
+                return  _.orderBy(files, [file => {
+                    const [name, ext] = splitFilename(file.name)
+                    return ext ? ext.toLowerCase() : ""
+                }, file => file.name.toLowerCase()], [sort.descending ? 'desc' : 'asc', sort.descending ? 'desc' : 'asc'])
             case 2:
                 return _.orderBy(files, ['time'], [sort.descending ? 'desc' : 'asc'])
             case 3:
                 return _.orderBy(files, ['size'], [sort.descending ? 'desc' : 'asc'])
             case 4:
-                return _.orderBy(files, [file => file.version.major, file => file.version.minor, file => file.version.patch, file => file.version.build])
+                return _.orderBy(files, [
+                    file => file.version ? file.version.major : "", 
+                    file => file.version ? file.version.minor : "", 
+                    file => file.version ? file.version.patch : "",
+                    file => file.version ? file.version.build : ""
+                ], [
+                    sort.descending ? 'desc' : 'asc',
+                    sort.descending ? 'desc' : 'asc',
+                    sort.descending ? 'desc' : 'asc',
+                    sort.descending ? 'desc' : 'asc'
+                ])
         }
         return files
     }
