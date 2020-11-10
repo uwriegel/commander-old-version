@@ -2,9 +2,10 @@ import { Protocol } from 'electron'
 import { getIcon } from 'filesystem-utilities'
 import { ICON_SCHEME, Sort } from '../model/model'
 import * as ioPath from 'path'
-import { formatDate, formatSize } from "../processors/processor"
+import { formatDate, formatSize, splitFilename } from "../processors/processor"
 import { IPlatform } from "./platform"
 import { DirectoryItem } from 'processors/directory'
+import _ = require('lodash')
 
 export class Linux implements IPlatform {
     getInitialDrivesWidths = () => [ "25%", "25%", "25%", "25%"] 
@@ -72,5 +73,20 @@ export class Linux implements IPlatform {
 
     getDriveID = (drive: DriveItem) => drive.mountPoint
 
-    sortFiles = (files: DirectoryItem[], sort: Sort) => files
+    sortFiles = (files: DirectoryItem[], sort: Sort) => {
+        switch (sort.column) {
+            case 0:
+                return sort.subItem != true
+                    ? _.orderBy(files, [file => file.name.toLowerCase()], [sort.descending ? 'desc' : 'asc'])
+                    : _.orderBy(files, [file => {
+                        const [name, ext] = splitFilename(file.name)
+                        return ext ? ext.toLowerCase() : ""
+                    }, file => file.name.toLowerCase()], [sort.descending ? 'desc' : 'asc', sort.descending ? 'desc' : 'asc'])
+            case 1:
+                return _.orderBy(files, [ file => file.exifDate ? file.exifDate : file.time ], [sort.descending ? 'desc' : 'asc'])
+            case 2:
+                return _.orderBy(files, ['size'], [sort.descending ? 'desc' : 'asc'])
+        }
+        return files
+    }
 }

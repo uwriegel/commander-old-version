@@ -82,7 +82,7 @@ export class Windows implements IPlatform {
                     return ext ? ext.toLowerCase() : ""
                 }, file => file.name.toLowerCase()], [sort.descending ? 'desc' : 'asc', sort.descending ? 'desc' : 'asc'])
             case 2:
-                return _.orderBy(files, ['time'], [sort.descending ? 'desc' : 'asc'])
+                return _.orderBy(files, [ file => file.exifDate ? file.exifDate : file.time ], [sort.descending ? 'desc' : 'asc'])
             case 3:
                 return _.orderBy(files, ['size'], [sort.descending ? 'desc' : 'asc'])
             case 4:
