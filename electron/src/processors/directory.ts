@@ -2,7 +2,7 @@ import { getFiles, getExifDate } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
 import { showHidden } from '../menu'
-import { ICON_SCHEME, ItemType } from "../model/model"
+import { ICON_SCHEME, ItemType, Sort } from "../model/model"
 import { platformMethods } from "../platforms/platform"
 import { changeProcessor, IProcessor } from "./processor"
 import { ROOT } from './root'
@@ -38,7 +38,8 @@ export class Directory implements IProcessor {
             items
             .filter(filterFiles)
             .sort(sortName)
-        
+
+        this.fileIndex = dirs.length + 1
         this.originalItems = _.concat(parent, dirs, files)
         this.items = this.originalItems
         
@@ -126,7 +127,16 @@ export class Directory implements IProcessor {
             return false
     }
 
+    sort = (sort: Sort) => {
+        const dirs = this.originalItems.slice(0, this.fileIndex)    
+        const files = this.originalItems.slice(this.fileIndex)    
+        const sortedFiles = platformMethods.sortFiles(files, sort)
+        this.originalItems = _.concat(dirs, sortedFiles)
+        this.items = this.originalItems        
+    }
+
     originalItems : DirectoryItem[]
     items: DirectoryItem[]
     path: string
+    fileIndex = 0
 }

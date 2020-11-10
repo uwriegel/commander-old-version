@@ -1,6 +1,6 @@
 import { Protocol } from 'electron'
 import { getIcon } from 'filesystem-utilities'
-import { ICON_SCHEME } from '../model/model'
+import { ICON_SCHEME, Sort } from '../model/model'
 import * as ioPath from 'path'
 import { formatDate, formatSize } from "../processors/processor"
 import { IPlatform } from "./platform"
@@ -71,4 +71,6 @@ export class Linux implements IPlatform {
     getSelectedFolder = (lastPath: string, path: string) => null
 
     getDriveID = (drive: DriveItem) => drive.mountPoint
+
+    sortFiles = (files: DirectoryItem[], sort: Sort) => files
 }

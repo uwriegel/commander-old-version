@@ -1,4 +1,4 @@
-import { Column, Item } from "../model/model"
+import { Column, Item, Sort } from "../model/model"
 import { Directory } from "./directory"
 import { Root, ROOT } from "./root"
 
@@ -23,6 +23,7 @@ export interface IProcessor {
     changePath(path: string, refresh: (()=>void)): Promise<void>
     restrict(value: string): number
     restrictClose(): boolean
+    sort(sort: Sort): void
 }
 
 export interface CheckedPath {

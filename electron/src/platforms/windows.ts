@@ -3,9 +3,10 @@ import { getIcon, getFileVersion } from 'filesystem-utilities'
 import * as ioPath from 'path'
 import { IPlatform } from "./platform"
 import { formatDate, formatSize, splitFilename } from "../processors/processor"
-import { ICON_SCHEME } from "../model/model"
+import { ICON_SCHEME, Sort } from "../model/model"
 import { DirectoryItem } from "../processors/directory"
 import { ROOT } from "../processors/root"
+import _ = require("lodash")
 
 export class Windows implements IPlatform {
     getInitialDrivesWidths = () => ["33%", "34%", "33%"] 
@@ -57,7 +58,7 @@ export class Windows implements IPlatform {
             callback(img)
         })
     }
-
+    
     getExtendedInfos = async (items: DirectoryItem[], path: string, refresh: ()=>void) => {
         const exes = items.filter(n => n.name.toLowerCase().endsWith(".dll") || n.name.toLowerCase().endsWith(".exe"))
         for (let i = 0; i < exes.length; i++) {
@@ -70,4 +71,20 @@ export class Windows implements IPlatform {
     getSelectedFolder = (lastPath: string, path: string) => path == ROOT ? lastPath : null
 
     getDriveID = (drive: DriveItem) => drive.name
+
+    sortFiles = (files: DirectoryItem[], sort: Sort) => {
+        switch (sort.column) {
+            case 0:
+                return _.orderBy(files, [file => file.name.toLowerCase()], [sort.descending ? 'desc' : 'asc'])
+            
+            
+            case 2:
+                return _.orderBy(files, ['time'], [sort.descending ? 'desc' : 'asc'])
+            case 3:
+                return _.orderBy(files, ['size'], [sort.descending ? 'desc' : 'asc'])
+            case 4:
+                return _.orderBy(files, [file => file.version.major, file => file.version.minor, file => file.version.patch, file => file.version.build])
+        }
+        return files
+    }
 }

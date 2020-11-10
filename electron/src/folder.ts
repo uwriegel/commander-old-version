@@ -3,7 +3,7 @@ import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
 import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
-    RestrictClose, RestrictMsg, RestrictResult, SendPath } from "./model/model"
+    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 
@@ -54,6 +54,12 @@ export class Folder {
                     break
                 case MainMsgType.RestrictClose:
                     this.restrictClose()
+                    break
+                case MainMsgType.Sort:
+                    this.restrictClose()
+                    this.processor.sort(args as Sort)
+                    // TODO: Index To Select
+                    this.refreshView(0)
                     break
             }
         })
@@ -113,6 +119,7 @@ export class Folder {
     // TODO: Viewer
     // TODO: drive types
     // TODO: change column widths
+    // TODO: Resolution != 100%: itemSize in tybleview wrong! (occurred in Windows)
     // TODO: retrieve column widths
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder

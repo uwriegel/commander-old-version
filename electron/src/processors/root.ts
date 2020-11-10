@@ -84,6 +84,8 @@ export class Root implements IProcessor {
             return false
     }
 
+    sort = ()=>{}
+
     drives: DriveItem[]
     originalDrives: DriveItem[]
 }

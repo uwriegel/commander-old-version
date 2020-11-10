@@ -36,19 +36,6 @@ export interface Item {
     columns: string[]
 }
 
-export interface ShowHidden {
-    show: boolean
-    selectedIndex: number
-}
-
-export interface Sort {
-    column: number
-    descending: boolean
-    subItem: boolean
-    selectedIndex: number
-}
-
-
 export enum MainMsgType {
     Init,
     GetItems,
@@ -57,11 +44,9 @@ export enum MainMsgType {
     ChangePath,
     Refresh,
     Restrict,
-    RestrictClose
+    RestrictClose,
+    Sort
     // ColumnsWidths = "ColumnsWidths",
-    // ShowHidden = "ShowHidden",
-    // Sort = "Sort",
-    // Restrict = "Restrict",
     // Backtrack = "Backtrack",
     // ToggleSelection = "ToggleSelection",
     // SelectAll = "SelectAll",
@@ -96,6 +81,13 @@ export interface ChangePathMsg extends MainMsg {
 
 export interface RestrictMsg extends MainMsg {
     value: string
+}
+
+export interface Sort extends MainMsg {
+    column: number
+    descending: boolean
+    subItem: boolean
+    selectedIndex: number
 }
 
 export interface ColumnsMsg extends RendererMsg {

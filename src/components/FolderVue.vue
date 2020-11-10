@@ -39,7 +39,7 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose, Sort } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -256,16 +256,14 @@ export default class FolderVue extends FolderVueProps {
     }
 
     onColumnClick(index: number, descending: boolean, subItem: boolean) {
-        // const msg: OutMsg = {
-        //     case: OutMsgType.Sort,
-        //     fields: [ {
-        //         column: index,
-        //         descending,
-        //         subItem,
-        //         selectedIndex: this.selectedIndex
-        //     } ]
-        // }
-        // this.ws.send(JSON.stringify(msg))
+            const msg: Sort = {
+                method: MainMsgType.Sort,
+                column: index,
+                descending,
+                subItem,
+                selectedIndex: this.selectedIndex
+            }
+            ipcRenderer.send(this.name, msg)
     }
     
     onEnter() {

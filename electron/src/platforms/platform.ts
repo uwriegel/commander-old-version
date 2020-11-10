@@ -1,6 +1,6 @@
 import { Protocol } from "electron"
 import { exec } from "child_process"
-import { Column } from "../model/model"
+import { Column, Sort } from "../model/model"
 import { Linux } from "./linux"
 import * as process from "process"
 import { Windows } from "./windows"
@@ -34,6 +34,7 @@ export interface IPlatform {
     getExtendedInfos(items: DirectoryItem[], path: string, refresh: ()=>void): void
     getSelectedFolder(lastPath: string, path: string): string
     getDriveID(drive: DriveItem): string
+    sortFiles(files: DirectoryItem[], sort: Sort): DirectoryItem[]
 }
 
 export const platformMethods: IPlatform = 
@@ -41,7 +42,7 @@ export const platformMethods: IPlatform =
     ? new Linux()
     : new Windows()
 
-export function runCmd(cmd: string) {
+export const runCmd = (cmd: string) => {
     return new Promise<string>((res, rej) => 
         exec(cmd, (err, stdout, stderr) => res(stdout))
     )
