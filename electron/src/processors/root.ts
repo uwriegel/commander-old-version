@@ -18,6 +18,7 @@ export class Root implements IProcessor {
             drives                
             .sort((a, b) => a.name.localeCompare(b.name)) 
         this.drives = this.originalDrives
+        return ROOT
     }
 
     getItemsCount() { return this.drives.length }

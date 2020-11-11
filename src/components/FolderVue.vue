@@ -39,7 +39,7 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose, Sort } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -170,10 +170,6 @@ export default class FolderVue extends FolderVueProps {
         //         case InMsgType.RefreshView:
         //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: this.selectedIndex }
         //             break
-        //         case InMsgType.BacktrackEnd:
-        //             this.isBacktrackEnd = true
-        //             setTimeout(() => this.isBacktrackEnd = false, 300)
-        //             break
         //     }
         // }
 
@@ -218,6 +214,10 @@ export default class FolderVue extends FolderVueProps {
                     this.itemsSource.count = restrictCloseMsg.itemsCount
                     this.restrictValue = ""
                     this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: 0 }
+                    break
+                case RendererMsgType.BacktrackEnd:                    
+                    this.isBacktrackEnd = true
+                    setTimeout(() => this.isBacktrackEnd = false, 300)
                     break
             }
         })
@@ -276,11 +276,11 @@ export default class FolderVue extends FolderVueProps {
 
     onBacktrack(directionBack: boolean) {
         if (!this.restrictValue) {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.Backtrack,
-            //     fields: [ directionBack ]
-            // }
-            // this.ws.send(JSON.stringify(msg))
+            const msg: BackTrackMsg = {
+                method: MainMsgType.Backtrack,
+                direction: directionBack
+            }
+            ipcRenderer.send(this.name, msg)
         }
     }
 

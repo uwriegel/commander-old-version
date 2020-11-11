@@ -55,6 +55,7 @@ export class Directory implements IProcessor {
         }
         getExtendedInfos()
         platformMethods.getExtendedInfos(this.items, this.path, refresh)
+        return this.path
     }
     
     getItemsCount = () => this.items.length 

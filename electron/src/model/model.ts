@@ -45,9 +45,9 @@ export enum MainMsgType {
     Refresh,
     Restrict,
     RestrictClose,
-    Sort
+    Sort,
+    Backtrack
     // ColumnsWidths = "ColumnsWidths",
-    // Backtrack = "Backtrack",
     // ToggleSelection = "ToggleSelection",
     // SelectAll = "SelectAll",
     // UnselectAll = "UnselectAll",
@@ -88,6 +88,10 @@ export interface Sort extends MainMsg {
     descending: boolean
     subItem: boolean
     selectedIndex: number
+}
+
+export interface BackTrackMsg extends MainMsg {
+    direction: boolean
 }
 
 export interface ColumnsMsg extends RendererMsg {

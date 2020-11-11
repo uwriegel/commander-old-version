@@ -1,7 +1,7 @@
 import { IpcMain } from "electron"
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
-import { ActionMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
+import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
@@ -36,7 +36,7 @@ export class Folder {
                 case MainMsgType.ChangePath:
                     const changePathMsg = args as ChangePathMsg
                     const checkedPath = this.processor.checkPath(changePathMsg.path)
-                    this.changePathWithCheckedPath(checkedPath, null)
+                    this.changePathWithCheckedPath(checkedPath, null, true)
                     break
                 case MainMsgType.Refresh:
                     this.refresh()
@@ -61,13 +61,40 @@ export class Folder {
                     // TODO: Index To Select
                     this.refreshView(0)
                     break
+                case MainMsgType.Backtrack:
+                    const backTrackMsg = args as BackTrackMsg
+                    let backtrack = false 
+                    if (backTrackMsg.direction) {
+                        if (this.backtrackPosition < this.backtrack.length - 1) {
+                            this.backtrackPosition++
+                            backtrack = true
+                        }
+                        else
+                            backtrack = false
+                    }
+                    else {
+                        if (this.backtrackPosition > 0) {
+                            this.backtrackPosition--
+                            backtrack = true
+                        }
+                        else
+                            backtrack = false
+                    }
+                    if (backtrack) {
+                        let path = this.backtrack[this.backtrackPosition]
+                        const checkedPath = this.processor.checkPath(path)
+                        this.changePathWithCheckedPath(checkedPath, null, false)
+                    }
+                    else
+                        this.sendToMain({ method: RendererMsgType.BacktrackEnd })
+                    break
             }
         })
     }
 
     init = async () => {
         const path = ROOT
-        this.changePathWithCheckedPath({ processor: changeProcessor(path), path }, null)
+        this.changePathWithCheckedPath({ processor: changeProcessor(path), path }, null, true)
     }
 
     changePathFromIndex = async (index: number) => {
@@ -79,18 +106,24 @@ export class Folder {
             : platformMethods.getSelectedFolder(lastPath, path)
         
         const checkedPath = this.processor.checkPath(path)
-        this.changePathWithCheckedPath(checkedPath, folderToSelect)
+        this.changePathWithCheckedPath(checkedPath, folderToSelect, true)
     }
 
-    changePathWithCheckedPath = async (checkedPath: CheckedPath, folderToSelect: string) => {
+    changePathWithCheckedPath = async (checkedPath: CheckedPath, folderToSelect: string, backTrack: boolean) => {
         this.restrictClose()
-        // TODO: changePath backtrack: path != selectedPath, not refresh
+
         if (checkedPath.processor != this.processor) {
             const cols = checkedPath.processor.getColumns()
             this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
             this.processor = checkedPath.processor
         }
-        await this.processor.changePath(checkedPath.path, () => this.refreshView(-1))
+
+        const newPath = await this.processor.changePath(checkedPath.path, () => this.refreshView(-1))
+
+        if (backTrack) {
+            this.backtrack = _.concat(this.backtrack, newPath)
+            this.backtrackPosition = this.backtrack.length - 1
+        }
         // TODO: save normalized path to settings
         this.refreshView(this.processor.getIndexOfName(folderToSelect))
     }
@@ -113,20 +146,23 @@ export class Folder {
             this.sendToMain({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: Backtrack
     // TODO: set selection
     // TODO: Viewer
     // TODO: drive types
     // TODO: change column widths
     // TODO: Resolution != 100%: itemSize in tybleview wrong! (occurred in Windows)
     // TODO: retrieve column widths
+    // TODO: Dialogs
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
     // TODO: Default folder for dark theme (Linux)
     // TODO: Sort: Select last item
-    // TODO: change Folder: clear stort or sort
+    // TODO: change Folder: clear sort or sort
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
+
+    backtrack = [] as string []
+    backtrackPosition = -1
 
     processor: IProcessor
     ipcMain: IpcMain

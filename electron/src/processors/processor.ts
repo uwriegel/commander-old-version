@@ -20,7 +20,7 @@ export interface IProcessor {
     getItemPath(index: number): string
     getIndexOfName(name: string): number
     checkPath(path: string): CheckedPath
-    changePath(path: string, refresh: (()=>void)): Promise<void>
+    changePath(path: string, refresh: (()=>void)): Promise<string>
     restrict(value: string): number
     restrictClose(): boolean
     sort(sort: Sort): void
