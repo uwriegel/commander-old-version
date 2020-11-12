@@ -150,7 +150,6 @@ export class Folder {
     // TODO: Viewer
     // TODO: drive types
     // TODO: change column widths
-    // TODO: Resolution != 100%: itemSize in tybleview wrong! (occurred in Windows)
     // TODO: retrieve column widths
     // TODO: Dialogs
     // TODO: Save commander-fs fs-files in fstools, then delete folder
