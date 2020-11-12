@@ -4,14 +4,13 @@ import * as ioPath from 'path'
 import { showHidden } from '../menu'
 import { ICON_SCHEME, ItemType, Sort } from "../model/model"
 import { platformMethods } from "../platforms/platform"
-import { changeProcessor, IProcessor } from "./processor"
+import { changeProcessor, CheckedPath, IProcessor } from "./processor"
 import { ROOT } from './root'
 
 export interface DirectoryItem extends FileItem {
-    exifDate?: Date
-    version?: VersionInfo
+    exifDate?: Date|null
+    version?: VersionInfo|null
 }
-
 
 export class Directory implements IProcessor {
     getColumns() { 
@@ -29,7 +28,7 @@ export class Directory implements IProcessor {
         const filterFiles = (item: FileItem) => !item.isDirectory
         const sortName = (a: FileItem, b: FileItem) => a.name.localeCompare(b.name)
 
-        const parent = [ { name: "..", isDirectory: true, size: 0, time: null, isHidden: null }]
+        const parent: DirectoryItem[] = [ { name: "..", isDirectory: true, size: 0 }]
         const dirs = 
             items
             .filter(filterDirectories)
@@ -95,16 +94,16 @@ export class Directory implements IProcessor {
         return path != this.path ? path : "root"
     }
 
-    getIndexOfName = (name: string) => 
+    getIndexOfName = (name: string|null) => 
         name 
         ? this.items.findIndex(n => n.name == name)
         : 0
 
-    checkPath = (path: string) => { 
+    checkPath = (path: string): CheckedPath => { 
         const processor = 
             path == ROOT 
             ? changeProcessor(path)
-            : this
+            : this as IProcessor
         return { processor, path } 
     }
 
@@ -136,8 +135,8 @@ export class Directory implements IProcessor {
         this.items = this.originalItems        
     }
 
-    originalItems : DirectoryItem[]
-    items: DirectoryItem[]
-    path: string
+    originalItems : DirectoryItem[] = []
+    items: DirectoryItem[]= []
+    path: string = ""
     fileIndex = 0
 }

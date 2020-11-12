@@ -32,15 +32,15 @@ export interface IPlatform {
     getDirectoryColumnItems(item: FileItem, path: string): ColumnItem
     registerIconServer(protocol: Protocol): void
     getExtendedInfos(items: DirectoryItem[], path: string, refresh: ()=>void): void
-    getSelectedFolder(lastPath: string, path: string): string
+    getSelectedFolder(lastPath: string, path: string|null): string|null
     getDriveID(drive: DriveItem): string
     sortFiles(files: DirectoryItem[], sort: Sort): DirectoryItem[]
 }
 
 export const platformMethods: IPlatform = 
     PLATFORM == Platform.Linux
-    ? new Linux()
-    : new Windows()
+    ? new Linux() as IPlatform
+    : new Windows()as IPlatform
 
 export const runCmd = (cmd: string) => {
     return new Promise<string>((res, rej) => 

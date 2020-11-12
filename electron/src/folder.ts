@@ -6,6 +6,7 @@ import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, Get
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
+import { Initial } from "./processors/initial"
 
 export class Folder {
     constructor(ipcMain: IpcMain, webContents: Electron.WebContents, name: string) {
@@ -99,17 +100,17 @@ export class Folder {
 
     changePathFromIndex = async (index: number) => {
         const lastPath = this.processor.getPath()
-        const path = this.processor.getItemPath(index)
+        const path = this.processor.getItemPath(index) ?? ""
         const folderToSelect = 
             lastPath.includes(path) 
-            ? _.trimStart(lastPath.substr(path.length), "/\\")
+            ? _.trimStart(lastPath.substr(path!!.length), "/\\")
             : platformMethods.getSelectedFolder(lastPath, path)
         
         const checkedPath = this.processor.checkPath(path)
         this.changePathWithCheckedPath(checkedPath, folderToSelect, true)
     }
 
-    changePathWithCheckedPath = async (checkedPath: CheckedPath, folderToSelect: string, backTrack: boolean) => {
+    changePathWithCheckedPath = async (checkedPath: CheckedPath, folderToSelect: string|null, backTrack: boolean) => {
         this.restrictClose()
 
         if (checkedPath.processor != this.processor) {
@@ -163,7 +164,7 @@ export class Folder {
     backtrack = [] as string []
     backtrackPosition = -1
 
-    processor: IProcessor
+    processor: IProcessor = new Initial
     ipcMain: IpcMain
     webContents: Electron.WebContents
     name: string

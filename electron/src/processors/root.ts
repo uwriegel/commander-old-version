@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import { platformMethods } from "../platforms/platform"
 import { ItemType } from "../model/model"
-import { changeProcessor, IProcessor } from "./processor"
+import { changeProcessor, CheckedPath, IProcessor } from "./processor"
 import { getDrives } from "filesystem-utilities"
 
 export const ROOT = "root"
@@ -50,16 +50,16 @@ export class Root implements IProcessor {
         ? platformMethods.getDriveItemPath(this.drives[index])
         : null
 
-    getIndexOfName = (name: string) => 
+    getIndexOfName = (name: string|null) => 
         name 
         ? this.drives.findIndex(n => platformMethods.getDriveID(n) == name)
         : 0
 
-    checkPath = (path: string) => {
+    checkPath = (path: string): CheckedPath => {
         const processor = 
             (path != ROOT) 
             ? changeProcessor(path)
-            : this
+            : this as IProcessor
         return { processor,  path }
     }
 
@@ -87,6 +87,6 @@ export class Root implements IProcessor {
 
     sort = ()=>{}
 
-    drives: DriveItem[]
-    originalDrives: DriveItem[]
+    drives: DriveItem[] = []
+    originalDrives: DriveItem[] = []
 }

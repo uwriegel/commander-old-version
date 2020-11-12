@@ -25,6 +25,7 @@
 	</div>
 </template>
 <script lang="ts">
+// TODO: in tsconfig.json: strict
 import { Component, Vue } from 'vue-property-decorator'
 import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'

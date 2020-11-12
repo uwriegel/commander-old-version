@@ -18,7 +18,7 @@ export class Linux implements IPlatform {
         { name: "Größe", width: widths[3], rightAligned: true }            
     ]
 
-    getDriveItemPath = (item: DriveItem) => item.mountPoint
+    getDriveItemPath = (item: DriveItem) => item.mountPoint!!
 
     getDirectoryColumns = (widths: string[]) => [
         { name: "Name", isSortable: true, width: widths[0], subItem: "Erw." },
@@ -30,7 +30,7 @@ export class Linux implements IPlatform {
         display: item.name, 
         columns: [
             item.description,
-            item.mountPoint,
+            item.mountPoint!!,
             formatSize(item.size)
         ]
     })
@@ -71,7 +71,7 @@ export class Linux implements IPlatform {
 
     getSelectedFolder = (lastPath: string, path: string) => null
 
-    getDriveID = (drive: DriveItem) => drive.mountPoint
+    getDriveID = (drive: DriveItem) => drive.mountPoint!!
 
     sortFiles = (files: DirectoryItem[], sort: Sort) => {
         switch (sort.column) {

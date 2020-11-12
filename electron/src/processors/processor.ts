@@ -17,8 +17,8 @@ export interface IProcessor {
     getItemsCount(): number
     getPath(): string
     getItems(startRange: number, endRange: number): Item[]
-    getItemPath(index: number): string
-    getIndexOfName(name: string): number
+    getItemPath(index: number): string|null
+    getIndexOfName(name: string|null): number
     checkPath(path: string): CheckedPath
     changePath(path: string, refresh: (()=>void)): Promise<string>
     restrict(value: string): number
@@ -31,11 +31,10 @@ export interface CheckedPath {
     path: string
 }
 
-export const changeProcessor = (path: string) => 
+export const changeProcessor = (path: string): IProcessor => 
     path == ROOT
-    ? new Root()
-    : new Directory()
-
+        ? new Root() as IProcessor
+        : new Directory() as IProcessor
 
 export const formatSize = (size: number) => size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") 
 

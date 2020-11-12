@@ -30,9 +30,9 @@ export interface Item {
     index: number
     name: string
     display: string
-    isHidden: boolean
+    isHidden: boolean|undefined
     iconPath?: string
-    isExif?: boolean
+    isExif?: boolean|null
     columns: string[]
 }
 

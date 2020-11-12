@@ -3,6 +3,7 @@
     "compilerOptions": {
         "baseUrl": "./",
         "outDir": "../dist",
+        "strict": true,
         "sourceMap": true,
         "declaration": false,
         "module": "commonjs",
