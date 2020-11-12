@@ -1,7 +1,8 @@
 import { IpcMain } from "electron"
+import * as settings from 'electron-settings'
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
-import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
+import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, ColumnsWidths, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
@@ -90,6 +91,11 @@ export class Folder {
                     else
                         this.sendToMain({ method: RendererMsgType.BacktrackEnd })
                     break
+                case MainMsgType.ColumnsWidths:
+                    const columnsWidths = args as ColumnsWidths
+                    // TODO: save to processor
+                    // settings.set(this.getSettingsName("columnsWidths") - processrName, columnsWidths.widths)
+                    break
             }
         })
     }
@@ -160,6 +166,8 @@ export class Folder {
     // TODO: change Folder: clear sort or sort
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
+
+    getSettingsName = (name: string) => `${this.name}-${name}`
 
     backtrack = [] as string []
     backtrackPosition = -1

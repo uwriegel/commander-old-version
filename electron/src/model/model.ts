@@ -46,8 +46,8 @@ export enum MainMsgType {
     Restrict,
     RestrictClose,
     Sort,
-    Backtrack
-    // ColumnsWidths = "ColumnsWidths",
+    Backtrack,
+    ColumnsWidths
     // ToggleSelection = "ToggleSelection",
     // SelectAll = "SelectAll",
     // UnselectAll = "UnselectAll",
@@ -92,6 +92,10 @@ export interface Sort extends MainMsg {
 
 export interface BackTrackMsg extends MainMsg {
     direction: boolean
+}
+
+export interface ColumnsWidths extends MainMsg {
+    widths: string[]
 }
 
 export interface ColumnsMsg extends RendererMsg {

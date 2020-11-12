@@ -39,7 +39,7 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg, ColumnsWidths } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -248,22 +248,22 @@ export default class FolderVue extends FolderVueProps {
     }
 
     onColumnsWidthChanged(widths: string[]) {
-        // const msg: OutMsg = {
-        //     case: OutMsgType.ColumnsWidths,
-        //     fields: [ widths ]
-        // }
-        // this.ws.send(JSON.stringify(msg))
+        const msg: ColumnsWidths = {
+            method: MainMsgType.ColumnsWidths,
+            widths 
+        }
+        ipcRenderer.send(this.name, msg)
     }
 
     onColumnClick(index: number, descending: boolean, subItem: boolean) {
-            const msg: Sort = {
-                method: MainMsgType.Sort,
-                column: index,
-                descending,
-                subItem,
-                selectedIndex: this.selectedIndex
-            }
-            ipcRenderer.send(this.name, msg)
+        const msg: Sort = {
+            method: MainMsgType.Sort,
+            column: index,
+            descending,
+            subItem,
+            selectedIndex: this.selectedIndex
+        }
+        ipcRenderer.send(this.name, msg)
     }
     
     onEnter() {
