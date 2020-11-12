@@ -18,6 +18,7 @@ export interface IProcessor {
     getPath(): string
     getItems(startRange: number, endRange: number): Item[]
     getItemPath(index: number): string|null
+    getItemName(index: number): string
     getIndexOfName(name: string|null): number
     checkPath(path: string): CheckedPath
     changePath(path: string, refresh: (()=>void)): Promise<string>

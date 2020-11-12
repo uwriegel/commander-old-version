@@ -49,6 +49,8 @@ export class Root implements IProcessor {
         index  != -1
         ? platformMethods.getDriveItemPath(this.drives[index])
         : null
+    
+    getItemName = (index: number)=> this.drives[index].name 
 
     getIndexOfName = (name: string|null) => 
         name 

@@ -94,6 +94,8 @@ export class Directory implements IProcessor {
         return path != this.path ? path : "root"
     }
 
+    getItemName = (index: number) => this.items[index].name 
+
     getIndexOfName = (name: string|null) => 
         name 
         ? this.items.findIndex(n => n.name == name)

@@ -9,6 +9,7 @@ export class Initial implements IProcessor {
     getItemPath = (index: number) => ""
     getIndexOfName = (name: string|null) => -1
     checkPath = (path: string) => ({ processor: this, path: "" })
+    getItemName = (index: number) => ""
     changePath = async (path: string, refresh: ()=>void) => ""
     restrict = (value: string) => 0
     restrictClose = () => false

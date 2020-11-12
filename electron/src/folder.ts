@@ -58,9 +58,10 @@ export class Folder {
                     break
                 case MainMsgType.Sort:
                     this.restrictClose()
+                    const selectedItem = this.processor.getItemName((args as Sort).selectedIndex)
                     this.processor.sort(args as Sort)
-                    // TODO: Index To Select
-                    this.refreshView(0)
+                    const itemToSelect = this.processor.getIndexOfName(selectedItem)
+                    this.refreshView(itemToSelect)
                     break
                 case MainMsgType.Backtrack:
                     const backTrackMsg = args as BackTrackMsg
@@ -156,7 +157,6 @@ export class Folder {
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
     // TODO: Default folder for dark theme (Linux)
-    // TODO: Sort: Select last item
     // TODO: change Folder: clear sort or sort
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
