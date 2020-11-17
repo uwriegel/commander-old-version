@@ -1,5 +1,4 @@
 import { IpcMain } from "electron"
-import * as settings from 'electron-settings'
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, ColumnsWidths, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
