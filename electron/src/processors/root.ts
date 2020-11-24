@@ -89,6 +89,12 @@ export class Root implements IProcessor {
 
     sort = ()=>{}
 
+    setColumnWiths(folderName: string, withs: string[]) {
+//        settings.set(this.getSettingsName(folderName), withs)
+    }
+
+    private getSettingsName = (folderName: string) => `${folderName}-root`
+
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []
 }

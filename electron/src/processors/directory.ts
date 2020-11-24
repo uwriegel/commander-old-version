@@ -137,6 +137,12 @@ export class Directory implements IProcessor {
         this.items = this.originalItems        
     }
 
+    setColumnWiths(folderName: string, withs: string[]) {
+//        settings.set(this.getSettingsName(folderName), withs)
+    }
+
+    private getSettingsName = (folderName: string) => `${folderName}-directory`
+
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []
     path: string = ""

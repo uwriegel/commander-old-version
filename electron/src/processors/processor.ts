@@ -25,6 +25,7 @@ export interface IProcessor {
     restrict(value: string): number
     restrictClose(): boolean
     sort(sort: Sort): void
+    setColumnWiths(folderName: string, withs: string[]): void 
 }
 
 export interface CheckedPath {

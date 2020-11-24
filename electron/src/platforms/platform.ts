@@ -23,6 +23,7 @@ interface ColumnItem {
 }
 
 export interface IPlatform {
+    getDefaultTheme() : string
     getInitialDrivesWidths(): string[]
     getInitialDirectoryWidths(): string[]
     getDrivesColumns(width: string[]): Column[]

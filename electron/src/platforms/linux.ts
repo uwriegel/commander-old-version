@@ -1,6 +1,6 @@
 import { Protocol } from 'electron'
 import { getIcon } from 'filesystem-utilities'
-import { ICON_SCHEME, Sort } from '../model/model'
+import { ICON_SCHEME, Sort, THEME_YARU } from '../model/model'
 import * as ioPath from 'path'
 import { formatDate, formatSize, splitFilename } from "../processors/processor"
 import { IPlatform } from "./platform"
@@ -8,6 +8,7 @@ import { DirectoryItem } from 'processors/directory'
 import _ = require('lodash')
 
 export class Linux implements IPlatform {
+    getDefaultTheme = () => THEME_YARU
     getInitialDrivesWidths = () => [ "25%", "25%", "25%", "25%"] 
     getInitialDirectoryWidths = () => ["34%", "33%", "33%"] 
 

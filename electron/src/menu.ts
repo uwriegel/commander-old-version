@@ -1,5 +1,4 @@
 import { BrowserWindow, Menu } from "electron"
-import * as settings from 'electron-settings'
 import { leftFolder, rightFolder, sendToApp } from "./main"
 import { MainAppMsgType } from "./model/model"
 
@@ -8,7 +7,9 @@ const THEME_YARU = "yaru"
 const THEME_YARUDARK = "yarudark"
 export const THEME_DEFAULT = THEME_BLUE
 
-var theme = settings.getSync("theme") || THEME_DEFAULT
+// TODO: THEME in main window
+// var theme = settings.getSync("theme") || THEME_DEFAULT
+var theme = THEME_DEFAULT
 export var showHidden = false
 
 export const createMenuBar = (win: BrowserWindow) => {
@@ -16,7 +17,9 @@ export const createMenuBar = (win: BrowserWindow) => {
     const setTheme = (themeToSet: string) => {
         theme = themeToSet
         sendToApp(MainAppMsgType.SetTheme, theme)
-        settings.set("theme", theme)
+
+        // TODO: THEME in main window
+        //settings.set("theme", theme)
     }
 
     const menu = Menu.buildFromTemplate([

@@ -25,14 +25,15 @@
 	</div>
 </template>
 <script lang="ts">
-// TODO: in tsconfig.json: strict
+
 import { Component, Vue } from 'vue-property-decorator'
 import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
 import { CHANNEL_TO_RENDERER, MainAppMsgType } from '../electron/src/model/model'
-
+import { platformMethods } from "../electron/src/platforms/platform"
+import { Console } from 'console'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -66,13 +67,24 @@ export default class App extends Vue {
         ipcRenderer.on(CHANNEL_TO_RENDERER, (event: any, msg: MainAppMsgType, ...args: any[]) => {
             switch (msg) {
                 case MainAppMsgType.SetTheme:
-                    this.changeTheme(args[0])
+                    //this.changeTheme(args[0])
                     break
                 case MainAppMsgType.Refresh:
                     this.getActiveFolder().$emit("refresh")
                     break
+                case MainAppMsgType.SaveBounds:
+                    localStorage["window-bounds"] = args[0]
             }
         })
+
+        try {
+            const affe = platformMethods.getDefaultTheme()
+        } catch (err) {
+            console.log("eeeee", err)
+        }
+        // TODO: no platform methods
+        //this.changeTheme(localStorage["theme"] || platformMethods.getDefaultTheme())
+
         ipcRenderer.send('ready')
     }
 

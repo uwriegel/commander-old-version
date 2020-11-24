@@ -92,8 +92,7 @@ export class Folder {
                     break
                 case MainMsgType.ColumnsWidths:
                     const columnsWidths = args as ColumnsWidths
-                    // TODO: save to processor
-                    // settings.set(this.getSettingsName("columnsWidths") - processrName, columnsWidths.widths)
+                    this.processor.setColumnWiths(this.name, columnsWidths.widths)
                     break
             }
         })
@@ -165,8 +164,6 @@ export class Folder {
     // TODO: change Folder: clear sort or sort
 
     sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
-
-    getSettingsName = (name: string) => `${this.name}-${name}`
 
     backtrack = [] as string []
     backtrackPosition = -1

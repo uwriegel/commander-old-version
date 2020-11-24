@@ -14,4 +14,5 @@ export class Initial implements IProcessor {
     restrict = (value: string) => 0
     restrictClose = () => false
     sort = (sort: Sort) => {}
+    setColumnWiths(folderName: string, withs: string[]) {}
 }

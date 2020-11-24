@@ -3,12 +3,14 @@ import { getIcon, getFileVersion } from 'filesystem-utilities'
 import * as ioPath from 'path'
 import { IPlatform } from "./platform"
 import { formatDate, formatSize, splitFilename } from "../processors/processor"
-import { ICON_SCHEME, Sort } from "../model/model"
+import { ICON_SCHEME, Sort, THEME_BLUE } from "../model/model"
 import { DirectoryItem } from "../processors/directory"
 import { ROOT } from "../processors/root"
 import _ = require("lodash")
 
 export class Windows implements IPlatform {
+    getDefaultTheme = () => THEME_BLUE
+
     getInitialDrivesWidths = () => ["33%", "34%", "33%"] 
 
     getInitialDirectoryWidths = () => ["20%", "20%", "20%", "20%", "20%"] 

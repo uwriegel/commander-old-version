@@ -25,14 +25,15 @@ if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 	app.quit()
 
 ipcMain.on('ready', async () => {
-	const theme = await settings.get("theme") || THEME_DEFAULT
-	sendToApp(MainAppMsgType.SetTheme, theme)
+	// TODO: SETTINGS in main window
+	// const theme = await settings.get("theme") || THEME_DEFAULT
+	// sendToApp(MainAppMsgType.SetTheme, theme)
 	mainWindow.show() 
 })
-
-const createWindow = async () => { 
+	
+const createWindow = () => { 
 	// Create the browser window.
-    let bounds = (await settings.get("window-bounds") || { 
+    let bounds = (settings.getSync("window-bounds") || { 
         width: 600,
         height: 800,
 	}) as Electron.BrowserWindowConstructorOptions
