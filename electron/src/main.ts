@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, protocol } from 'electron'
 import * as settings from 'electron-settings'
 import * as path from 'path'
-import { createMenuBar, THEME_DEFAULT } from './menu'
+import { createMenuBar, setInitialTheme } from './menu'
 import { Folder } from './folder'
 import { CHANNEL_TO_RENDERER, ICON_SCHEME, MainAppMsgType } from './model/model'
 import { platformMethods } from './platforms/platform'
@@ -24,10 +24,9 @@ protocol.registerSchemesAsPrivileged([{
 if (require('electron-squirrel-startup'))  // eslint-disable-line global-require
 	app.quit()
 
-ipcMain.on('ready', async () => {
-	// TODO: SETTINGS in main window
-	// const theme = await settings.get("theme") || THEME_DEFAULT
-	// sendToApp(MainAppMsgType.SetTheme, theme)
+ipcMain.on('ready', (_, theme: string) => {
+	setInitialTheme(theme)
+	createMenuBar(mainWindow)
 	mainWindow.show() 
 })
 	
@@ -61,7 +60,6 @@ const createWindow = () => {
         }
     })
 
-	createMenuBar(mainWindow)
 	mainWindow.setAutoHideMenuBar(true)
 	mainWindow.setMenuBarVisibility(false)
 };

@@ -31,9 +31,7 @@ import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
-import { CHANNEL_TO_RENDERER, MainAppMsgType } from '../electron/src/model/model'
-import { platformMethods } from "../electron/src/platforms/platform"
-import { Console } from 'console'
+import { CHANNEL_TO_RENDERER, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -67,7 +65,7 @@ export default class App extends Vue {
         ipcRenderer.on(CHANNEL_TO_RENDERER, (event: any, msg: MainAppMsgType, ...args: any[]) => {
             switch (msg) {
                 case MainAppMsgType.SetTheme:
-                    //this.changeTheme(args[0])
+                    this.changeTheme(args[0])
                     break
                 case MainAppMsgType.Refresh:
                     this.getActiveFolder().$emit("refresh")
@@ -77,15 +75,9 @@ export default class App extends Vue {
             }
         })
 
-        try {
-            const affe = platformMethods.getDefaultTheme()
-        } catch (err) {
-            console.log("eeeee", err)
-        }
-        // TODO: no platform methods
-        //this.changeTheme(localStorage["theme"] || platformMethods.getDefaultTheme())
-
-        ipcRenderer.send('ready')
+        const theme = localStorage["theme"] || THEME_BLUE
+        this.changeTheme(theme)
+        ipcRenderer.send('ready', theme)
     }
 
  	onLeftFocus() { 
@@ -127,6 +119,8 @@ export default class App extends Vue {
     }
     
     changeTheme = (theme: string) => {
+        localStorage["theme"] = theme
+
         const styleSheet = document.getElementById("theme")  
         if (styleSheet)
             styleSheet.remove()
