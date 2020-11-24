@@ -13,6 +13,7 @@ const timeFormat = Intl.DateTimeFormat("de-DE", {
 })
 
 export interface IProcessor {
+    getName(): string
     getColumns(): Column[]
     getItemsCount(): number
     getPath(): string
@@ -25,7 +26,6 @@ export interface IProcessor {
     restrict(value: string): number
     restrictClose(): boolean
     sort(sort: Sort): void
-    setColumnWiths(folderName: string, withs: string[]): void 
 }
 
 export interface CheckedPath {

@@ -39,7 +39,8 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg, ColumnsWidths } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, 
+    RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -71,6 +72,7 @@ export default class FolderVue extends FolderVueProps {
     itemsSource = { count: 0, getItems: (async () => await []) as (n: number, m: number)=>Promise<any[]>, indexToSelect: 0}
     isBacktrackEnd = false
     keyDown$ = new Subject()
+    processorName = ""
 
     mounted() {
         const shiftTabs$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
@@ -134,13 +136,6 @@ export default class FolderVue extends FolderVueProps {
         this.eventBus.$on('path', (path: string) => this.setPath(path))
         this.eventBus.$on('themeChanged', () => 
             setTimeout(() => this.tableEventBus.$emit("themeChanged"), 300))
-        this.eventBus.$on('showHidden', (showHidden: boolean) => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.ShowHidden,
-            //     fields: [{show: showHidden ? true : false, selectedIndex: this.selectedIndex}]
-            // }
-            //this.ws.send(JSON.stringify(msg))
-        })
         this.eventBus.$on('refresh', () => ipcRenderer.send(this.name, { method: MainMsgType.Refresh }))
         this.eventBus.$on('selectionChanged', (index: number) => {
             const msg: GetItemPathMsg = {
@@ -177,6 +172,7 @@ export default class FolderVue extends FolderVueProps {
             switch (msg.method) {
                 case RendererMsgType.SetColumns:
                     const colmsg = msg as ColumnsMsg
+                    this.processorName = colmsg.processor
                     this.columns = colmsg.value
                     break
                 case RendererMsgType.ItemsSource:
@@ -248,11 +244,6 @@ export default class FolderVue extends FolderVueProps {
     }
 
     onColumnsWidthChanged(widths: string[]) {
-        const msg: ColumnsWidths = {
-            method: MainMsgType.ColumnsWidths,
-            widths 
-        }
-        ipcRenderer.send(this.name, msg)
     }
 
     onColumnClick(index: number, descending: boolean, subItem: boolean) {

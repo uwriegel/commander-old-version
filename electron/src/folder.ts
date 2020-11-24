@@ -1,7 +1,7 @@
 import { IpcMain } from "electron"
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
-import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, ColumnsWidths, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
+import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
@@ -22,7 +22,7 @@ export class Folder {
                 case MainMsgType.GetItems:
                     const msg = args as GetItems
                     const items = this.processor.getItems(msg.startRange, msg.endRange)
-                    this.sendToMain({ method: RendererMsgType.Items, items, reqId: msg.reqId } as ItemsMsg)
+                    this.sendToRenderer({ method: RendererMsgType.Items, items, reqId: msg.reqId } as ItemsMsg)
                     break
                 case MainMsgType.Action:
                     const actionmsg = args as ActionMsg
@@ -32,7 +32,7 @@ export class Folder {
                 case MainMsgType.GetItemPath:
                     const getItemPathMsg = args as GetItemPathMsg
                     const path = this.processor.getItemPath(getItemPathMsg.selectedIndex)
-                    this.sendToMain({ method: RendererMsgType.SendPath, path } as SendPath)
+                    this.sendToRenderer({ method: RendererMsgType.SendPath, path } as SendPath)
                     break
                 case MainMsgType.ChangePath:
                     const changePathMsg = args as ChangePathMsg
@@ -46,7 +46,7 @@ export class Folder {
                     const restrictMsg = args as RestrictMsg
                     const count = this.processor.restrict(restrictMsg.value)
                     if (count > 0) {
-                        this.sendToMain({ 
+                        this.sendToRenderer({ 
                             method: RendererMsgType.Restrict, 
                             restrictValue: restrictMsg.value, 
                             itemsCount: count 
@@ -88,11 +88,7 @@ export class Folder {
                         this.changePathWithCheckedPath(checkedPath, null, false)
                     }
                     else
-                        this.sendToMain({ method: RendererMsgType.BacktrackEnd })
-                    break
-                case MainMsgType.ColumnsWidths:
-                    const columnsWidths = args as ColumnsWidths
-                    this.processor.setColumnWiths(this.name, columnsWidths.widths)
+                        this.sendToRenderer({ method: RendererMsgType.BacktrackEnd })
                     break
             }
         })
@@ -120,7 +116,11 @@ export class Folder {
 
         if (checkedPath.processor != this.processor) {
             const cols = checkedPath.processor.getColumns()
-            this.sendToMain({ method: RendererMsgType.SetColumns, value: cols} as ColumnsMsg)
+            this.sendToRenderer({ 
+                method: RendererMsgType.SetColumns, 
+                value: cols, 
+                processor: checkedPath.processor.getName()
+            } as ColumnsMsg)
             this.processor = checkedPath.processor
         }
 
@@ -140,7 +140,7 @@ export class Folder {
         this.refreshView()
     }
 
-    refreshView = (indexToSelect = 0) => this.sendToMain({ 
+    refreshView = (indexToSelect = 0) => this.sendToRenderer({ 
             method: RendererMsgType.ItemsSource, 
             path: this.processor.getPath(),
             count: this.processor.getItemsCount(),
@@ -149,7 +149,7 @@ export class Folder {
 
     restrictClose = () => {
         if (this.processor && this.processor.restrictClose())
-            this.sendToMain({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
+            this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
     // TODO: set selection
@@ -163,7 +163,7 @@ export class Folder {
     // TODO: Default folder for dark theme (Linux)
     // TODO: change Folder: clear sort or sort
 
-    sendToMain = (msg: RendererMsg) => this.webContents.send(this.name, msg)
+    sendToRenderer = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 
     backtrack = [] as string []
     backtrackPosition = -1

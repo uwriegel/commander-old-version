@@ -52,7 +52,6 @@ export enum MainMsgType {
     RestrictClose,
     Sort,
     Backtrack,
-    ColumnsWidths
     // ToggleSelection = "ToggleSelection",
     // SelectAll = "SelectAll",
     // UnselectAll = "UnselectAll",
@@ -99,11 +98,8 @@ export interface BackTrackMsg extends MainMsg {
     direction: boolean
 }
 
-export interface ColumnsWidths extends MainMsg {
-    widths: string[]
-}
-
 export interface ColumnsMsg extends RendererMsg {
+    processor: string
     value: Column[]
 }
 
@@ -142,7 +138,6 @@ export interface Column {
     name: string,
     subItem?: string | null
     isSortable?: boolean,
-    width: string,
     rightAligned?: boolean
     isExif?: boolean
 }

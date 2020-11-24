@@ -9,24 +9,18 @@ import { ROOT } from "../processors/root"
 import _ = require("lodash")
 
 export class Windows implements IPlatform {
-    getDefaultTheme = () => THEME_BLUE
-
-    getInitialDrivesWidths = () => ["33%", "34%", "33%"] 
-
-    getInitialDirectoryWidths = () => ["20%", "20%", "20%", "20%", "20%"] 
-
-    getDrivesColumns = (widths: string[]) => [
-        { name: "Beschreibung", width: widths[0] },
-        { name: "Name", width: widths[1] },
-        { name: "Größe", width: widths[3] }            
+    getDrivesColumns = () => [
+        { name: "Beschreibung" },
+        { name: "Name" },
+        { name: "Größe" }            
     ]
     
-    getDirectoryColumns = (widths: string[]) => [
-        { name: "Name", isSortable: true, width: widths[0] },
-        { name: "Erw.", isSortable: true, width: widths[1] },
-        { name: "Datum", isSortable: true, width: widths[2], isExif: true },            
-        { name: "Größe", isSortable: true, width: widths[3], rightAligned: true },           
-        { name: "Version", isSortable: true, width: widths[4] }            
+    getDirectoryColumns = () => [
+        { name: "Name", isSortable: true },
+        { name: "Erw.", isSortable: true },
+        { name: "Datum", isSortable: true, isExif: true },            
+        { name: "Größe", isSortable: true, rightAligned: true },           
+        { name: "Version", isSortable: true }            
     ]
 
     getDriveItemPath = (item: DriveItem) => item.name

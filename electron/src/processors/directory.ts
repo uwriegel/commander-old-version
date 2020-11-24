@@ -14,9 +14,10 @@ export interface DirectoryItem extends FileItem {
 
 export class Directory implements IProcessor {
     getColumns() { 
-        const widths = platformMethods.getInitialDirectoryWidths()
-        return platformMethods.getDirectoryColumns(widths)
+        return platformMethods.getDirectoryColumns()
     }
+
+    getName = () => "directory"
 
     changePath = async (path: string, refresh: ()=>void) => {
         const items = 
@@ -136,12 +137,6 @@ export class Directory implements IProcessor {
         this.originalItems = _.concat(dirs, sortedFiles)
         this.items = this.originalItems        
     }
-
-    setColumnWiths(folderName: string, withs: string[]) {
-//        settings.set(this.getSettingsName(folderName), withs)
-    }
-
-    private getSettingsName = (folderName: string) => `${folderName}-directory`
 
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []

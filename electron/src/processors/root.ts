@@ -8,9 +8,10 @@ export const ROOT = "root"
 
 export class Root implements IProcessor {
     getColumns() {
-        const widths = platformMethods.getInitialDrivesWidths()
-        return platformMethods.getDrivesColumns(widths)
+        return platformMethods.getDrivesColumns()
     }
+
+    getName = () => "root"
 
     async changePath(path: string) {
         const drives = await getDrives()
@@ -88,12 +89,6 @@ export class Root implements IProcessor {
     }
 
     sort = ()=>{}
-
-    setColumnWiths(folderName: string, withs: string[]) {
-//        settings.set(this.getSettingsName(folderName), withs)
-    }
-
-    private getSettingsName = (folderName: string) => `${folderName}-root`
 
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []

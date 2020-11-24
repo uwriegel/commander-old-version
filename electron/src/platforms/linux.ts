@@ -8,23 +8,20 @@ import { DirectoryItem } from 'processors/directory'
 import _ = require('lodash')
 
 export class Linux implements IPlatform {
-    getDefaultTheme = () => THEME_YARU
-    getInitialDrivesWidths = () => [ "25%", "25%", "25%", "25%"] 
-    getInitialDirectoryWidths = () => ["34%", "33%", "33%"] 
 
-    getDrivesColumns = (widths: string[]) => [
-        { name: "Beschreibung", width: widths[0] },
-        { name: "Name", width: widths[1] },
-        { name: "Mountpoint", width: widths[2] },
-        { name: "Größe", width: widths[3], rightAligned: true }            
+    getDrivesColumns = () => [
+        { name: "Beschreibung" },
+        { name: "Name" },
+        { name: "Mountpoint" },
+        { name: "Größe", rightAligned: true }            
     ]
 
     getDriveItemPath = (item: DriveItem) => item.mountPoint!!
 
-    getDirectoryColumns = (widths: string[]) => [
-        { name: "Name", isSortable: true, width: widths[0], subItem: "Erw." },
-        { name: "Datum", isSortable: true, width: widths[1], isExif: true},
-        { name: "Größe", isSortable: true, width: widths[2], rightAligned: true }            
+    getDirectoryColumns = () => [
+        { name: "Name", isSortable: true, subItem: "Erw." },
+        { name: "Datum", isSortable: true, isExif: true},
+        { name: "Größe", isSortable: true, rightAligned: true }            
     ]
 
     getDriveColumnItems = (item: DriveItem) => ({

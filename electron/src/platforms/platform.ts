@@ -23,11 +23,8 @@ interface ColumnItem {
 }
 
 export interface IPlatform {
-    getDefaultTheme() : string
-    getInitialDrivesWidths(): string[]
-    getInitialDirectoryWidths(): string[]
-    getDrivesColumns(width: string[]): Column[]
-    getDirectoryColumns(width: string[]): Column[]
+    getDrivesColumns(): Column[]
+    getDirectoryColumns(): Column[]
     getDriveItemPath(item: DriveItem): string
     getDriveColumnItems(item: DriveItem): ColumnItem
     getDirectoryColumnItems(item: FileItem, path: string): ColumnItem
