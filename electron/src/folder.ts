@@ -155,8 +155,6 @@ export class Folder {
     // TODO: set selection
     // TODO: Viewer
     // TODO: drive types
-    // TODO: change column widths
-    // TODO: retrieve column widths
     // TODO: Dialogs
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder

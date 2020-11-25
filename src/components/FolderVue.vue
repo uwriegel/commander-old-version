@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+import _ from 'lodash'
 import { Component, Vue } from 'vue-property-decorator'
 import { map, filter } from "rxjs/operators"
 import { Observable, Subject } from 'rxjs'
@@ -168,12 +169,13 @@ export default class FolderVue extends FolderVueProps {
         //     }
         // }
 
-        ipcRenderer.on(this.name, (_: any, msg: RendererMsg) => {
+        ipcRenderer.on(this.name, (e: any, msg: RendererMsg) => {
             switch (msg.method) {
                 case RendererMsgType.SetColumns:
                     const colmsg = msg as ColumnsMsg
                     this.processorName = colmsg.processor
-                    this.columns = colmsg.value
+                    const widths: string[] = JSON.parse(localStorage[`${this.name}-${this.processorName}`] || "[]")
+                    this.columns = _.merge(colmsg.value, widths.map(n => ({ width: n })))
                     break
                 case RendererMsgType.ItemsSource:
                     const itemsSource = msg as ItemsSource
@@ -244,6 +246,7 @@ export default class FolderVue extends FolderVueProps {
     }
 
     onColumnsWidthChanged(widths: string[]) {
+        localStorage[`${this.name}-${this.processorName}`] = JSON.stringify(widths)
     }
 
     onColumnClick(index: number, descending: boolean, subItem: boolean) {
