@@ -52,7 +52,7 @@ export enum MainMsgType {
     RestrictClose,
     Sort,
     Backtrack,
-    // ToggleSelection = "ToggleSelection",
+    ToggleSelection,
     // SelectAll = "SelectAll",
     // UnselectAll = "UnselectAll",
     // SelectTo = "SelectTo",
@@ -75,7 +75,7 @@ export interface ActionMsg extends MainMsg {
     selectedIndex: number
 }
 
-export interface GetItemPathMsg extends MainMsg {
+export interface SelectedIndexMsg extends MainMsg {
     selectedIndex: number
 }
 

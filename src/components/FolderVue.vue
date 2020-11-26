@@ -40,8 +40,8 @@ import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, GetItemPathMsg, SendPath, ChangePathMsg, 
-    RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg } from "../../electron/src/model/model"
+    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, 
+    RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -96,11 +96,15 @@ export default class FolderVue extends FolderVueProps {
         this.$subscribeTo(backSpaces$, (evt: any) => this.onBacktrack(evt.event.ctrlKey ? true : false))
 
         this.$subscribeTo(inserts$, () => {
-            // const msg: OutMsg = {
+            const msg: SelectedIndexMsg = {
+                method: MainMsgType.ToggleSelection,
+                selectedIndex: this.selectedIndex
+            }
+            ipcRenderer.send(this.name, msg)
+// const msg: OutMsg = {
             //     case: OutMsgType.ToggleSelection,
             //     fields: [this.selectedIndex]
             // }
-            //this.ws.send(JSON.stringify(msg))
             if (this.selectedIndex < this.itemsSource.count - 1)
                 this.selectedIndex++
         })
@@ -139,7 +143,7 @@ export default class FolderVue extends FolderVueProps {
             setTimeout(() => this.tableEventBus.$emit("themeChanged"), 300))
         this.eventBus.$on('refresh', () => ipcRenderer.send(this.name, { method: MainMsgType.Refresh }))
         this.eventBus.$on('selectionChanged', (index: number) => {
-            const msg: GetItemPathMsg = {
+            const msg: SelectedIndexMsg = {
                 method: MainMsgType.GetItemPath,
                 selectedIndex: this.selectedIndex
             }
@@ -293,7 +297,7 @@ export default class FolderVue extends FolderVueProps {
             default:
                 return // exit this handler for other keys
         }
-        evt.preventDefault() // prevent
+        evt.preventDefault() 
     }
 
     setPath(path: string) {

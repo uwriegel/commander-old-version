@@ -90,6 +90,8 @@ export class Root implements IProcessor {
 
     sort = ()=>{}
 
+    toggleSelection(index: number) {}
+
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []
 }

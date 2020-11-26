@@ -1,7 +1,7 @@
 import { IpcMain } from "electron"
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
-import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, GetItemPathMsg, GetItems, ItemsMsg, ItemsSource, 
+import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
@@ -30,7 +30,7 @@ export class Folder {
                     this.changePathFromIndex(actionmsg.selectedIndex)
                     break
                 case MainMsgType.GetItemPath:
-                    const getItemPathMsg = args as GetItemPathMsg
+                    const getItemPathMsg = args as SelectedIndexMsg
                     const path = this.processor.getItemPath(getItemPathMsg.selectedIndex)
                     this.sendToRenderer({ method: RendererMsgType.SendPath, path } as SendPath)
                     break
@@ -90,7 +90,12 @@ export class Folder {
                     else
                         this.sendToRenderer({ method: RendererMsgType.BacktrackEnd })
                     break
-            }
+                case MainMsgType.ToggleSelection:
+                    const toggleSelectionMsg = args as SelectedIndexMsg
+                    this.processor.toggleSelection(toggleSelectionMsg.selectedIndex)
+                    this.refreshView(++toggleSelectionMsg.selectedIndex)
+                    break
+                }
         })
     }
 

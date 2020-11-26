@@ -26,6 +26,7 @@ export interface IProcessor {
     restrict(value: string): number
     restrictClose(): boolean
     sort(sort: Sort): void
+    toggleSelection(index: number): void
 }
 
 export interface CheckedPath {

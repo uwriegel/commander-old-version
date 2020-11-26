@@ -10,6 +10,7 @@ import { ROOT } from './root'
 export interface DirectoryItem extends FileItem {
     exifDate?: Date|null
     version?: VersionInfo|null
+    isSelected?: boolean
 }
 
 export class Directory implements IProcessor {
@@ -69,7 +70,7 @@ export class Directory implements IProcessor {
         const getItem = (item: DirectoryItem, index: number) => {
             const columns = platformMethods.getDirectoryColumnItems(item, this.path)                        
             return {
-                isSelected: false,
+                isSelected: item.isSelected as boolean,
                 type: item.name == ".."
                         ? ItemType.Parent
                         : item.isDirectory 
@@ -136,6 +137,12 @@ export class Directory implements IProcessor {
         const sortedFiles = platformMethods.sortFiles(files, sort)
         this.originalItems = _.concat(dirs, sortedFiles)
         this.items = this.originalItems        
+    }
+
+    toggleSelection(index: number) {
+        const item = this.items[index]
+        if (item.name != "..")
+            item.isSelected = !item.isSelected
     }
 
     originalItems : DirectoryItem[] = []
