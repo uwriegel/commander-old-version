@@ -101,26 +101,18 @@ export default class FolderVue extends FolderVueProps {
                 selectedIndex: this.selectedIndex
             }
             ipcRenderer.send(this.name, msg)
-// const msg: OutMsg = {
-            //     case: OutMsgType.ToggleSelection,
-            //     fields: [this.selectedIndex]
-            // }
-            if (this.selectedIndex < this.itemsSource.count - 1)
-                this.selectedIndex++
         })
         this.$subscribeTo(pluses$, () => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.SelectAll,
-            //     fields: []
-            // }
-            //this.ws.send(JSON.stringify(msg))
+            const msg: MainMsg = {
+                method: MainMsgType.SelectAll
+            }
+            ipcRenderer.send(this.name, msg)
         })        
         this.$subscribeTo(minuses$, () => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.UnselectAll,
-            //     fields: []
-            // }
-            //this.ws.send(JSON.stringify(msg))
+            const msg: MainMsg = {
+                method: MainMsgType.UnselectAll
+            }
+            ipcRenderer.send(this.name, msg)
         })        
         this.$subscribeTo(shiftHomes$, () => {
             // const msg: OutMsg = {

@@ -16,5 +16,7 @@ export class Initial implements IProcessor {
     restrictClose = () => false
     sort = (sort: Sort) => {}
     toggleSelection(index: number) {}
+    SelectAll() {}
+    UnselectAll() {}
     setColumnWiths(folderName: string, withs: string[]) {}
 }

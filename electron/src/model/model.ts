@@ -53,8 +53,8 @@ export enum MainMsgType {
     Sort,
     Backtrack,
     ToggleSelection,
-    // SelectAll = "SelectAll",
-    // UnselectAll = "UnselectAll",
+    SelectAll,
+    UnselectAll,
     // SelectTo = "SelectTo",
     // SelectFrom = "SelectFrom",
 }

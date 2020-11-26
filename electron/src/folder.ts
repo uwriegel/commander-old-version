@@ -95,6 +95,14 @@ export class Folder {
                     this.processor.toggleSelection(toggleSelectionMsg.selectedIndex)
                     this.refreshView(++toggleSelectionMsg.selectedIndex)
                     break
+                case MainMsgType.SelectAll:
+                    this.processor.SelectAll()
+                    this.refreshView(-1)
+                    break
+                case MainMsgType.UnselectAll:
+                    this.processor.UnselectAll()
+                    this.refreshView(-1)
+                    break
                 }
         })
     }
@@ -157,7 +165,8 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: set selection
+    // TODO: set selection from/to index
+    // TODO: toggleSelection with space, without hijacking space in textbox
     // TODO: Viewer
     // TODO: drive types
     // TODO: Dialogs

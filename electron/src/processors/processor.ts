@@ -27,6 +27,8 @@ export interface IProcessor {
     restrictClose(): boolean
     sort(sort: Sort): void
     toggleSelection(index: number): void
+    SelectAll(): void
+    UnselectAll(): void
 }
 
 export interface CheckedPath {
