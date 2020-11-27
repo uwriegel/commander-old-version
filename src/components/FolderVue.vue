@@ -55,7 +55,6 @@ const FolderVueProps = Vue.extend({
         name: String
     }
 })
-
 @Component({
     components: {
         FileIcon,

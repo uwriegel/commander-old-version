@@ -11,6 +11,8 @@ export var rightFolder: Folder
 
 export var sendToApp: (msg: MainAppMsgType, ...args: any[])=>void
 
+const PREVIEW_SCHEME = "preview"
+
 const debug = process.env.NODE_ENV == 'development'
 let mainWindow: BrowserWindow
 
@@ -45,6 +47,15 @@ const createWindow = () => {
 	sendToApp = (msg: MainAppMsgType, ...args: any[])=> mainWindow.webContents.send(CHANNEL_TO_RENDERER, msg, args)
 
 	platformMethods.registerIconServer(protocol)
+
+	protocol.registerFileProtocol(PREVIEW_SCHEME, async (request, callback) => {
+		try {
+			const path = decodeURIComponent(request.url.substring(17))
+			callback(path)
+		} catch (err) {
+			console.error("Could not get icon", err)
+		}
+	})
 
 	leftFolder = new Folder(ipcMain, mainWindow.webContents, "folderLeft")
 	rightFolder = new Folder(ipcMain, mainWindow.webContents, "folderRight")

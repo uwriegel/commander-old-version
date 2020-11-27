@@ -7,36 +7,34 @@
 </template>
 
 <script lang="ts">
-// TODO convert to component class
 import Vue from 'vue'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
-export default Vue.extend({
-    props: [
-        "src"
-    ],
-    data() {
-        return {
-            itemPath: ""
-        }
-    },
-    watch: {
-        src() {
-            this.itemPath = "http://localhost:9865/getfile?file=" + this.src
-        }
-    },
-    mounted() { this.itemPath = this.src },    
-    methods: {
-        isImage(value: string) {
-            return value.toLowerCase().endsWith('jpg') || value.toLowerCase().endsWith('png') || value.toLowerCase().endsWith('gif')
-        },
-        isVideo(value: string) {
-            return value.toLowerCase().endsWith('mp4')
-        }, 
-        isPdf(value: string) {
-            return value.toLowerCase().endsWith('pdf')
-        }, 
-    }    
-})
+@Component
+export default class Viewer extends Vue {
+    @Prop()
+    src: string = ""
+    
+    @Watch("src")
+    onPropertyChanged() {
+        this.itemPath = "preview:///?file=" + this.src
+    }
+
+    itemPath = ""
+    mounted() { this.itemPath = this.src }
+
+    isImage(value: string) {
+        return value.toLowerCase().endsWith('jpg') || value.toLowerCase().endsWith('png') || value.toLowerCase().endsWith('gif')
+    }
+
+    isVideo(value: string) {
+        return value.toLowerCase().endsWith('mp4')
+    } 
+    
+    isPdf(value: string) {
+        return value.toLowerCase().endsWith('pdf')
+    } 
+}
 
 </script>
 
