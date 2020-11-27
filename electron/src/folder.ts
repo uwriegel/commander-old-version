@@ -178,6 +178,8 @@ export class Folder {
     // TODO: Viewer
     // TODO: drive types
     // TODO: Dialogs
+    // TODO: F9 adapt folders
+    // TODO: Menu structure
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
     // TODO: Default folder for dark theme (Linux)

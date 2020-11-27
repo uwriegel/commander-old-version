@@ -72,6 +72,10 @@ export default class App extends Vue {
                     break
                 case MainAppMsgType.SaveBounds:
                     localStorage["window-bounds"] = args[0]
+                    break
+                case MainAppMsgType.Preview:
+                    this.showViewer = args[0][0]
+                    break
             }
         })
 

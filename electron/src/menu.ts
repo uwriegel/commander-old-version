@@ -4,6 +4,7 @@ import { MainAppMsgType, THEME_BLUE, THEME_YARU, THEME_YARUDARK } from "./model/
 
 var theme = ""
 export var showHidden = false
+var showPreview = false
 
 export const setInitialTheme = (themeToSet: string) => theme = themeToSet
 
@@ -33,6 +34,17 @@ export const createMenuBar = (win: BrowserWindow) => {
                     leftFolder.refresh()
                     rightFolder.refresh()
                 }
+            }, {
+                label: '&Vorschau',
+                type: "checkbox",
+                checked: showPreview,
+                accelerator: 'F3',
+                click: () => {
+                    showPreview = !showPreview
+                    sendToApp(MainAppMsgType.Preview, showPreview)
+                }
+            }, {
+                type: 'separator'
             }, {
                 label: '&Aktualisieren',
                 accelerator: 'Ctrl+R',
