@@ -96,14 +96,24 @@ export class Folder {
                     this.refreshView(++toggleSelectionMsg.selectedIndex)
                     break
                 case MainMsgType.SelectAll:
-                    this.processor.SelectAll()
+                    this.processor.selectAll()
                     this.refreshView(-1)
                     break
                 case MainMsgType.UnselectAll:
-                    this.processor.UnselectAll()
+                    this.processor.unselectAll()
                     this.refreshView(-1)
                     break
-                }
+                case MainMsgType.SelectTo:
+                    const selectToMsg = args as SelectedIndexMsg
+                    this.processor.selectTo(selectToMsg.selectedIndex)
+                    this.refreshView(-1)
+                    break
+                case MainMsgType.SelectFrom:
+                    const selectFromMsg = args as SelectedIndexMsg
+                    this.processor.selectFrom(selectFromMsg.selectedIndex)
+                    this.refreshView(-1)
+                    break
+            }
         })
     }
 
@@ -165,8 +175,6 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: set selection from/to index
-    // TODO: toggleSelection with space, without hijacking space in textbox
     // TODO: Viewer
     // TODO: drive types
     // TODO: Dialogs

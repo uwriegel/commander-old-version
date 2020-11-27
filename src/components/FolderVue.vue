@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash'
+import * as _ from 'lodash'
 import { Component, Vue } from 'vue-property-decorator'
 import { map, filter } from "rxjs/operators"
 import { Observable, Subject } from 'rxjs'
@@ -115,18 +115,18 @@ export default class FolderVue extends FolderVueProps {
             ipcRenderer.send(this.name, msg)
         })        
         this.$subscribeTo(shiftHomes$, () => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.SelectTo,
-            //     fields: [this.selectedIndex]
-            // }
-            //this.ws.send(JSON.stringify(msg))
+            const msg: SelectedIndexMsg = {
+                selectedIndex: this.selectedIndex,
+                method: MainMsgType.SelectTo
+            }
+            ipcRenderer.send(this.name, msg)
         })     
         this.$subscribeTo(shiftEnds$, () => {
-            // const msg: OutMsg = {
-            //     case: OutMsgType.SelectFrom,
-            //     fields: [this.selectedIndex]
-            // }
-            //this.ws.send(JSON.stringify(msg))
+            const msg: SelectedIndexMsg = {
+                selectedIndex: this.selectedIndex,
+                method: MainMsgType.SelectFrom
+            }
+            ipcRenderer.send(this.name, msg)
         })     
         this.eventBus.$on('focus', () => this.focus ())
         this.eventBus.$on('resize', () => this.tableEventBus.$emit('resize'))

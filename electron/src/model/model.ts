@@ -55,8 +55,8 @@ export enum MainMsgType {
     ToggleSelection,
     SelectAll,
     UnselectAll,
-    // SelectTo = "SelectTo",
-    // SelectFrom = "SelectFrom",
+    SelectTo,
+    SelectFrom,
 }
 
 export interface RendererMsg {

@@ -145,15 +145,27 @@ export class Directory implements IProcessor {
             item.isSelected = !item.isSelected
     }
 
-    SelectAll() {
+    selectAll() {
         this.items
             .filter(n => n.name != "..")
             .forEach(n => n.isSelected = true)
     }
 
-    UnselectAll() {
+    unselectAll() {
         this.items.forEach(n => n.isSelected = false)
     }
+
+    selectTo(index: number) {
+        this.items
+            .filter(n => n.name != "..")
+            .forEach((n, i) => n.isSelected = i < index)
+    }
+
+    selectFrom(index: number) {
+        this.items
+        .filter(n => n.name != "..")
+        .forEach((n, i) => n.isSelected = i >= index - 1)
+}
 
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []
