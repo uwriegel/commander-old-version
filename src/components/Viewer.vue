@@ -13,7 +13,7 @@ import { Component, Prop, Watch } from 'vue-property-decorator'
 @Component
 export default class Viewer extends Vue {
     @Prop()
-    src: string = ""
+    src!: string
     
     @Watch("src")
     onPropertyChanged() {
@@ -28,7 +28,7 @@ export default class Viewer extends Vue {
     }
 
     isVideo(value: string) {
-        return value.toLowerCase().endsWith('mp4')
+        return value.toLowerCase().endsWith('mp4') || value.toLowerCase().endsWith('mkv')
     } 
     
     isPdf(value: string) {

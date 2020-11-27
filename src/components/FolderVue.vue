@@ -58,10 +58,10 @@ var reqId = 0
     }
 })
 export default class FolderVue extends Vue {
-    @Prop({ default: ""})
-    name: string
+    @Prop()
+    name!: string
     @Prop({ type: Object, default: () => new Vue() })
-    eventBus: Vue
+    eventBus!: Vue
 
     tableEventBus = new Vue()
     selectedIndex = 0
