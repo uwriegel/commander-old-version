@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import * as _ from 'lodash'
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { map, filter } from "rxjs/operators"
 import { Observable, Subject } from 'rxjs'
 import FolderIcon from '../icons/FolderIcon.vue'
@@ -49,12 +49,6 @@ const { ipcRenderer } = window.require('electron')
 
 var reqId = 0
 
-const FolderVueProps = Vue.extend({
-    props: {
-        eventBus: { type: Object, default: () => new Vue() },
-        name: String
-    }
-})
 @Component({
     components: {
         FileIcon,
@@ -63,7 +57,12 @@ const FolderVueProps = Vue.extend({
         ParentIcon
     }
 })
-export default class FolderVue extends FolderVueProps {
+export default class FolderVue extends Vue {
+    @Prop({ default: ""})
+    name: string
+    @Prop({ type: Object, default: () => new Vue() })
+    eventBus: Vue
+
     tableEventBus = new Vue()
     selectedIndex = 0
     columns = [ { name: "Name" } ] as Column[]
