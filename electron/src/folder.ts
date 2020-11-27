@@ -175,7 +175,6 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: Viewer: video like home server
     // TODO: F9 adapt folders
     // TODO: Dialogs
     // TODO: Menu structure

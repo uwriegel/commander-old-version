@@ -42,7 +42,7 @@ export default class Viewer extends Vue {
 .viewer {
     position: relative;
 }
-img, video, iframe {
+img, iframe {
     position: absolute;
     display: block;
     max-width: 100%;
@@ -52,5 +52,12 @@ img, video, iframe {
     margin-right: auto;
     left: 0;
     right: 0;    
+}
+video {
+    position: absolute;
+    outline-width: 0px;
+    background-color: black;
+    width: 100%;
+    height: 100%;
 }
 </style>
