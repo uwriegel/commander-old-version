@@ -76,6 +76,12 @@ export default class App extends Vue {
                 case MainAppMsgType.Preview:
                     this.showViewer = args[0][0]
                     break
+                case MainAppMsgType.OpenSameFolder:
+                    this.openSameFolder()
+                    break
+                case MainAppMsgType.Delete:
+                    this.delete()
+                    break
             }
         })
 
@@ -120,6 +126,16 @@ export default class App extends Vue {
     //     extendedRename() { console.log("Extended Rename", this)},		
     openSameFolder() {
         this.getInactiveFolder().$emit("path", this.basePath)
+    }
+
+    async delete() {
+        const ret = await (this.$refs.dialog as any).show({
+            ok: true, 
+            cancel : true,
+            defButton: "ok",
+            text: "Wollen Sie nichts löschen?", 
+        })
+        console.log(ret)
     }
     
     changeTheme = (theme: string) => {

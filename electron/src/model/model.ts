@@ -9,7 +9,9 @@ export enum MainAppMsgType {
     SetTheme = 1,
     Refresh,
     SaveBounds,
-    Preview
+    Preview,
+    Delete,
+    OpenSameFolder
 } 
 
 export enum RendererMsgType {

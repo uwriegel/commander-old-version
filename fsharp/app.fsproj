@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Globals.fs" />
+    <Compile Include="Settings.fs" />
+    <Compile Include="Helpers.fs" />
+    <Compile Include="Model.fs" />
+    <Compile Include="Platform.fs" />
+    <Compile Include="FileSystem.fs" />
+    <Compile Include="Root.fs" />
+    <Compile Include="FolderView.fs" />
+    <Compile Include="Commander.fs" />
+    <Compile Include="Webserver.fs" />
+    <Compile Include="app.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharpTools" Version="2.4.0" />
+    <PackageReference Include="UwebServer" Version="5.0.7" />
+    <PackageReference Include="UwebStatic" Version="1.4.0" />
+    <PackageReference Include="UwebSocket" Version="3.0.0" />
+    <PackageReference Include="NewtonSoft.Json" Version="12.0.3" />
+  </ItemGroup>
+</Project>

@@ -18,9 +18,61 @@ export const createMenuBar = (win: BrowserWindow) => {
         {
             label: '&Datei',
             submenu: [{
+                label: '&Umbenennen',
+                accelerator: 'F2',
+            }, {
+                label: 'Er&weitertes Umbenennen',
+                accelerator: 'Ctrl+F2',
+            }, {
+                type: 'separator'
+            }, {
+                label: '&Kopieren',
+                accelerator: 'F5',
+            }, {
+                label: '&Verschieben',
+                accelerator: 'F6',
+            }, {
+                label: '&Löschen',
+                accelerator: 'Del',
+                click: () => sendToApp(MainAppMsgType.Delete)
+            }, {
+                type: 'separator'
+            }, {
+                label: '&Ordner anlegen',
+                accelerator: 'F7',
+            }, {
+                type: 'separator'
+            }, {
+                label: '&Eigenschaften',
+                accelerator: 'Alt+Enter',
+            }, {
+                label: 'Öffnen &mit',
+                accelerator: 'Ctrl+Enter',
+            }, {
+                type: 'separator'
+            }, {
                 label: '&Beenden',
                 accelerator: 'Alt+F4',
                 role: "quit"
+            }]
+        }, {
+            label: '&Navigation',
+            submenu: [{
+                label: '&Favoriten',
+                accelerator: 'F1',
+            }, {
+                label: '&Gleichen Ordner öffnen',
+                accelerator: 'F9',
+                click: () => sendToApp(MainAppMsgType.OpenSameFolder)
+            }]
+        }, {
+            label: '&Selektion',
+            submenu: [{
+                label: '&Alles',
+                accelerator: 'Num +',
+            }, {
+                label: 'Alle &deselektieren',
+                accelerator: 'Num -',
             }]
         }, {
             label: '&Ansicht',

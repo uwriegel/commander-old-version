@@ -61,3 +61,6 @@ Delete node_modules and type ```npm i```
 
 
 ignore="docs/.*|dev/.*|somefile\.js"
+
+## F# Version
+Look at folder ```fsharp```. It is deleted, but accessable in Git history
