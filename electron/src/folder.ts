@@ -175,7 +175,6 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
     // TODO: Default folder for dark theme (Linux)
     // TODO: change Folder: clear sort or sort
