@@ -1,10 +1,13 @@
 import { app, BrowserWindow, ipcMain, protocol } from 'electron'
 import * as settings from 'electron-settings'
 import * as path from 'path'
+import * as http from 'http'
+import * as fs from 'fs'
 import { createMenuBar, setInitialTheme } from './menu'
 import { Folder } from './folder'
 import { CHANNEL_TO_RENDERER, ICON_SCHEME, MainAppMsgType } from './model/model'
 import { platformMethods } from './platforms/platform'
+const fsa = fs.promises
 
 export var leftFolder: Folder
 export var rightFolder: Folder
@@ -96,4 +99,11 @@ app.on('activate', () => {
 	
 })
 
-
+http.createServer(async (req, res) => {
+	try {
+		const path = decodeURIComponent(req.url!)
+		const data = await fsa.readFile(path)	
+		res.writeHead(200)
+		res.end(data)
+	} catch (err) { console.log(err) }
+}).listen(20000)

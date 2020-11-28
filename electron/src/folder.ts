@@ -175,16 +175,15 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: F9 adapt folders
     // TODO: Dialogs
     // TODO: Menu structure
-    // TODO: drive types
-    // TODO: Viewer: crash when pdf
     // TODO: Save commander-fs fs-files in fstools, then delete folder
     // TODO: Save commander-node electron files in this project, then delete folder
+    // TODO: F9 adapt folders
     // TODO: Default folder for dark theme (Linux)
     // TODO: change Folder: clear sort or sort
-
+    // TODO: drive types
+    
     sendToRenderer = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 
     backtrack = [] as string []

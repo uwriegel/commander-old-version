@@ -17,7 +17,8 @@ export default class Viewer extends Vue {
     
     @Watch("src")
     onPropertyChanged() {
-        this.itemPath = "preview:///?file=" + this.src
+        const pdf = this.src.toLowerCase().endsWith(".pdf") 
+        this.itemPath = `${(pdf ? "http://localhost:20000" : "preview:///?file=")}${this.src}`
     }
 
     itemPath = ""
@@ -52,6 +53,10 @@ img, iframe {
     margin-right: auto;
     left: 0;
     right: 0;    
+}
+iframe {
+    width: 100%;
+    height: 100%;
 }
 video {
     position: absolute;
