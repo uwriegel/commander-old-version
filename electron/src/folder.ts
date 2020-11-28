@@ -175,11 +175,11 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
-    // TODO: Save commander-node electron files in this project, then delete folder
-    // TODO: Default folder for dark theme (Linux)
     // TODO: change Folder: clear sort or sort
+    // TODO: Default folder for dark theme (Linux)
     // TODO: drive types
-    
+    // TODO: commander-node has Electron-Menu and Electron titlebar
+
     sendToRenderer = (msg: RendererMsg) => this.webContents.send(this.name, msg)
 
     backtrack = [] as string []
