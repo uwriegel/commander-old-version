@@ -62,6 +62,9 @@ export default class App extends Vue {
 			this.getInactiveFolder().$emit("focus")
         })
 
+        const dels$ = this.keyDown$.pipe(filter((evt: any) => evt.event.which == 46 && !evt.event.shiftKey))
+        this.$subscribeTo(dels$, (evt: KeyboardEvent) => this.delete())
+
         ipcRenderer.on(CHANNEL_TO_RENDERER, (event: any, msg: MainAppMsgType, ...args: any[]) => {
             switch (msg) {
                 case MainAppMsgType.SetTheme:
@@ -133,7 +136,7 @@ export default class App extends Vue {
             ok: true, 
             cancel : true,
             defButton: "ok",
-            text: "Wollen Sie nichts löschen?", 
+            text: "Möchtest Du die markierten Elemente löschen?", 
         })
         console.log(ret)
     }

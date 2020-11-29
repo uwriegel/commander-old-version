@@ -48,4 +48,11 @@
     --gridsplitter-grip-color: var(--tablevue-selected-background-color);
     --gridsplitter-grip-hover-color: #6b6969;
     --gridsplitter-grip-active-color: darkgray;
+
+    --dialog-main-background-color:  #444;
+    --dialog-fader-color: rgba(0, 0, 0, 0.50);
+    --dialog-button-color: #e95420;
+    --dialog-button-hover-color: #e7835f;
+    --dialog-button-active-color: #b94116;
+    --dialog-button-focus-color: #e95420;    
 }

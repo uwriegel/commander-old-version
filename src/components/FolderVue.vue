@@ -276,18 +276,20 @@ export default class FolderVue extends Vue {
         switch (evt.which) {
             case 9: // TAB
                 this.focus()
-                evt.stopPropagation()
-                evt.preventDefault()
+                evt.stopPropagation() // don't let this event bubble to the next element 
                 break
             case 13: // enter
                 const path = (this as any).$refs.input.value
                 this.setPath(path)
                 this.focus()
                 break
+            case 46: // del
+                evt.stopPropagation() // don't let this event bubble to the next element
+                return
             default:
                 return // exit this handler for other keys
         }
-        evt.preventDefault() 
+        evt.preventDefault() // Prevent propagation to input control
     }
 
     setPath(path: string) {

@@ -46,4 +46,11 @@
     --gridsplitter-grip-color: lightgray;
     --gridsplitter-grip-hover-color: darkgray;
     --gridsplitter-grip-active-color: #6b6969;
+
+    --dialog-main-background-color: white;
+    --dialog-fader-color: rgba(0, 0, 0, 0.50);
+    --dialog-button-color: blue;
+    --dialog-button-hover-color: #7979ff;
+    --dialog-button-active-color: #01018e;
+    --dialog-button-focus-color: blue;    
 }
