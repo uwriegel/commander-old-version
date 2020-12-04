@@ -22,4 +22,5 @@ export class Initial implements IProcessor {
     selectFrom(index: number) {}
     setColumnWiths(folderName: string, withs: string[]) {}
     isDeletable = () => false
+    getSelectedItems = () => []
 }

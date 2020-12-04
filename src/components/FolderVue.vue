@@ -41,7 +41,7 @@ import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
-    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, RendererFunctionMsg } from "../../electron/src/model/model"
+    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, RendererFunctionMsg, NumbersResponse } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -141,8 +141,9 @@ export default class FolderVue extends Vue {
             }
             ipcRenderer.send(this.name, msg)
         })
-        this.eventBus.$on('getSelectedItems', (res: (items: number[])=>void) => {
-            res([12, 13, 14])
+        this.eventBus.$on('getSelectedItems', async (res: (items: number[])=>void) => {
+            const result = await this.callFunction({ method: MainMsgType.GetSelectedItems }) as NumbersResponse
+            res(result.value)
         })
         this.eventBus.$on('isDeletable', async (res: (res: boolean)=>void) => {
             const result = await this.callFunction({ method: MainMsgType.IsDeletable }) as BooleanResponse
@@ -221,6 +222,9 @@ export default class FolderVue extends Vue {
                     setTimeout(() => this.isBacktrackEnd = false, 300)
                     break
                 case RendererMsgType.IsDeletable:
+                    this.onFunctionResult(msg as RendererFunctionMsg)
+                    break
+                case RendererMsgType.GetSelectedItems:
                     this.onFunctionResult(msg as RendererFunctionMsg)
                     break
             }

@@ -23,7 +23,8 @@ export enum RendererMsgType {
     RestrictClose,
     BacktrackEnd,
     SendPath,
-    IsDeletable
+    IsDeletable,
+    GetSelectedItems
 }
 
 export enum ItemType {
@@ -61,7 +62,8 @@ export enum MainMsgType {
     UnselectAll,
     SelectTo,
     SelectFrom,
-    IsDeletable
+    IsDeletable,
+    GetSelectedItems
 }
 
 export interface RendererMsg {
@@ -74,6 +76,10 @@ export interface RendererFunctionMsg extends RendererMsg {
 
 export interface BooleanResponse extends RendererFunctionMsg {
     value: boolean
+}
+
+export interface NumbersResponse extends RendererFunctionMsg {
+    value: number[]
 }
 
 export interface MainMsg { method: MainMsgType }

@@ -3,7 +3,7 @@ import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
-    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse } from "./model/model"
+    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, NumbersResponse } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -118,7 +118,15 @@ export class Folder {
                     const res = this.processor.isDeletable()
                     this.sendToRenderer({ method: RendererMsgType.IsDeletable, id: functionMsg.id, value: res } as BooleanResponse)
                     break
-            }
+                case MainMsgType.GetSelectedItems:
+                    const selectedItemsMsg = args as MainFunctionMsg
+                    const selectedItems = this.processor.getSelectedItems()
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.GetSelectedItems, 
+                        id: selectedItemsMsg.id, 
+                        value: selectedItems } as NumbersResponse)
+                    break
+                }
         })
     }
 

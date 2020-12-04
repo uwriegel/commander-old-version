@@ -169,6 +169,12 @@ export class Directory implements IProcessor {
 
     isDeletable = () => true
 
+    getSelectedItems = () => 
+        this.originalItems
+            .map((n, i) => ({ index: i, isSelected: n.isSelected}))
+            .filter(n => n.isSelected)
+            .map(n => n.index)
+
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []
     path: string = ""
