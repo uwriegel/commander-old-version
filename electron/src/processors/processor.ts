@@ -31,6 +31,7 @@ export interface IProcessor {
     unselectAll(): void
     selectTo(index: number): void
     selectFrom(index: number): void
+    isDeletable(): boolean
 }
 
 export interface CheckedPath {

@@ -39,15 +39,17 @@ import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
-    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, 
-    MainMsg, ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, 
-    RestrictMsg, RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg } from "../../electron/src/model/model"
+    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
+    ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
+    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, RendererFunctionMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
 const { ipcRenderer } = window.require('electron')
 
 var reqId = 0
+var requestIdSeed = 0
+var functionCalls: Map<number, (msg:RendererFunctionMsg)=>void> = new Map
 
 @Component({
     components: {
@@ -72,7 +74,7 @@ export default class FolderVue extends Vue {
     isBacktrackEnd = false
     keyDown$ = new Subject()
     processorName = ""
-
+    
     mounted() {
         const shiftTabs$ = this.keyDown$.pipe(filter((n: any) => n.event.which == 9 && n.event.shiftKey))
         const inputChars$ = this.keyDown$.pipe(filter((n: any) => !n.event.altKey && !n.event.ctrlKey && n.event.key.length > 0 && n.event.key.length < 2))
@@ -142,7 +144,11 @@ export default class FolderVue extends Vue {
         this.eventBus.$on('getSelectedItems', (res: (items: number[])=>void) => {
             res([12, 13, 14])
         })
-        
+        this.eventBus.$on('isDeletable', async (res: (res: boolean)=>void) => {
+            const result = await this.callFunction({ method: MainMsgType.IsDeletable }) as BooleanResponse
+            res(result.value)
+        })
+                
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
             return new Promise<any[]>((res, rej) => {
@@ -214,9 +220,11 @@ export default class FolderVue extends Vue {
                     this.isBacktrackEnd = true
                     setTimeout(() => this.isBacktrackEnd = false, 300)
                     break
+                case RendererMsgType.IsDeletable:
+                    this.onFunctionResult(msg as RendererFunctionMsg)
+                    break
             }
         })
-
         const msg: MainMsg = {
             method: MainMsgType.Init,
         }
@@ -329,6 +337,21 @@ export default class FolderVue extends Vue {
     }
     restrictClose() { 
         ipcRenderer.send(this.name, { method: MainMsgType.RestrictClose })
+    }
+
+    callFunction(msg: MainFunctionMsg) {
+        return new Promise<RendererFunctionMsg>((res, rej) => {
+            msg.id = ++requestIdSeed
+            functionCalls.set(msg.id, res)
+            ipcRenderer.send(this.name, msg)
+        })
+    }
+
+    onFunctionResult(msg: RendererFunctionMsg) {
+        const res = functionCalls.get(msg.id)
+        functionCalls.delete(msg.id)
+        if (res)
+            res(msg)
     }
 }
 </script>

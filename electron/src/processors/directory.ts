@@ -165,7 +165,9 @@ export class Directory implements IProcessor {
         this.items
         .filter(n => n.name != "..")
         .forEach((n, i) => n.isSelected = i >= index - 1)
-}
+    }
+
+    isDeletable = () => true
 
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []

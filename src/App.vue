@@ -136,6 +136,17 @@ export default class App extends Vue {
     }
 
     async delete() {
+        if (!await emitForResponse<boolean>(this.getActiveFolder(), "isDeletable")) {
+            await (this.$refs.dialog as any).show({
+                ok: true, 
+                defButton: "ok",
+                text: "Du kannst hier nicht löschen!", 
+            })
+            return
+        }
+        // TODO: OK only Dialog  cancable
+
+        // TODO: GetSelectedItems
         const res = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
         const ret = await (this.$refs.dialog as any).show({
             ok: true, 

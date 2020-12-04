@@ -89,6 +89,7 @@ export class Root implements IProcessor {
     }
 
     sort = ()=>{}
+    isDeletable = () => false
 
     toggleSelection(index: number) {}
     selectAll() {}
