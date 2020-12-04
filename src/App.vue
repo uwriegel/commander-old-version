@@ -144,8 +144,6 @@ export default class App extends Vue {
             })
             return
         }
-        // TODO: OK only Dialog  cancable
-
         // TODO: GetSelectedItems
         const res = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
         const ret = await (this.$refs.dialog as any).show({
