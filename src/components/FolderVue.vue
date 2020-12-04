@@ -139,6 +139,9 @@ export default class FolderVue extends Vue {
             }
             ipcRenderer.send(this.name, msg)
         })
+        this.eventBus.$on('getSelectedItems', (res: (items: number[])=>void) => {
+            res([12, 13, 14])
+        })
         
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {

@@ -36,6 +36,10 @@ var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
 
+function emitForResponse<T>(vue: Vue, evt: string) { 
+    return new Promise<T>((res, rej) => vue.$emit(evt, res))
+}
+
 @Component({
     components: {
         FolderView,
@@ -132,6 +136,7 @@ export default class App extends Vue {
     }
 
     async delete() {
+        const res = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
         const ret = await (this.$refs.dialog as any).show({
             ok: true, 
             cancel : true,
