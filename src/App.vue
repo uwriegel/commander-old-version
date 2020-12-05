@@ -145,10 +145,11 @@ export default class App extends Vue {
             return
         }
 
-        let res = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
-        if (res.length == 0)
-        // TODO: GetCurrentItem
-            res = [9]
+        let items = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
+        if (items.length == 0)
+            items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
+
+        console.log("Selected", items)
         const ret = await (this.$refs.dialog as any).show({
             ok: true, 
             cancel : true,

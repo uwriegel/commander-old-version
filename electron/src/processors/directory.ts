@@ -175,6 +175,11 @@ export class Directory implements IProcessor {
             .filter(n => n.isSelected)
             .map(n => n.index)
 
+    getCurrentItem = (index: number) => {
+        const element = this.items[index]
+        return this.originalItems.findIndex(n => n == element)
+    }
+
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []
     path: string = ""

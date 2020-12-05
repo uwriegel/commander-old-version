@@ -41,7 +41,7 @@ import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
-    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, RendererFunctionMsg, NumbersResponse } from "../../electron/src/model/model"
+    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, RendererFunctionMsg, NumbersResponse, NumberResponse, GetCurrentItem } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -149,6 +149,13 @@ export default class FolderVue extends Vue {
             const result = await this.callFunction({ method: MainMsgType.IsDeletable }) as BooleanResponse
             res(result.value)
         })
+        this.eventBus.$on('getCurrentItem', async (res: (item: number)=>void) => {
+            const indexResult = await this.callFunction({ 
+                method: MainMsgType.GetCurrentItem, 
+                index: this.selectedIndex 
+            } as GetCurrentItem) as NumberResponse
+            res(indexResult.value)
+        })
                 
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
@@ -225,6 +232,9 @@ export default class FolderVue extends Vue {
                     this.onFunctionResult(msg as RendererFunctionMsg)
                     break
                 case RendererMsgType.GetSelectedItems:
+                    this.onFunctionResult(msg as RendererFunctionMsg)
+                    break
+                case RendererMsgType.GetCurrentItem:
                     this.onFunctionResult(msg as RendererFunctionMsg)
                     break
             }

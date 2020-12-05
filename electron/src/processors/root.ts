@@ -97,6 +97,7 @@ export class Root implements IProcessor {
     unselectAll() {}
     selectTo(index: number) {}
     selectFrom(index: number) {}
+    getCurrentItem = (index: number) => index            
 
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []

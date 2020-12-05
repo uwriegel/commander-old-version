@@ -3,7 +3,7 @@ import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
-    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, NumbersResponse } from "./model/model"
+    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, NumbersResponse, NumberResponse, GetCurrentItem } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -125,6 +125,14 @@ export class Folder {
                         method: RendererMsgType.GetSelectedItems, 
                         id: selectedItemsMsg.id, 
                         value: selectedItems } as NumbersResponse)
+                    break
+                case MainMsgType.GetCurrentItem:
+                    const currentItemMsg = args as GetCurrentItem
+                    const currentItem = this.processor.getCurrentItem(currentItemMsg.index)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.GetSelectedItems, 
+                        id: currentItemMsg.id, 
+                        value: currentItem } as NumberResponse)
                     break
                 }
         })

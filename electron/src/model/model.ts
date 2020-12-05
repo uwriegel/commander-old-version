@@ -24,7 +24,8 @@ export enum RendererMsgType {
     BacktrackEnd,
     SendPath,
     IsDeletable,
-    GetSelectedItems
+    GetSelectedItems,
+    GetCurrentItem
 }
 
 export enum ItemType {
@@ -63,7 +64,8 @@ export enum MainMsgType {
     SelectTo,
     SelectFrom,
     IsDeletable,
-    GetSelectedItems
+    GetSelectedItems,
+    GetCurrentItem
 }
 
 export interface RendererMsg {
@@ -80,6 +82,10 @@ export interface BooleanResponse extends RendererFunctionMsg {
 
 export interface NumbersResponse extends RendererFunctionMsg {
     value: number[]
+}
+
+export interface NumberResponse extends RendererFunctionMsg {
+    value: number
 }
 
 export interface MainMsg { method: MainMsgType }
@@ -119,6 +125,10 @@ export interface Sort extends MainMsg {
 
 export interface BackTrackMsg extends MainMsg {
     direction: boolean
+}
+
+export interface GetCurrentItem extends MainFunctionMsg {
+    index: number
 }
 
 export interface ColumnsMsg extends RendererMsg {

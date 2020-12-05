@@ -33,6 +33,7 @@ export interface IProcessor {
     selectFrom(index: number): void
     isDeletable(): boolean
     getSelectedItems(): number[]
+    getCurrentItem(index: number): number 
 }
 
 export interface CheckedPath {
