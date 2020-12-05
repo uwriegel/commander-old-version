@@ -93,32 +93,42 @@ export class Folder {
                     break
                 case MainMsgType.SelectAll:
                     this.processor.selectAll()
-                    this.refreshView(-1)
+                    const selectAllMsg = args as MainFunctionMsg
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        id: selectAllMsg.id } as RendererFunctionMsg)
                     break
                 case MainMsgType.UnselectAll:
                     this.processor.unselectAll()
-                    this.refreshView(-1)
+                    const unselectAllMsg = args as MainFunctionMsg
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        id: unselectAllMsg.id } as RendererFunctionMsg)
                     break
                 case MainMsgType.SelectTo:
-                    const selectToMsg = args as SelectedIndexMsg
-                    this.processor.selectTo(selectToMsg.selectedIndex)
-                    this.refreshView(-1)
+                    const selectToMsg = args as IndexMsg
+                    this.processor.selectTo(selectToMsg.index)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        id: selectToMsg.id } as RendererFunctionMsg)
                     break
                 case MainMsgType.SelectFrom:
-                    const selectFromMsg = args as SelectedIndexMsg
-                    this.processor.selectFrom(selectFromMsg.selectedIndex)
-                    this.refreshView(-1)
+                    const selectFromMsg = args as IndexMsg
+                    this.processor.selectFrom(selectFromMsg.index)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        id: selectFromMsg.id } as RendererFunctionMsg)
                     break
                 case MainMsgType.IsDeletable:
                     const functionMsg = args as MainFunctionMsg
                     const res = this.processor.isDeletable()
-                    this.sendToRenderer({ method: RendererMsgType.IsDeletable, id: functionMsg.id, value: res } as BooleanResponse)
+                    this.sendToRenderer({ method: RendererMsgType.FuctionReturn, id: functionMsg.id, value: res } as BooleanResponse)
                     break
                 case MainMsgType.GetSelectedItems:
                     const selectedItemsMsg = args as MainFunctionMsg
                     const selectedItems = this.processor.getSelectedItems()
                     this.sendToRenderer({ 
-                        method: RendererMsgType.GetSelectedItems, 
+                        method: RendererMsgType.FuctionReturn, 
                         id: selectedItemsMsg.id, 
                         value: selectedItems } as NumbersResponse)
                     break
@@ -126,7 +136,7 @@ export class Folder {
                     const currentItemMsg = args as IndexMsg
                     const currentItem = this.processor.getCurrentItem(currentItemMsg.index)
                     this.sendToRenderer({ 
-                        method: RendererMsgType.GetSelectedItems, 
+                        method: RendererMsgType.FuctionReturn, 
                         id: currentItemMsg.id, 
                         value: currentItem } as NumberResponse)
                     break
@@ -134,7 +144,7 @@ export class Folder {
                     const toggleSelectionMsg = args as IndexMsg
                     this.processor.toggleSelection(toggleSelectionMsg.index)
                     this.sendToRenderer({ 
-                        method: RendererMsgType.ToggleSelection, 
+                        method: RendererMsgType.FuctionReturn, 
                         id: toggleSelectionMsg.id } as RendererFunctionMsg)
                     break
             }

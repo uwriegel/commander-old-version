@@ -23,10 +23,7 @@ export enum RendererMsgType {
     RestrictClose,
     BacktrackEnd,
     SendPath,
-    IsDeletable,
-    GetSelectedItems,
-    GetCurrentItem,
-    ToggleSelection
+    FuctionReturn
 }
 
 export enum ItemType {

@@ -104,33 +104,27 @@ export default class FolderVue extends Vue {
             this.tableEventBus.$emit("refreshView")
             this.tableEventBus.$emit("downOne")
         })
-        // TODO: SelectAll UnselectAll per function
-        this.$subscribeTo(pluses$, () => {
-            const msg: MainMsg = {
-                method: MainMsgType.SelectAll
-            }
-            ipcRenderer.send(this.name, msg)
+        this.$subscribeTo(pluses$, async () => {
+            await this.callFunction({ method: MainMsgType.SelectAll })
+            this.tableEventBus.$emit("refreshView")
         })        
-        this.$subscribeTo(minuses$, () => {
-            const msg: MainMsg = {
-                method: MainMsgType.UnselectAll
-            }
-            ipcRenderer.send(this.name, msg)
+        this.$subscribeTo(minuses$, async () => {
+            await this.callFunction({ method: MainMsgType.UnselectAll })
+            this.tableEventBus.$emit("refreshView")
         })        
-        // TODO: SelectTo SelectFrom per function
-        this.$subscribeTo(shiftHomes$, () => {
-            const msg: SelectedIndexMsg = {
-                selectedIndex: this.selectedIndex,
-                method: MainMsgType.SelectTo
-            }
-            ipcRenderer.send(this.name, msg)
+        this.$subscribeTo(shiftHomes$, async () => {
+            await this.callFunction({ 
+                index: this.selectedIndex,
+                method: MainMsgType.SelectTo 
+            } as IndexMsg)
+            this.tableEventBus.$emit("refreshView")
         })     
-        this.$subscribeTo(shiftEnds$, () => {
-            const msg: SelectedIndexMsg = {
-                selectedIndex: this.selectedIndex,
-                method: MainMsgType.SelectFrom
-            }
-            ipcRenderer.send(this.name, msg)
+        this.$subscribeTo(shiftEnds$, async () => {
+            await this.callFunction({ 
+                index: this.selectedIndex,
+                method: MainMsgType.SelectFrom 
+            } as IndexMsg)
+            this.tableEventBus.$emit("refreshView")
         })     
         this.eventBus.$on('focus', () => this.focus ())
         this.eventBus.$on('resize', () => this.tableEventBus.$emit('resize'))
@@ -223,10 +217,7 @@ export default class FolderVue extends Vue {
                     this.isBacktrackEnd = true
                     setTimeout(() => this.isBacktrackEnd = false, 300)
                     break
-                case RendererMsgType.IsDeletable:
-                case RendererMsgType.GetSelectedItems:
-                case RendererMsgType.GetCurrentItem:
-                case RendererMsgType.ToggleSelection:
+                case RendererMsgType.FuctionReturn:
                     this.onFunctionResult(msg as RendererFunctionMsg)
                     break
             }
