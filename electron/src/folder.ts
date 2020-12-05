@@ -3,7 +3,8 @@ import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
-    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, NumbersResponse, NumberResponse, GetCurrentItem } from "./model/model"
+    RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -90,11 +91,6 @@ export class Folder {
                     else
                         this.sendToRenderer({ method: RendererMsgType.BacktrackEnd })
                     break
-                case MainMsgType.ToggleSelection:
-                    const toggleSelectionMsg = args as SelectedIndexMsg
-                    this.processor.toggleSelection(toggleSelectionMsg.selectedIndex)
-                    this.refreshView(++toggleSelectionMsg.selectedIndex)
-                    break
                 case MainMsgType.SelectAll:
                     this.processor.selectAll()
                     this.refreshView(-1)
@@ -127,14 +123,21 @@ export class Folder {
                         value: selectedItems } as NumbersResponse)
                     break
                 case MainMsgType.GetCurrentItem:
-                    const currentItemMsg = args as GetCurrentItem
+                    const currentItemMsg = args as IndexMsg
                     const currentItem = this.processor.getCurrentItem(currentItemMsg.index)
                     this.sendToRenderer({ 
                         method: RendererMsgType.GetSelectedItems, 
                         id: currentItemMsg.id, 
                         value: currentItem } as NumberResponse)
                     break
-                }
+                case MainMsgType.ToggleSelection:
+                    const toggleSelectionMsg = args as IndexMsg
+                    this.processor.toggleSelection(toggleSelectionMsg.index)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.ToggleSelection, 
+                        id: toggleSelectionMsg.id } as RendererFunctionMsg)
+                    break
+            }
         })
     }
 

@@ -52,7 +52,7 @@
     "grid-splitter-vue": "^2.1.7",
     "lodash": "^4.17.20",
     "rxjs": "^6.6.3",
-    "virtual-table-vue": "^5.2.0",
+    "virtual-table-vue": "^5.3.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",

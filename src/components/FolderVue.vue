@@ -41,7 +41,8 @@ import ParentIcon from '../icons/ParentIcon.vue'
 import { 
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
-    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, RendererFunctionMsg, NumbersResponse, NumberResponse, GetCurrentItem } from "../../electron/src/model/model"
+    RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
+    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -95,17 +96,15 @@ export default class FolderVue extends Vue {
         this.$subscribeTo(escapes$, () => this.restrictClose())
         this.$subscribeTo(backSpaces$, (evt: any) => this.onBacktrack(evt.event.ctrlKey ? true : false))
 
-        this.$subscribeTo(inserts$, () => {
-
-            // TODO await Call Function ToggleSelection
+        this.$subscribeTo(inserts$, async () => {
+            await this.callFunction({ 
+                method: MainMsgType.ToggleSelection, 
+                index: this.selectedIndex 
+            } as IndexMsg)
             this.tableEventBus.$emit("refreshView")
-
-            // const msg: SelectedIndexMsg = {
-            //     method: MainMsgType.ToggleSelection,
-            //     selectedIndex: this.selectedIndex
-            // }
-            // ipcRenderer.send(this.name, msg)
+            this.tableEventBus.$emit("downOne")
         })
+        // TODO: SelectAll UnselectAll per function
         this.$subscribeTo(pluses$, () => {
             const msg: MainMsg = {
                 method: MainMsgType.SelectAll
@@ -118,6 +117,7 @@ export default class FolderVue extends Vue {
             }
             ipcRenderer.send(this.name, msg)
         })        
+        // TODO: SelectTo SelectFrom per function
         this.$subscribeTo(shiftHomes$, () => {
             const msg: SelectedIndexMsg = {
                 selectedIndex: this.selectedIndex,
@@ -157,7 +157,7 @@ export default class FolderVue extends Vue {
             const indexResult = await this.callFunction({ 
                 method: MainMsgType.GetCurrentItem, 
                 index: this.selectedIndex 
-            } as GetCurrentItem) as NumberResponse
+            } as IndexMsg) as NumberResponse
             res(indexResult.value)
         })
                 
@@ -224,12 +224,9 @@ export default class FolderVue extends Vue {
                     setTimeout(() => this.isBacktrackEnd = false, 300)
                     break
                 case RendererMsgType.IsDeletable:
-                    this.onFunctionResult(msg as RendererFunctionMsg)
-                    break
                 case RendererMsgType.GetSelectedItems:
-                    this.onFunctionResult(msg as RendererFunctionMsg)
-                    break
                 case RendererMsgType.GetCurrentItem:
+                case RendererMsgType.ToggleSelection:
                     this.onFunctionResult(msg as RendererFunctionMsg)
                     break
             }

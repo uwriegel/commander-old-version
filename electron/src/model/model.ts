@@ -25,7 +25,8 @@ export enum RendererMsgType {
     SendPath,
     IsDeletable,
     GetSelectedItems,
-    GetCurrentItem
+    GetCurrentItem,
+    ToggleSelection
 }
 
 export enum ItemType {
@@ -127,7 +128,7 @@ export interface BackTrackMsg extends MainMsg {
     direction: boolean
 }
 
-export interface GetCurrentItem extends MainFunctionMsg {
+export interface IndexMsg extends MainFunctionMsg {
     index: number
 }
 
