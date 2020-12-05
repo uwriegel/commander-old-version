@@ -96,11 +96,15 @@ export default class FolderVue extends Vue {
         this.$subscribeTo(backSpaces$, (evt: any) => this.onBacktrack(evt.event.ctrlKey ? true : false))
 
         this.$subscribeTo(inserts$, () => {
-            const msg: SelectedIndexMsg = {
-                method: MainMsgType.ToggleSelection,
-                selectedIndex: this.selectedIndex
-            }
-            ipcRenderer.send(this.name, msg)
+
+            // TODO await Call Function ToggleSelection
+            this.tableEventBus.$emit("refreshView")
+
+            // const msg: SelectedIndexMsg = {
+            //     method: MainMsgType.ToggleSelection,
+            //     selectedIndex: this.selectedIndex
+            // }
+            // ipcRenderer.send(this.name, msg)
         })
         this.$subscribeTo(pluses$, () => {
             const msg: MainMsg = {
@@ -170,15 +174,6 @@ export default class FolderVue extends Vue {
                 ipcRenderer.send(this.name, msg)
             })
         }
-
-        // this.ws.onmessage = m => { 
-        //     var msg = JSON.parse(m.data) as InMsg
-        //     switch (msg.method) {
-        //         case InMsgType.RefreshView:
-        //             this.itemsSource = { count: this.itemsSource.count, getItems, indexToSelect: this.selectedIndex }
-        //             break
-        //     }
-        // }
 
         ipcRenderer.on(this.name, (e: any, msg: RendererMsg) => {
             switch (msg.method) {
