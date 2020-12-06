@@ -11,7 +11,8 @@ export enum MainAppMsgType {
     SaveBounds,
     Preview,
     Delete,
-    OpenSameFolder
+    OpenSameFolder,
+    CreateFolder
 } 
 
 export enum RendererMsgType {
@@ -61,7 +62,7 @@ export enum MainMsgType {
     UnselectAll,
     SelectTo,
     SelectFrom,
-    IsDeletable,
+    isWritable,
     GetSelectedItems,
     GetCurrentItem
 }

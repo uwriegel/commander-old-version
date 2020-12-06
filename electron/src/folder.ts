@@ -119,9 +119,9 @@ export class Folder {
                         method: RendererMsgType.FuctionReturn, 
                         id: selectFromMsg.id } as RendererFunctionMsg)
                     break
-                case MainMsgType.IsDeletable:
+                case MainMsgType.isWritable:
                     const functionMsg = args as MainFunctionMsg
-                    const res = this.processor.isDeletable()
+                    const res = this.processor.isWritable()
                     this.sendToRenderer({ method: RendererMsgType.FuctionReturn, id: functionMsg.id, value: res } as BooleanResponse)
                     break
                 case MainMsgType.GetSelectedItems:

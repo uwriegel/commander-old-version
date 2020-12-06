@@ -143,8 +143,8 @@ export default class FolderVue extends Vue {
             const result = await this.callFunction({ method: MainMsgType.GetSelectedItems }) as NumbersResponse
             res(result.value)
         })
-        this.eventBus.$on('isDeletable', async (res: (res: boolean)=>void) => {
-            const result = await this.callFunction({ method: MainMsgType.IsDeletable }) as BooleanResponse
+        this.eventBus.$on('isWritable', async (res: (res: boolean)=>void) => {
+            const result = await this.callFunction({ method: MainMsgType.isWritable }) as BooleanResponse
             res(result.value)
         })
         this.eventBus.$on('getCurrentItem', async (res: (item: number)=>void) => {

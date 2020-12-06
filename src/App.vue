@@ -20,7 +20,7 @@
 		</splitter-grid>
 		<div class="status">{{ selectedItem }}</div>
         <vue-dialog-box ref="dialog" @state-changed=onDialogStateChanged>
-            <!-- <text-input-dialog ref=textinput v-if="textInput"></text-input-dialog> -->
+            <text-input-dialog ref=textinput v-if="textInput"></text-input-dialog>
         </vue-dialog-box>
 	</div>
 </template>
@@ -55,6 +55,7 @@ export default class App extends Vue {
     basePath = ""
     dialogOpen = false
     keyDown$ = new Subject()
+    textInput = false
     
     mounted() {
 		this.folderLeftEventBus.$emit("focus") 
@@ -88,6 +89,9 @@ export default class App extends Vue {
                     break
                 case MainAppMsgType.Delete:
                     this.delete()
+                    break
+                case MainAppMsgType.CreateFolder:
+                    this.createFolder()
                     break
             }
         })
@@ -136,7 +140,7 @@ export default class App extends Vue {
     }
 
     async delete() {
-        if (!await emitForResponse<boolean>(this.getActiveFolder(), "isDeletable")) {
+        if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
             await (this.$refs.dialog as any).show({
                 ok: true, 
                 defButton: "ok",
@@ -156,6 +160,27 @@ export default class App extends Vue {
             text: "Möchtest Du die markierten Elemente löschen?", 
         })
         console.log(ret)
+    }
+
+    async createFolder() {
+        if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
+            await (this.$refs.dialog as any).show({
+                ok: true, 
+                defButton: "ok",
+                text: "Du kannst hier keinen Ordner anlegen!", 
+            })
+            return
+        }
+        this.textInput = true
+        const ret = await (this.$refs.dialog as any).show({
+            ok: true, 
+            cancel : true,
+            defButton: "ok",
+            text: "Neuen Ordner anlegen", 
+            getContent: () => this.$refs.textinput
+        })
+        this.textInput = false
+
     }
     
     changeTheme = (theme: string) => {

@@ -31,7 +31,7 @@ export interface IProcessor {
     unselectAll(): void
     selectTo(index: number): void
     selectFrom(index: number): void
-    isDeletable(): boolean
+    isWritable(): boolean
     getSelectedItems(): number[]
     getCurrentItem(index: number): number 
 }

@@ -40,6 +40,7 @@ export const createMenuBar = (win: BrowserWindow) => {
             }, {
                 label: '&Ordner anlegen',
                 accelerator: 'F7',
+                click: () => sendToApp(MainAppMsgType.CreateFolder)
             }, {
                 type: 'separator'
             }, {

@@ -167,7 +167,7 @@ export class Directory implements IProcessor {
         .forEach((n, i) => n.isSelected = i >= index - 1)
     }
 
-    isDeletable = () => true
+    isWritable = () => true
 
     getSelectedItems = () => 
         this.originalItems
