@@ -25,9 +25,7 @@
 <script lang="ts">
 
 import { Component, Vue } from 'vue-property-decorator'
-
-import { showDialog } from 'virtual-table-vue'
-
+import { showDialog, DIALOG_CANCEL } from 'dialogbox-vue'
 import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
@@ -56,7 +54,6 @@ export default class App extends Vue {
     basePath = ""
     dialogOpen = false
     keyDown$ = new Subject()
-    textInput = false
     
     mounted() {
         this.folderLeftEventBus.$emit("focus") 
@@ -164,28 +161,22 @@ export default class App extends Vue {
     }
 
     async createFolder() {
-
-
-        showDialog("Affenkopp") 
-
         if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
-            await (this.$refs.dialog as any).show({
+            await showDialog(this.$refs.dialog as Vue, {
                 ok: true, 
                 defButton: "ok",
                 text: "Du kannst hier keinen Ordner anlegen!", 
             })
             return
         }
-        this.textInput = true
-        const ret = await (this.$refs.dialog as any).show({
+        const ret = await showDialog(this.$refs.dialog as Vue, {
             ok: true, 
             cancel : true,
-            defButton: "DEF_BUTTON_OK",
+            defButton: "ok",
             text: "Neuen Ordner anlegen", 
             textInput: true,
             textInputValue: "Der Input"
         })
-        this.textInput = false
         if (ret == 0)
             return
         console.log((this.$refs.dialog as any).textInputValue)
