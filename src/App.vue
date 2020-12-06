@@ -19,14 +19,15 @@
             </template>			
 		</splitter-grid>
 		<div class="status">{{ selectedItem }}</div>
-        <vue-dialog-box ref="dialog" @state-changed=onDialogStateChanged>
-            <text-input-dialog ref=textinput v-if="textInput"></text-input-dialog>
-        </vue-dialog-box>
+        <vue-dialog-box ref="dialog" @state-changed=onDialogStateChanged></vue-dialog-box>
 	</div>
 </template>
 <script lang="ts">
 
 import { Component, Vue } from 'vue-property-decorator'
+
+import { showDialog } from 'virtual-table-vue'
+
 import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
@@ -58,8 +59,8 @@ export default class App extends Vue {
     textInput = false
     
     mounted() {
-		this.folderLeftEventBus.$emit("focus") 
-
+        this.folderLeftEventBus.$emit("focus") 
+        
         const tabs$ = this.keyDown$.pipe(filter((evt: any) => evt.event.which == 9 && !evt.event.shiftKey))
 		this.$subscribeTo(tabs$, (evt: any) => {
 			evt.event.stopPropagation()
@@ -163,6 +164,10 @@ export default class App extends Vue {
     }
 
     async createFolder() {
+
+
+        showDialog("Affenkopp") 
+
         if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
             await (this.$refs.dialog as any).show({
                 ok: true, 
@@ -175,12 +180,15 @@ export default class App extends Vue {
         const ret = await (this.$refs.dialog as any).show({
             ok: true, 
             cancel : true,
-            defButton: "ok",
+            defButton: "DEF_BUTTON_OK",
             text: "Neuen Ordner anlegen", 
-            getContent: () => this.$refs.textinput
+            textInput: true,
+            textInputValue: "Der Input"
         })
         this.textInput = false
-
+        if (ret == 0)
+            return
+        console.log((this.$refs.dialog as any).textInputValue)
     }
     
     changeTheme = (theme: string) => {
