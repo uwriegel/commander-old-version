@@ -139,7 +139,7 @@ export default class App extends Vue {
 
     async delete() {
         if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
-            await (this.$refs.dialog as any).show({
+            await showDialog(this.$refs.dialog as Vue, {
                 ok: true, 
                 defButton: "ok",
                 text: "Du kannst hier nicht löschen!", 
@@ -151,7 +151,8 @@ export default class App extends Vue {
         if (items.length == 0)
             items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
 
-        const ret = await (this.$refs.dialog as any).show({
+        // TODO: die selektierten Elemente/das selektierte ELEMENT
+        const ret = await showDialog(this.$refs.dialog as Vue, {
             ok: true, 
             cancel : true,
             defButton: "ok",
@@ -169,13 +170,14 @@ export default class App extends Vue {
             })
             return
         }
+        // TODO: Delete in input shows delete dialog
         const ret = await showDialog(this.$refs.dialog as Vue, {
             ok: true, 
             cancel : true,
             defButton: "ok",
             text: "Neuen Ordner anlegen", 
             textInput: true,
-            textInputValue: "Der Input"
+            textInputValue: this.selectedItem
         })
         if (ret == 0)
             return
@@ -249,6 +251,10 @@ body {
 }
 .viewer {
     flex-grow: 1;
+}
+::selection {
+    color: white;
+    background-color: var(--selected-background-color);
 }
 </style>
 
