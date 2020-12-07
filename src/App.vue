@@ -30,7 +30,7 @@ import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
-import { CHANNEL_TO_RENDERER, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
+import { CHANNEL_TO_RENDERER, Item, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -170,6 +170,7 @@ export default class App extends Vue {
             })
             return
         }
+        const selectedItem = await emitForResponse<Item>(this.getActiveFolder(), "getSelectedItem")
         // TODO: Delete in input shows delete dialog
         const ret = await showDialog(this.$refs.dialog as Vue, {
             ok: true, 
@@ -177,7 +178,7 @@ export default class App extends Vue {
             defButton: "ok",
             text: "Neuen Ordner anlegen", 
             textInput: true,
-            textInputValue: this.selectedItem
+            textInputValue: selectedItem.name != ".." ? selectedItem.name : ""
         })
         if (ret == 0)
             return

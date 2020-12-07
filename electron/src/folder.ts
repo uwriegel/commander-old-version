@@ -4,7 +4,7 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -146,6 +146,14 @@ export class Folder {
                     this.sendToRenderer({ 
                         method: RendererMsgType.FuctionReturn, 
                         id: toggleSelectionMsg.id } as RendererFunctionMsg)
+                    break
+                case MainMsgType.GetSelectedItem:
+                    const getSelectedItemMsg = args as IndexMsg
+                    const item = this.processor.getItems(getSelectedItemMsg.index, getSelectedItemMsg.index)[0]
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        value: item,
+                        id: getSelectedItemMsg.id } as ItemResponse)
                     break
             }
         })

@@ -64,7 +64,8 @@ export enum MainMsgType {
     SelectFrom,
     isWritable,
     GetSelectedItems,
-    GetCurrentItem
+    GetCurrentItem,
+    GetSelectedItem
 }
 
 export interface RendererMsg {
@@ -85,6 +86,10 @@ export interface NumbersResponse extends RendererFunctionMsg {
 
 export interface NumberResponse extends RendererFunctionMsg {
     value: number
+}
+
+export interface ItemResponse extends RendererFunctionMsg {
+    value: Item
 }
 
 export interface MainMsg { method: MainMsgType }

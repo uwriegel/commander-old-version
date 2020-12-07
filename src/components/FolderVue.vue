@@ -42,7 +42,7 @@ import {
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
-    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg } from "../../electron/src/model/model"
+    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, Item } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -147,14 +147,21 @@ export default class FolderVue extends Vue {
             const result = await this.callFunction({ method: MainMsgType.isWritable }) as BooleanResponse
             res(result.value)
         })
-        this.eventBus.$on('getCurrentItem', async (res: (item: number)=>void) => {
+        this.eventBus.$on('getCurrentItem', async (res: (item: Item)=>void) => {
             const indexResult = await this.callFunction({ 
                 method: MainMsgType.GetCurrentItem, 
                 index: this.selectedIndex 
-            } as IndexMsg) as NumberResponse
+            } as IndexMsg) as ItemResponse
             res(indexResult.value)
         })
-                
+        this.eventBus.$on('getSelectedItem', async (res: (item: Item)=>void) => {
+            const indexResult = await this.callFunction({ 
+                method: MainMsgType.GetSelectedItem, 
+                index: this.selectedIndex 
+            } as IndexMsg) as ItemResponse
+            res(indexResult.value)
+        })
+                        
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
             return new Promise<any[]>((res, rej) => {
