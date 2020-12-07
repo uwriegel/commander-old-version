@@ -65,7 +65,7 @@ export default class App extends Vue {
 			this.getInactiveFolder().$emit("focus")
         })
 
-        const dels$ = this.keyDown$.pipe(filter((evt: any) => evt.event.which == 46 && !evt.event.shiftKey))
+        const dels$ = this.keyDown$.pipe(filter((evt: any) => evt.event.which == 46 && !evt.event.shiftKey && evt.event.target.localName != "input"))
         this.$subscribeTo(dels$, (evt: KeyboardEvent) => this.delete())
 
         ipcRenderer.on(CHANNEL_TO_RENDERER, (event: any, msg: MainAppMsgType, ...args: any[]) => {
@@ -171,7 +171,6 @@ export default class App extends Vue {
             return
         }
         const selectedItem = await emitForResponse<Item>(this.getActiveFolder(), "getSelectedItem")
-        // TODO: Delete in input shows delete dialog
         const ret = await showDialog(this.$refs.dialog as Vue, {
             ok: true, 
             cancel : true,
