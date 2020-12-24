@@ -9,6 +9,10 @@ In Visual Studio Code open terminal and type:
 
 ```npm i```
 
+### Prerequisites
+
+Probably install g++ (on fedora)
+
 ## Debug
 Before Debugging first run script ```start```. This rebuilds native addon.
 
