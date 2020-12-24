@@ -11,7 +11,11 @@ In Visual Studio Code open terminal and type:
 
 ### Prerequisites
 
-Probably install g++ (on fedora)
+Probably install g++ or 
+
+```sudo dnf install make automake gcc gcc-c++ kernel-devel``` 
+
+(on fedora)
 
 ## Debug
 Before Debugging first run script ```start```. This rebuilds native addon.
