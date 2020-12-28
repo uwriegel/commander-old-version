@@ -1,0 +1,58 @@
+:root {
+    --main-background-color: #fcfcfc;
+    --main-color: #494646;
+    --selected-color: white;
+    --selected-background-color: #3584e4;
+    --icon-color: #999;
+    --icon-selected-color: white;
+    --font-size: 85%;
+    --exif-color: blue;
+
+    --vue-menu-color: black;
+    --vue-menu-background-color: white;
+    --vue-menu-hover-color: lightblue;
+    --vue-menu-separator-color: #ddd;
+    --vue-menu-border-color: lightgray;
+    --vue-menu-shadow-color: rgba(0, 0, 0, 0.4);
+    --vue-menu-selected-background-color: var(--selected-background-color);
+    --vue-menu-selected-color: white;
+
+    --tablevue-main-color: #494646;
+    --tablevue-main-background-color: #fcfcfc;
+    --tablevue-right-margin-scrollbar: 6px;
+    
+    --tablevue-scrollbar-width: 12px;
+    --tablevue-scrollbar-border-width: 0px;
+    --tablevue-scrollbar-grip-radius: 999px;
+    --tablevue-scrollbar-button-display: none; 
+    --tablevue-scrollbar-background-color: transparent;
+    --tablevue-scrollbar-background-hover-color: rgb(192, 192, 192);
+    --tablevue-scrollbar-grip-color: gray;    
+    --tablevue-scrollbar-grip-hover-color: gray;    
+    --tablevue-scrollbar-grip-active-color: var(--selected-background-color);    
+    --tablevue-scrollbar-grip-width: 4px;    
+    --tablevue-scrollbar-grip-right: 1px;    
+    --tablevue-scrollbar-button-color: #666;
+    --tablevue-scrollbar-button-hover-color: #555;
+    --tablevue-scrollbar-button-active-color: #444;
+    --tablevue-scrollbar-button-background-color: white;
+    --tablevue-scrollbar-button-hover-background-color: rgb(209, 209, 209);
+    --tablevue-scrollbar-button-active-background-color: #aaa;
+
+    --tablevue-selected-color:  #737373;
+    --tablevue-selected-background-color: #eff0f1;
+    --tablevue-columns-separator-color:  #737373;
+    --tablevue-selected-background-hover-color: #e2e2e2;
+    --tablevue-tr-selected-color: #494646;
+
+    --gridsplitter-grip-color: var(--tablevue-selected-background-color);
+    --gridsplitter-grip-hover-color: darkgray;
+    --gridsplitter-grip-active-color: #6b6969;
+
+    --dialog-main-background-color: white;
+    --dialog-fader-color: rgba(0, 0, 0, 0.50);
+    --dialog-button-color: #3584e4;
+    --dialog-button-hover-color: #649ee4;
+    --dialog-button-active-color: #1975e6;
+    --dialog-button-focus-color: #3584e4;    
+}

@@ -1,6 +1,6 @@
 import { BrowserWindow, Menu } from "electron"
 import { leftFolder, rightFolder, sendToApp } from "./main"
-import { MainAppMsgType, THEME_BLUE, THEME_YARU, THEME_YARUDARK } from "./model/model"
+import { MainAppMsgType, THEME_ADWAITA, THEME_BLUE, THEME_YARU, THEME_YARUDARK } from "./model/model"
 
 var theme = ""
 export var showHidden = false
@@ -112,6 +112,11 @@ export const createMenuBar = (win: BrowserWindow) => {
                     type: "radio",
                     checked: theme == THEME_BLUE,
                     click: () => setTheme(THEME_BLUE)
+                }, {
+                    label: '&Adwaita',
+                    type: "radio",
+                    checked: theme == THEME_ADWAITA,
+                    click: () => setTheme(THEME_ADWAITA)
                 }, {
                     label: '&Yaru',
                     type: "radio",
