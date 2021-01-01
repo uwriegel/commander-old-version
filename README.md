@@ -7,7 +7,7 @@ Node.js Version 15 is not supported by currently used Electron, so install node.
 
 In Visual Studio Code open terminal and type:
 
-```npm i```
+```npm i```f
 
 ### Prerequisites
 
