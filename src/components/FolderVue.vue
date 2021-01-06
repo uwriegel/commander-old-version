@@ -161,6 +161,10 @@ export default class FolderVue extends Vue {
             } as IndexMsg) as ItemResponse
             res(indexResult.value)
         })
+        this.eventBus.$on('createFolder', async (res: ()=>void, name: String) => {
+            const affe = name
+            res()
+        })
                         
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {

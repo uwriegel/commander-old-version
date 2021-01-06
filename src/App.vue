@@ -25,7 +25,7 @@
 <script lang="ts">
 
 import { Component, Vue } from 'vue-property-decorator'
-import { showDialog, DIALOG_CANCEL } from 'dialogbox-vue'
+import { showDialog, DIALOG_CANCEL, DIALOG_OK } from 'dialogbox-vue'
 import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
@@ -35,8 +35,8 @@ var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
 
-function emitForResponse<T>(vue: Vue, evt: string) { 
-    return new Promise<T>((res, rej) => vue.$emit(evt, res))
+function emitForResponse<T>(vue: Vue, evt: string, ...args: any[]) { 
+    return new Promise<T>((res, rej) => vue.$emit(evt, res, args))
 }
 
 @Component({
@@ -179,9 +179,9 @@ export default class App extends Vue {
             textInput: true,
             textInputValue: selectedItem.name != ".." ? selectedItem.name : ""
         })
-        if (ret == 0)
-            return
-        console.log((this.$refs.dialog as any).textInputValue)
+        console.log("ret", ret, DIALOG_OK, ret == DIALOG_OK)
+        if (ret == DIALOG_OK)
+            await emitForResponse<void>(this.getActiveFolder(), "createFolder", (this.$refs.dialog as any).textInputValue)
     }
     
     changeTheme = (theme: string) => {
