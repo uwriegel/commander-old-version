@@ -4,7 +4,7 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -154,6 +154,13 @@ export class Folder {
                         method: RendererMsgType.FuctionReturn, 
                         value: item,
                         id: getSelectedItemMsg.id } as ItemResponse)
+                    break
+                case MainMsgType.CreateFolder:
+                    const createFolderMsg = args as StringMsg
+                    console.log("CreateFolder", createFolderMsg.value)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        id: createFolderMsg.id } as RendererFunctionMsg)
                     break
             }
         })

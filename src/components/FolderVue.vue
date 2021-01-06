@@ -42,7 +42,7 @@ import {
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
-    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, Item } from "../../electron/src/model/model"
+    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, Item, StringMsg } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -162,7 +162,10 @@ export default class FolderVue extends Vue {
             res(indexResult.value)
         })
         this.eventBus.$on('createFolder', async (res: ()=>void, name: String) => {
-            const affe = name
+            await this.callFunction({ 
+                method: MainMsgType.CreateFolder, 
+                value: name 
+            } as StringMsg)
             res()
         })
                         

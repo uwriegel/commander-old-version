@@ -66,7 +66,8 @@ export enum MainMsgType {
     isWritable,
     GetSelectedItems,
     GetCurrentItem,
-    GetSelectedItem
+    GetSelectedItem,
+    CreateFolder
 }
 
 export interface RendererMsg {
@@ -134,6 +135,10 @@ export interface BackTrackMsg extends MainMsg {
 
 export interface IndexMsg extends MainFunctionMsg {
     index: number
+}
+
+export interface StringMsg extends MainFunctionMsg {
+    value: string
 }
 
 export interface ColumnsMsg extends RendererMsg {
