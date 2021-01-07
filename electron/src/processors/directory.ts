@@ -1,11 +1,13 @@
 import { getFiles, getExifDate } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
+import * as fs from 'fs'
 import { showHidden } from '../menu'
 import { ICON_SCHEME, ItemType, Sort } from "../model/model"
 import { platformMethods } from "../platforms/platform"
 import { changeProcessor, CheckedPath, IProcessor } from "./processor"
 import { ROOT } from './root'
+const fsa = fs.promises
 
 export interface DirectoryItem extends FileItem {
     exifDate?: Date|null
@@ -178,6 +180,15 @@ export class Directory implements IProcessor {
     getCurrentItem = (index: number) => {
         const element = this.items[index]
         return this.originalItems.findIndex(n => n == element)
+    }
+
+    async createFolder(name: string) {
+        const dir = ioPath.join(this.path, name)
+        try {
+            await fsa.mkdir(dir)   
+        } catch (e) {
+            const te = e
+        }
     }
 
     originalItems : DirectoryItem[] = []

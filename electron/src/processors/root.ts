@@ -98,6 +98,7 @@ export class Root implements IProcessor {
     selectTo(index: number) {}
     selectFrom(index: number) {}
     getCurrentItem = (index: number) => index            
+    createFolder(name: string) {}
 
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []

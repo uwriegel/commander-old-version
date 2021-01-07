@@ -161,10 +161,10 @@ export default class FolderVue extends Vue {
             } as IndexMsg) as ItemResponse
             res(indexResult.value)
         })
-        this.eventBus.$on('createFolder', async (res: ()=>void, name: String) => {
+        this.eventBus.$on('createFolder', async (res: ()=>void, args: string[]) => {
             await this.callFunction({ 
                 method: MainMsgType.CreateFolder, 
-                value: name 
+                value: args[0]
             } as StringMsg)
             res()
         })

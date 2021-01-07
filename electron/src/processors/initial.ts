@@ -23,5 +23,6 @@ export class Initial implements IProcessor {
     setColumnWiths(folderName: string, withs: string[]) {}
     isWritable = () => false
     getSelectedItems = () => []
-    getCurrentItem = (index: number) => index            
+    getCurrentItem = (index: number) => index      
+    createFolder(name: string) {}      
 }

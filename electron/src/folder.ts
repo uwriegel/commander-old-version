@@ -1,4 +1,5 @@
 import { IpcMain } from "electron"
+import * as fs from 'fs'
 import _ = require("lodash")
 import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
@@ -8,6 +9,7 @@ import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, G
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
+const fsa = fs.promises
 
 export class Folder {
     constructor(ipcMain: IpcMain, webContents: Electron.WebContents, name: string) {
@@ -157,7 +159,7 @@ export class Folder {
                     break
                 case MainMsgType.CreateFolder:
                     const createFolderMsg = args as StringMsg
-                    console.log("CreateFolder", createFolderMsg.value)
+                    this.processor.createFolder(createFolderMsg.value)
                     this.sendToRenderer({ 
                         method: RendererMsgType.FuctionReturn, 
                         id: createFolderMsg.id } as RendererFunctionMsg)

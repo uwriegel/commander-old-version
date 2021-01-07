@@ -34,6 +34,7 @@ export interface IProcessor {
     isWritable(): boolean
     getSelectedItems(): number[]
     getCurrentItem(index: number): number 
+    createFolder(name: string): void
 }
 
 export interface CheckedPath {
