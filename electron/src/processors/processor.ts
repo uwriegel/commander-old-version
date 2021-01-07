@@ -12,6 +12,12 @@ const timeFormat = Intl.DateTimeFormat("de-DE", {
     minute: "2-digit"
 })
 
+export enum FileResult {
+    Success,
+    AccessDenied,
+    FileExists
+}
+
 export interface IProcessor {
     getName(): string
     getColumns(): Column[]
@@ -34,7 +40,7 @@ export interface IProcessor {
     isWritable(): boolean
     getSelectedItems(): number[]
     getCurrentItem(index: number): number 
-    createFolder(name: string): void
+    createFolder(name: string): Promise<FileResult>
 }
 
 export interface CheckedPath {

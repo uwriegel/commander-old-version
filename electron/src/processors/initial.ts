@@ -1,5 +1,5 @@
 import { Sort } from "../model/model"
-import { IProcessor } from "./processor"
+import { FileResult, IProcessor } from "./processor"
 
 export class Initial implements IProcessor {
     getName = () => "initial"
@@ -24,5 +24,5 @@ export class Initial implements IProcessor {
     isWritable = () => false
     getSelectedItems = () => []
     getCurrentItem = (index: number) => index      
-    createFolder(name: string) {}      
+    createFolder = async (name: string) => FileResult.AccessDenied       
 }

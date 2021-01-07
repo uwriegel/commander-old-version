@@ -31,6 +31,7 @@ import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
 import { CHANNEL_TO_RENDERER, Item, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
+import { FileResult } from 'electron/src/processors/processor'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -180,8 +181,12 @@ export default class App extends Vue {
             textInputValue: selectedItem.name != ".." ? selectedItem.name : ""
         })
         console.log("ret", ret, DIALOG_OK, ret == DIALOG_OK)
-        if (ret == DIALOG_OK)
-            await emitForResponse<void>(this.getActiveFolder(), "createFolder", (this.$refs.dialog as any).textInputValue)
+        if (ret == DIALOG_OK) {
+            const res = await emitForResponse<FileResult>(this.getActiveFolder(), "createFolder", (this.$refs.dialog as any).textInputValue)
+            // TODO: check result, dialog on error
+            // TODO: check result, refresh on success
+            console.log(res)
+        }
     }
     
     changeTheme = (theme: string) => {

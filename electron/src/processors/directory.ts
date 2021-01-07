@@ -5,7 +5,7 @@ import * as fs from 'fs'
 import { showHidden } from '../menu'
 import { ICON_SCHEME, ItemType, Sort } from "../model/model"
 import { platformMethods } from "../platforms/platform"
-import { changeProcessor, CheckedPath, IProcessor } from "./processor"
+import { changeProcessor, CheckedPath, FileResult, IProcessor } from "./processor"
 import { ROOT } from './root'
 const fsa = fs.promises
 
@@ -186,8 +186,11 @@ export class Directory implements IProcessor {
         const dir = ioPath.join(this.path, name)
         try {
             await fsa.mkdir(dir)   
+            return FileResult.Success
         } catch (e) {
             const te = e
+            // TODO: the right result
+            return FileResult.AccessDenied
         }
     }
 

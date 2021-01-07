@@ -5,7 +5,7 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -159,10 +159,11 @@ export class Folder {
                     break
                 case MainMsgType.CreateFolder:
                     const createFolderMsg = args as StringMsg
-                    this.processor.createFolder(createFolderMsg.value)
+                    const mkdirResult = await this.processor.createFolder(createFolderMsg.value)
                     this.sendToRenderer({ 
                         method: RendererMsgType.FuctionReturn, 
-                        id: createFolderMsg.id } as RendererFunctionMsg)
+                        value: mkdirResult,
+                        id: createFolderMsg.id } as FileResultResponse)
                     break
             }
         })

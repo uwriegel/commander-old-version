@@ -1,3 +1,5 @@
+import { FileResult } from "../processors/processor"
+
 export const ICON_SCHEME = 'icon'
 export const CHANNEL_TO_RENDERER = "RENDERER"
 
@@ -92,6 +94,10 @@ export interface NumberResponse extends RendererFunctionMsg {
 
 export interface ItemResponse extends RendererFunctionMsg {
     value: Item
+}
+
+export interface FileResultResponse extends RendererFunctionMsg {
+    value: FileResult
 }
 
 export interface MainMsg { method: MainMsgType }

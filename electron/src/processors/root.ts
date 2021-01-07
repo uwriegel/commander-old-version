@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import { platformMethods } from "../platforms/platform"
 import { ItemType } from "../model/model"
-import { changeProcessor, CheckedPath, IProcessor } from "./processor"
+import { changeProcessor, CheckedPath, FileResult, IProcessor } from "./processor"
 import { getDrives } from "filesystem-utilities"
 
 export const ROOT = "root"
@@ -98,7 +98,7 @@ export class Root implements IProcessor {
     selectTo(index: number) {}
     selectFrom(index: number) {}
     getCurrentItem = (index: number) => index            
-    createFolder(name: string) {}
+    createFolder = async (name: string) => FileResult.AccessDenied
 
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []
