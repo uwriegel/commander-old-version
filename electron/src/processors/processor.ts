@@ -1,4 +1,4 @@
-import { Column, Item, Sort } from "../model/model"
+import { Column, Item, Sort, FileResult } from "../model/model"
 import { Directory } from "./directory"
 import { Root, ROOT } from "./root"
 
@@ -11,12 +11,6 @@ const timeFormat = Intl.DateTimeFormat("de-DE", {
     hour: "2-digit",
     minute: "2-digit"
 })
-
-export enum FileResult {
-    Success,
-    AccessDenied,
-    FileExists
-}
 
 export interface IProcessor {
     getName(): string

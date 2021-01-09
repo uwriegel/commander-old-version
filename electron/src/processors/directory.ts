@@ -1,12 +1,13 @@
-import { getFiles, getExifDate } from 'filesystem-utilities'
+import { getFiles, getExifDate, createFolder } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
 import * as fs from 'fs'
 import { showHidden } from '../menu'
-import { ICON_SCHEME, ItemType, Sort } from "../model/model"
+import { ICON_SCHEME, ItemType, Sort, FileResult } from "../model/model"
 import { platformMethods } from "../platforms/platform"
-import { changeProcessor, CheckedPath, FileResult, IProcessor } from "./processor"
+import { changeProcessor, CheckedPath, IProcessor } from "./processor"
 import { ROOT } from './root'
+import { FileException } from 'model/model'
 const fsa = fs.promises
 
 export interface DirectoryItem extends FileItem {
@@ -185,12 +186,11 @@ export class Directory implements IProcessor {
     async createFolder(name: string) {
         const dir = ioPath.join(this.path, name)
         try {
-            await fsa.mkdir(dir)   
+            await createFolder(dir)
             return FileResult.Success
         } catch (e) {
-            const te = e
-            // TODO: the right result
-            return FileResult.AccessDenied
+            const fe = e as FileException
+            return fe.res
         }
     }
 

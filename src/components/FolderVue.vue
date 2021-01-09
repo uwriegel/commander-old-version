@@ -42,8 +42,8 @@ import {
     RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
-    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, Item, StringMsg, FileResultResponse } from "../../electron/src/model/model"
-import { FileResult } from 'electron/src/processors/processor'
+    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, 
+    Item, StringMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 

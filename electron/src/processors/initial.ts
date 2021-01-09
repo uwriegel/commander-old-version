@@ -1,5 +1,5 @@
-import { Sort } from "../model/model"
-import { FileResult, IProcessor } from "./processor"
+import { Sort, FileResult } from "../model/model"
+import { IProcessor } from "./processor"
 
 export class Initial implements IProcessor {
     getName = () => "initial"

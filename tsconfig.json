@@ -15,11 +15,6 @@
       "types": [
         "webpack-env"
       ],
-      "paths": {
-        "@/*": [
-          "src/*"
-        ]
-      },
       "lib": [
         "esnext",
         "dom",
@@ -29,14 +24,12 @@
     },
     "include": [
       "src/**/*.ts",
-      "electron/src/model/model.ts",
       "src/**/*.tsx",
       "src/**/*.vue",
-      "tests/**/*.ts",
-      "tests/**/*.tsx"
     ],
     "exclude": [
-      "node_modules"
+      "node_modules",
+      "electron",
     ]
   }
   

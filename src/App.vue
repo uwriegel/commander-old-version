@@ -30,8 +30,7 @@ import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import { Observable, Subject } from 'rxjs'
-import { CHANNEL_TO_RENDERER, Item, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
-import { FileResult } from 'electron/src/processors/processor'
+import { CHANNEL_TO_RENDERER, FileResult, Item, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')

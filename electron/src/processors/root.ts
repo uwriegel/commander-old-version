@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import { platformMethods } from "../platforms/platform"
-import { ItemType } from "../model/model"
-import { changeProcessor, CheckedPath, FileResult, IProcessor } from "./processor"
+import { ItemType, FileResult } from "../model/model"
+import { changeProcessor, CheckedPath, IProcessor } from "./processor"
 import { getDrives } from "filesystem-utilities"
 
 export const ROOT = "root"

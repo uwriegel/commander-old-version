@@ -1,5 +1,3 @@
-import { FileResult } from "../processors/processor"
-
 export const ICON_SCHEME = 'icon'
 export const CHANNEL_TO_RENDERER = "RENDERER"
 
@@ -7,6 +5,19 @@ export const THEME_BLUE = "blue"
 export const THEME_YARU = "yaru"
 export const THEME_ADWAITA = "adwaita"
 export const THEME_YARUDARK = "yarudark"
+
+export enum FileResult {
+    Success,
+    Unknown,
+    AccessDenied,
+    FileExists,
+    FileNotFound
+}
+
+export interface FileException {
+    res: number
+    description: FileResult
+}
 
 export enum MainAppMsgType {
     SetTheme = 1,
