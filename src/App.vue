@@ -139,11 +139,7 @@ export default class App extends Vue {
 
     async delete() {
         if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
-            await showDialog(this.$refs.dialog as Vue, {
-                ok: true, 
-                defButton: "ok",
-                text: "Du kannst hier nicht löschen!", 
-            })
+            await this.showText("Du kannst hier nicht löschen!")
             return
         }
 
@@ -158,16 +154,11 @@ export default class App extends Vue {
             defButton: "ok",
             text: "Möchtest Du die markierten Elemente löschen?", 
         })
-        console.log(ret)
     }
 
     async createFolder() {
         if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) {
-            await showDialog(this.$refs.dialog as Vue, {
-                ok: true, 
-                defButton: "ok",
-                text: "Du kannst hier keinen Ordner anlegen!", 
-            })
+            await this.showText("Du kannst hier keinen Ordner anlegen!")
             return
         }
         const selectedItem = await emitForResponse<Item>(this.getActiveFolder(), "getSelectedItem")
@@ -179,12 +170,22 @@ export default class App extends Vue {
             textInput: true,
             textInputValue: selectedItem.name != ".." ? selectedItem.name : ""
         })
-        console.log("ret", ret, DIALOG_OK, ret == DIALOG_OK)
         if (ret == DIALOG_OK) {
             const res = await emitForResponse<FileResult>(this.getActiveFolder(), "createFolder", (this.$refs.dialog as any).textInputValue)
-            // TODO: check result, dialog on error
-            // TODO: check result, refresh on success
-            console.log(res)
+            switch (res) {
+                case FileResult.Success:
+                    this.getActiveFolder().$emit("refresh")
+                    break
+                case FileResult.AccessDenied:
+                    await this.showText("Zugriff verweigert")
+                    break
+                case FileResult.FileExists:
+                    await this.showText("Der Ordner ist bereits vorhanden")
+                    break
+                default:
+                    await this.showText("Ordner konnte nicht angelegt werden")
+                    break
+            }
         }
     }
     
@@ -205,6 +206,14 @@ export default class App extends Vue {
         head.appendChild(link)
         this.folderLeftEventBus.$emit("themeChanged")
         this.folderRightEventBus.$emit("themeChanged")
+    }
+
+    showText = async (text: string) => {
+        await showDialog(this.$refs.dialog as Vue, {
+            ok: true, 
+            defButton: "ok",
+            text, 
+        })                    
     }
 }
 </script>
