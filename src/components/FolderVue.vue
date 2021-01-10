@@ -43,7 +43,7 @@ import {
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
     RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, 
-    Item, StringMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
+    Item, StringMsg, NumbersMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -167,6 +167,13 @@ export default class FolderVue extends Vue {
                 method: MainMsgType.CreateFolder, 
                 value: args[0]
             } as StringMsg) as FileResultResponse
+            res(mkdirResponse.value)
+        })
+        this.eventBus.$on('delete', async (res: (res: FileResult)=>void, args: number[][]) => {
+            const mkdirResponse = await this.callFunction({ 
+                method: MainMsgType.Delete, 
+                value: args[0]
+            } as NumbersMsg) as FileResultResponse
             res(mkdirResponse.value)
         })
                         

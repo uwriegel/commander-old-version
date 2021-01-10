@@ -146,14 +146,7 @@ export default class App extends Vue {
         let items = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
         if (items.length == 0)
             items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
-
-        // TODO: die selektierten Elemente/das selektierte ELEMENT
-        const ret = await showDialog(this.$refs.dialog as Vue, {
-            ok: true, 
-            cancel : true,
-            defButton: "ok",
-            text: "Möchtest Du die markierten Elemente löschen?", 
-        })
+        const res = await emitForResponse<FileResult>(this.getActiveFolder(), "delete", items)
     }
 
     async createFolder() {

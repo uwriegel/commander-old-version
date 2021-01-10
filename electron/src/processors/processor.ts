@@ -35,6 +35,7 @@ export interface IProcessor {
     getSelectedItems(): number[]
     getCurrentItem(index: number): number 
     createFolder(name: string): Promise<FileResult>
+    delete(names: number[]): Promise<FileResult>
 }
 
 export interface CheckedPath {

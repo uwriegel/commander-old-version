@@ -25,4 +25,5 @@ export class Initial implements IProcessor {
     getSelectedItems = () => []
     getCurrentItem = (index: number) => index      
     createFolder = async (name: string) => FileResult.AccessDenied       
+    delete = async (names: number[]) => FileResult.AccessDenied       
 }

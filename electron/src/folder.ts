@@ -5,7 +5,7 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -165,7 +165,15 @@ export class Folder {
                         value: mkdirResult,
                         id: createFolderMsg.id } as FileResultResponse)
                     break
-            }
+                case MainMsgType.Delete:
+                    const deleteMsg = args as NumbersMsg
+                    const delResult = await this.processor.delete(deleteMsg.value)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FuctionReturn, 
+                        value: delResult,
+                        id: deleteMsg.id } as FileResultResponse)
+                    break
+                }
         })
     }
 

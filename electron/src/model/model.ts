@@ -80,7 +80,8 @@ export enum MainMsgType {
     GetSelectedItems,
     GetCurrentItem,
     GetSelectedItem,
-    CreateFolder
+    CreateFolder,
+    Delete
 }
 
 export interface RendererMsg {
@@ -156,6 +157,10 @@ export interface IndexMsg extends MainFunctionMsg {
 
 export interface StringMsg extends MainFunctionMsg {
     value: string
+}
+
+export interface NumbersMsg extends MainFunctionMsg {
+    value: number[]
 }
 
 export interface ColumnsMsg extends RendererMsg {
