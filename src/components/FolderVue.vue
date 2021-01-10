@@ -239,7 +239,7 @@ export default class FolderVue extends Vue {
                     this.isBacktrackEnd = true
                     setTimeout(() => this.isBacktrackEnd = false, 300)
                     break
-                case RendererMsgType.FuctionReturn:
+                case RendererMsgType.FunctionReturn:
                     this.onFunctionResult(msg as RendererFunctionMsg)
                     break
             }

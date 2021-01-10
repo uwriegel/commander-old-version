@@ -147,6 +147,20 @@ export default class App extends Vue {
         if (items.length == 0)
             items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
         const res = await emitForResponse<FileResult>(this.getActiveFolder(), "delete", items)
+        switch (res) {
+            case FileResult.Success:
+                this.getActiveFolder().$emit("refresh")
+                break
+            case FileResult.AccessDenied:
+                await this.showText("Zugriff verweigert")
+                break
+            case FileResult.FileNotFound:
+                await this.showText("Das Objekt konnte nicht gefunden werden")
+                break
+            default:
+                await this.showText("Es konnte nicht gelöscht werden")
+                break
+        }
     }
 
     async createFolder() {

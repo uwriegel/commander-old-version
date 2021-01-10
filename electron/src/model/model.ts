@@ -38,7 +38,7 @@ export enum RendererMsgType {
     RestrictClose,
     BacktrackEnd,
     SendPath,
-    FuctionReturn
+    FunctionReturn
 }
 
 export enum ItemType {
