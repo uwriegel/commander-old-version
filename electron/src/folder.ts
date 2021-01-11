@@ -5,7 +5,7 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg, CopyMsg, InitMsg } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -20,7 +20,8 @@ export class Folder {
         ipcMain.on(name, async (_, args: MainMsg) => {
             switch (args.method) {
                 case MainMsgType.Init:
-                    this.init()
+                    const initmsg = args as InitMsg
+                    this.init(initmsg.path)
                     break 
                 case MainMsgType.GetItems:
                     const msg = args as GetItems
@@ -173,12 +174,20 @@ export class Folder {
                         value: delResult,
                         id: deleteMsg.id } as FileResultResponse)
                     break
+                case MainMsgType.Copy:
+                    const copyMsg = args as CopyMsg
+                    // const delResult = await this.processor.delete(deleteMsg.value)
+                    // this.sendToRenderer({ 
+                    //     method: RendererMsgType.FunctionReturn, 
+                    //     value: delResult,
+                    //     id: deleteMsg.id } as FileResultResponse)
+                    break
                 }
         })
     }
 
-    init = async () => {
-        const path = ROOT
+    init = async (pathToSet: string) => {
+        const path = pathToSet || ROOT
         this.changePathWithCheckedPath({ processor: changeProcessor(path), path }, null, true)
     }
 
@@ -213,7 +222,6 @@ export class Folder {
             this.backtrack = _.concat(this.backtrack, newPath)
             this.backtrackPosition = this.backtrack.length - 1
         }
-        // TODO: save normalized path to settings
         this.refreshView(this.processor.getIndexOfName(folderToSelect))
     }
 

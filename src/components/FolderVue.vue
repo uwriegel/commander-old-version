@@ -39,11 +39,11 @@ import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
-    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, 
+    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, InitMsg,
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
     RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, 
-    Item, StringMsg, NumbersMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
+    Item, StringMsg, NumbersMsg, CopyMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -176,6 +176,14 @@ export default class FolderVue extends Vue {
             } as NumbersMsg) as FileResultResponse
             res(mkdirResponse.value)
         })
+        this.eventBus.$on('copy', async (res: (res: FileResult)=>void, args: any[]) => {
+            const mkdirResponse = await this.callFunction({ 
+                method: MainMsgType.Copy, 
+                value: args[0] as number[],
+                move: args[1] as boolean
+            } as CopyMsg) as FileResultResponse
+            res(mkdirResponse.value)
+        })
                         
         let resolves = new Map<number, (items: any[])=>void>()
         const getItems = async (startRange: number, endRange: number) => {
@@ -202,6 +210,7 @@ export default class FolderVue extends Vue {
                 case RendererMsgType.ItemsSource:
                     const itemsSource = msg as ItemsSource
                     this.basePath = itemsSource.path
+                    localStorage.setItem(`${this.name}-path`, this.basePath)
                     this.itemsSource = { 
                         count: itemsSource.count, 
                         getItems, 
@@ -244,8 +253,9 @@ export default class FolderVue extends Vue {
                     break
             }
         })
-        const msg: MainMsg = {
+        const msg: InitMsg = {
             method: MainMsgType.Init,
+            path: localStorage[`${this.name}-path`]
         }
         ipcRenderer.send(this.name, msg)
     }

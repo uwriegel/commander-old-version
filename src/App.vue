@@ -91,6 +91,12 @@ export default class App extends Vue {
                 case MainAppMsgType.CreateFolder:
                     this.createFolder()
                     break
+                case MainAppMsgType.Copy:
+                    this.copy(false)
+                    break
+                case MainAppMsgType.Move:
+                    this.copy(true)
+                    break
             }
         })
 
@@ -196,6 +202,28 @@ export default class App extends Vue {
         }
     }
     
+    async copy(move: boolean) {
+        if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable") || !await emitForResponse<boolean>(this.getInactiveFolder(), "isWritable")) {
+            await this.showText("Du kannst die Aktion hier nicht ausführen!")
+            return
+        }
+        let items = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
+        if (items.length == 0)
+            items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
+        const res = await emitForResponse<FileResult>(this.getActiveFolder(), "copy", items, move)
+        switch (res) {
+            case FileResult.Success:
+                this.getActiveFolder().$emit("refresh")
+                break
+            case FileResult.AccessDenied:
+                await this.showText("Zugriff verweigert")
+                break
+            default:
+                await this.showText("Es ist ein Fehler aufgetreten")
+                break
+        }
+    }
+
     changeTheme = (theme: string) => {
         localStorage["theme"] = theme
 

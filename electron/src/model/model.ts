@@ -26,7 +26,9 @@ export enum MainAppMsgType {
     Preview,
     Delete,
     OpenSameFolder,
-    CreateFolder
+    CreateFolder,
+    Copy,
+    Move
 } 
 
 export enum RendererMsgType {
@@ -81,7 +83,8 @@ export enum MainMsgType {
     GetCurrentItem,
     GetSelectedItem,
     CreateFolder,
-    Delete
+    Delete,
+    Copy
 }
 
 export interface RendererMsg {
@@ -113,6 +116,10 @@ export interface FileResultResponse extends RendererFunctionMsg {
 }
 
 export interface MainMsg { method: MainMsgType }
+
+export interface InitMsg extends MainMsg {
+    path: string
+}
 
 export interface MainFunctionMsg extends MainMsg {
     id?: number
@@ -161,6 +168,11 @@ export interface StringMsg extends MainFunctionMsg {
 
 export interface NumbersMsg extends MainFunctionMsg {
     value: number[]
+}
+
+export interface CopyMsg extends MainFunctionMsg {
+    value: number[]
+    move: boolean
 }
 
 export interface ColumnsMsg extends RendererMsg {

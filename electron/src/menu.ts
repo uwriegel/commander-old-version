@@ -28,9 +28,11 @@ export const createMenuBar = (win: BrowserWindow) => {
             }, {
                 label: '&Kopieren',
                 accelerator: 'F5',
+                click: () => sendToApp(MainAppMsgType.Copy)
             }, {
                 label: '&Verschieben',
                 accelerator: 'F6',
+                click: () => sendToApp(MainAppMsgType.Move)
             }, {
                 label: '&Löschen',
                 accelerator: 'Del',
