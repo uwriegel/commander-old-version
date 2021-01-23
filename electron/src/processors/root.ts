@@ -100,6 +100,7 @@ export class Root implements IProcessor {
     getCurrentItem = (index: number) => index            
     createFolder = async (name: string) => FileResult.AccessDenied
     delete = async (names: number[]) => FileResult.AccessDenied       
+    copy = async (items: number[], target: string, move: boolean) => FileResult.AccessDenied
 
     drives: DriveItem[] = []
     originalDrives: DriveItem[] = []

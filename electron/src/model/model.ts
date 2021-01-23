@@ -172,7 +172,8 @@ export interface NumbersMsg extends MainFunctionMsg {
 
 export interface CopyMsg extends MainFunctionMsg {
     value: number[]
-    move: boolean
+    move: boolean,
+    target: string
 }
 
 export interface ColumnsMsg extends RendererMsg {

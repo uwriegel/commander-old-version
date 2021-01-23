@@ -1,4 +1,4 @@
-import { getFiles, getExifDate, createFolder, trash } from 'filesystem-utilities'
+import { getFiles, getExifDate, createFolder, trash, copy, move } from 'filesystem-utilities'
 import * as _ from 'lodash'
 import * as ioPath from 'path'
 import * as fs from 'fs'
@@ -194,10 +194,21 @@ export class Directory implements IProcessor {
         }
     }
 
-    async delete(names: number[]) {
-        const files = names.map(n => ioPath.join(this.path, this.originalItems[n].name))
+    async delete(items: number[]) {
+        const files = items.map(n => ioPath.join(this.path, this.originalItems[n].name))
         try {
             await trash(files)
+            return FileResult.Success
+        } catch (e) {
+            const fe = e as FileException
+            return fe.res
+        }
+    }
+
+    async copy(items: number[], target: string, moveFiles: boolean) {
+        const files = items.map(n => ioPath.join(this.path, this.originalItems[n].name))
+        try {
+            await (moveFiles ? move(files, target) : copy(files, target))
             return FileResult.Success
         } catch (e) {
             const fe = e as FileException

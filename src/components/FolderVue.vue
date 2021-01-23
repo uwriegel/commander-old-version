@@ -162,6 +162,7 @@ export default class FolderVue extends Vue {
             } as IndexMsg) as ItemResponse
             res(indexResult.value)
         })
+        this.eventBus.$on('getPath', async (res: (item: string)=>void) => res(this.basePath))
         this.eventBus.$on('createFolder', async (res: (res: FileResult)=>void, args: string[]) => {
             const mkdirResponse = await this.callFunction({ 
                 method: MainMsgType.CreateFolder, 
@@ -180,7 +181,8 @@ export default class FolderVue extends Vue {
             const mkdirResponse = await this.callFunction({ 
                 method: MainMsgType.Copy, 
                 value: args[0] as number[],
-                move: args[1] as boolean
+                move: args[1] as boolean,
+                target: args[2] as string
             } as CopyMsg) as FileResultResponse
             res(mkdirResponse.value)
         })

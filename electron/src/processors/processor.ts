@@ -36,6 +36,7 @@ export interface IProcessor {
     getCurrentItem(index: number): number 
     createFolder(name: string): Promise<FileResult>
     delete(names: number[]): Promise<FileResult>
+    copy(items: number[], target: string, move: boolean): Promise<FileResult>
 }
 
 export interface CheckedPath {

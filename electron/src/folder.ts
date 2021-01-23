@@ -176,11 +176,11 @@ export class Folder {
                     break
                 case MainMsgType.Copy:
                     const copyMsg = args as CopyMsg
-                    // const delResult = await this.processor.delete(deleteMsg.value)
-                    // this.sendToRenderer({ 
-                    //     method: RendererMsgType.FunctionReturn, 
-                    //     value: delResult,
-                    //     id: deleteMsg.id } as FileResultResponse)
+                    const copyResult = await this.processor.copy(copyMsg.value, copyMsg.target, copyMsg.move)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FunctionReturn, 
+                        value: copyResult,
+                        id: copyMsg.id } as FileResultResponse)
                     break
                 }
         })

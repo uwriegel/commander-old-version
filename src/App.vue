@@ -203,17 +203,20 @@ export default class App extends Vue {
     }
     
     async copy(move: boolean) {
-        if (!await emitForResponse<boolean>(this.getActiveFolder(), "isWritable") || !await emitForResponse<boolean>(this.getInactiveFolder(), "isWritable")) {
+        if ((move && !await emitForResponse<boolean>(this.getActiveFolder(), "isWritable")) || !await emitForResponse<boolean>(this.getInactiveFolder(), "isWritable")) {
             await this.showText("Du kannst die Aktion hier nicht ausführen!")
             return
         }
         let items = await emitForResponse<number[]>(this.getActiveFolder(), "getSelectedItems")
         if (items.length == 0)
             items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
-        const res = await emitForResponse<FileResult>(this.getActiveFolder(), "copy", items, move)
+        let target = await emitForResponse<string>(this.getInactiveFolder(), "getPath")
+        const res = await emitForResponse<FileResult>(this.getActiveFolder(), "copy", items, move, target)
         switch (res) {
             case FileResult.Success:
-                this.getActiveFolder().$emit("refresh")
+                this.getInactiveFolder().$emit("refresh")
+                if (move)
+                    this.getActiveFolder().$emit("refresh")
                 break
             case FileResult.AccessDenied:
                 await this.showText("Zugriff verweigert")
