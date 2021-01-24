@@ -255,6 +255,7 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
+    // TODO: Integrate all progressDatas to one
     // TODO: change Folder: clear sort or sort
     // TODO: Default file for dark theme (Linux)
     // TODO: drive types
