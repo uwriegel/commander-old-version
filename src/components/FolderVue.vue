@@ -32,17 +32,17 @@
 <script lang="ts">
 import * as _ from 'lodash'
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { map, filter } from "rxjs/operators"
-import { Observable, Subject } from 'rxjs'
+import { filter } from "rxjs/operators"
+import { Subject } from 'rxjs'
 import FolderIcon from '../icons/FolderIcon.vue'
 import FileIcon from '../icons/FileIcon.vue'
 import DriveIcon from '../icons/DriveIcon.vue'
 import ParentIcon from '../icons/ParentIcon.vue'
 import { 
-    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, MainMsg, InitMsg,
+    RendererMsgType, RendererMsg, Column, ColumnsMsg, MainMsgType, InitMsg,
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
-    RendererFunctionMsg, NumbersResponse, NumberResponse, IndexMsg, ItemResponse, 
+    RendererFunctionMsg, NumbersResponse, IndexMsg, ItemResponse, 
     Item, StringMsg, NumbersMsg, CopyMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0

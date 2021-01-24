@@ -18,7 +18,10 @@
                 <viewer class="viewer" :src=selectedItem></viewer>
             </template>			
 		</splitter-grid>
-		<div class="status">{{ selectedItem }}</div>
+		<div class="status">
+            <div class="statustext">{{ selectedItem }}</div>
+            <progress-view :progress="progress"></progress-view>
+        </div>
         <vue-dialog-box ref="dialog" @state-changed=onDialogStateChanged></vue-dialog-box>
 	</div>
 </template>
@@ -29,7 +32,8 @@ import { showDialog, DIALOG_CANCEL, DIALOG_OK } from 'dialogbox-vue'
 import { filter } from "rxjs/operators"
 import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
-import { Observable, Subject } from 'rxjs'
+import ProgressView from './components/ProgressView.vue'
+import { Subject } from 'rxjs'
 import { CHANNEL_TO_RENDERER, FileResult, Item, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
 var sendPathChanges = false
 
@@ -42,7 +46,8 @@ function emitForResponse<T>(vue: Vue, evt: string, ...args: any[]) {
 @Component({
     components: {
         FolderView,
-        Viewer
+        Viewer,
+        ProgressView
     }
 })
 export default class App extends Vue {
@@ -53,6 +58,7 @@ export default class App extends Vue {
     selectedItem = ""
     basePath = ""
     dialogOpen = false
+    progress = 25
     keyDown$ = new Subject()
     
     mounted() {
@@ -292,10 +298,14 @@ body {
     filter: blur(1px);
 }
 .status {
-    padding: 2px 2px 1px 5px;
-    height: 14px; 
+    padding: 1px 10px 1px 5px;
+    height: 16px; 
     color: var(--selected-color);
     background-color: var(--selected-background-color);
+    display: flex;
+}
+.statustext {
+    flex-grow: 1;
 }
 .hidden {
 	display: none;
