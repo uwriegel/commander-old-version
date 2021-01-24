@@ -34,7 +34,7 @@ import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import ProgressView from './components/ProgressView.vue'
 import { Subject } from 'rxjs'
-import { CHANNEL_TO_RENDERER, FileResult, Item, MainAppMsgType, THEME_BLUE } from '../electron/src/model/model'
+import { CHANNEL_TO_RENDERER, FileResult, Item, MainAppMsgType, MainMsgType, THEME_BLUE } from '../electron/src/model/model'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -58,7 +58,8 @@ export default class App extends Vue {
     selectedItem = ""
     basePath = ""
     dialogOpen = false
-    progress = 25
+    progress = 0
+    progressResetter = 0
     keyDown$ = new Subject()
     
     mounted() {
@@ -102,6 +103,18 @@ export default class App extends Vue {
                     break
                 case MainAppMsgType.Move:
                     this.copy(true)
+                    break
+                case MainAppMsgType.Progress:
+                    this.progress = args[0][0]
+                    if (this.progress == 100) {
+                        if (this.progressResetter)
+                            clearInterval(this.progressResetter)
+                        this.progressResetter = setTimeout(() => {
+                            if (this.progress == 100)
+                                this.progress = 0
+                            this.progressResetter = 0
+                        }, 10_000)
+                    }
                     break
             }
         })

@@ -28,7 +28,8 @@ export enum MainAppMsgType {
     OpenSameFolder,
     CreateFolder,
     Copy,
-    Move
+    Move,
+    Progress
 } 
 
 export enum RendererMsgType {
@@ -63,28 +64,29 @@ export interface Item {
 }
 
 export enum MainMsgType {
-    Init,
-    GetItems,
-    Action,
-    GetItemPath,
-    ChangePath,
-    Refresh,
-    Restrict,
-    RestrictClose,
-    Sort,
-    Backtrack,
-    ToggleSelection,
-    SelectAll,
-    UnselectAll,
-    SelectTo,
-    SelectFrom,
-    isWritable,
-    GetSelectedItems,
-    GetCurrentItem,
-    GetSelectedItem,
-    CreateFolder,
-    Delete,
-    Copy
+	Init,
+	GetItems,
+	Action,
+	GetItemPath,
+	ChangePath,
+	Refresh,
+	Restrict,
+	RestrictClose,
+	Sort,
+	Backtrack,
+	ToggleSelection,
+	SelectAll,
+	UnselectAll,
+	SelectTo,
+	SelectFrom,
+	isWritable,
+	GetSelectedItems,
+	GetCurrentItem,
+	GetSelectedItem,
+	CreateFolder,
+	Delete,
+	Copy,
+	Progress
 }
 
 export interface RendererMsg {

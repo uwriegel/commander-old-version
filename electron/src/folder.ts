@@ -5,11 +5,14 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg, CopyMsg, InitMsg } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg, CopyMsg, InitMsg, CHANNEL_TO_RENDERER, MainAppMsgType } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
 const fsa = fs.promises
+
+let progress = 0
+let progressRunning: NodeJS.Timeout | null
 
 export class Folder {
     constructor(ipcMain: IpcMain, webContents: Electron.WebContents, name: string) {
@@ -176,7 +179,16 @@ export class Folder {
                     break
                 case MainMsgType.Copy:
                     const copyMsg = args as CopyMsg
-                    const copyResult = await this.processor.copy(copyMsg.value, copyMsg.target, copyMsg.move)
+                    const progressor = (p: ProgressData) => progress = p.totalProgress * 100
+                    if (progressRunning)
+                        clearInterval(progressRunning)
+                    progressRunning = setInterval(() => this.sendToApp(MainAppMsgType.Progress, progress), 250)
+                    const copyResult = await this.processor.copy(copyMsg.value, copyMsg.target, copyMsg.move, progressor)
+                    progressor({name: "", size: 0, progress: 0, totalProgress: 1, totalSize: 0 })
+                    this.sendToApp(MainAppMsgType.Progress, 100)
+                    clearInterval(progressRunning)
+                    progressRunning = null
+
                     this.sendToRenderer({ 
                         method: RendererMsgType.FunctionReturn, 
                         value: copyResult,
@@ -249,6 +261,7 @@ export class Folder {
     // TODO: commander-node has Electron-Menu and Electron titlebar
 
     sendToRenderer = (msg: RendererMsg) => this.webContents.send(this.name, msg)
+    sendToApp = (msg: MainAppMsgType, ...args: any[]) => this.webContents.send(CHANNEL_TO_RENDERER, msg, args)
 
     backtrack = [] as string []
     backtrackPosition = -1

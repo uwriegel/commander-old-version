@@ -205,10 +205,10 @@ export class Directory implements IProcessor {
         }
     }
 
-    async copy(items: number[], target: string, moveFiles: boolean) {
+    async copy(items: number[], target: string, moveFiles: boolean, progress: (p: ProgressData)=>void) {
         const files = items.map(n => ioPath.join(this.path, this.originalItems[n].name))
         try {
-            await (moveFiles ? move(files, target) : copy(files, target))
+            await (moveFiles ? move(files, target, progress) : copy(files, target, progress))
             return FileResult.Success
         } catch (e) {
             const fe = e as FileException
