@@ -3,7 +3,7 @@ import * as _ from 'lodash'
 import * as ioPath from 'path'
 import * as fs from 'fs'
 import { showHidden } from '../menu'
-import { ICON_SCHEME, ItemType, Sort, FileResult } from "../model/model"
+import { ICON_SCHEME, ItemType, Sort, FileResult, ConflictItem } from "../model/model"
 import { platformMethods } from "../platforms/platform"
 import { changeProcessor, CheckedPath, IProcessor } from "./processor"
 import { ROOT } from './root'
@@ -214,6 +214,29 @@ export class Directory implements IProcessor {
             const fe = e as FileException
             return fe.res
         }
+    }
+
+    async getConflicts(items: number[], target: string) {
+        const files = items.map(n => this.originalItems[n].name)                
+        const result: ConflictItem[] = []
+        
+        const getConflicts = async (files: string[], target: string) => {
+            for (let file of files) {
+                try {
+                    const path = ioPath.join(target, file)
+                    const stat = await fsa.stat(path)
+                    if (stat.isDirectory()) {
+                        var subItems = await fsa.readdir(path)
+                        await getConflicts(subItems.map(n => ioPath.join(path, n)), ioPath.join(target, file))
+                    } else {
+                        result.push({ source: path, target: ioPath.join(target, file)})    
+                    }
+                } catch (err) { }
+            }
+        }        
+
+        getConflicts(files, target)
+        return result;
     }
 
     originalItems : DirectoryItem[] = []

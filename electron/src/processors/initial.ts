@@ -27,4 +27,5 @@ export class Initial implements IProcessor {
     createFolder = async (name: string) => FileResult.AccessDenied       
     delete = async (names: number[]) => FileResult.AccessDenied       
     copy = async (items: number[], target: string, move: boolean) => FileResult.AccessDenied
+    getConflicts = async (items: number[], target: string) => []
 }

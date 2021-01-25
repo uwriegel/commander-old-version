@@ -222,3 +222,7 @@ export interface Column {
     isExif?: boolean
 }
 
+export interface ConflictItem {
+    source: string,
+    target: string
+}

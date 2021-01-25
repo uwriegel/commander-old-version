@@ -1,4 +1,4 @@
-import { Column, Item, Sort, FileResult } from "../model/model"
+import { Column, Item, Sort, FileResult, ConflictItem } from "../model/model"
 import { Directory } from "./directory"
 import { Root, ROOT } from "./root"
 
@@ -37,6 +37,7 @@ export interface IProcessor {
     createFolder(name: string): Promise<FileResult>
     delete(names: number[]): Promise<FileResult>
     copy(items: number[], target: string, move: boolean, progress?: (p: ProgressData)=>void): Promise<FileResult>
+    getConflicts(items: number[], target: string): Promise<ConflictItem[]>
 }
 
 export interface CheckedPath {
