@@ -220,24 +220,24 @@ export class Directory implements IProcessor {
         const files = items.map(n => this.originalItems[n].name)                
         const result: ConflictItem[] = []
         
-        const getConflicts = async (files: string[], target: string) => {
+        const getConflicts = async (files: string[]) => {
             for (let file of files) {
                 try {
                     const path = ioPath.join(target, file)
                     const stat = await fsa.stat(path)
                     if (stat.isDirectory()) {
                         var subItems = await fsa.readdir(path)
-                        await getConflicts(subItems.map(n => ioPath.join(path, n)), ioPath.join(target, file))
+                        await getConflicts(subItems.map(n => ioPath.join(file, n)))
                     } else {
-                        result.push({ source: path, target: ioPath.join(target, file)})    
+                        result.push({ source: file, target: ioPath.join(target, file)})    
                     }
                 } catch (err) { }
             }
         }        
 
-        getConflicts(files, target)
+        await getConflicts(files)
         return result;
-    }
+    }   
 
     originalItems : DirectoryItem[] = []
     items: DirectoryItem[]= []

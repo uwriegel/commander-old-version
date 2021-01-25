@@ -34,7 +34,7 @@ import FolderView from './components/FolderVue.vue'
 import Viewer from './components/Viewer.vue'
 import ProgressView from './components/ProgressView.vue'
 import { Subject } from 'rxjs'
-import { CHANNEL_TO_RENDERER, FileResult, Item, MainAppMsgType, MainMsgType, THEME_BLUE } from '../electron/src/model/model'
+import { CHANNEL_TO_RENDERER, ConflictItem, FileResult, Item, MainAppMsgType, MainMsgType, THEME_BLUE } from '../electron/src/model/model'
 var sendPathChanges = false
 
 const { ipcRenderer } = window.require('electron')
@@ -230,6 +230,9 @@ export default class App extends Vue {
         if (items.length == 0)
             items = [ await emitForResponse<number>(this.getActiveFolder(), "getCurrentItem") ]
         let target = await emitForResponse<string>(this.getInactiveFolder(), "getPath")
+
+        let conflictItems = await emitForResponse<ConflictItem[]>(this.getActiveFolder(), "getConflicts", items, target)
+
         const res = await emitForResponse<FileResult>(this.getActiveFolder(), "copy", items, move, target)
         switch (res) {
             case FileResult.Success:

@@ -86,7 +86,8 @@ export enum MainMsgType {
 	CreateFolder,
 	Delete,
 	Copy,
-	Progress
+    Progress,
+    GetConflicts
 }
 
 export interface RendererMsg {
@@ -115,6 +116,10 @@ export interface ItemResponse extends RendererFunctionMsg {
 
 export interface FileResultResponse extends RendererFunctionMsg {
     value: FileResult
+}
+
+export interface ConflictItemsResponse extends RendererFunctionMsg {
+    value: ConflictItem[]
 }
 
 export interface MainMsg { method: MainMsgType }

@@ -5,7 +5,7 @@ import { platformMethods } from "./platforms/platform"
 import { ActionMsg, BackTrackMsg, ChangePathMsg, ColumnsMsg, SelectedIndexMsg, GetItems, ItemsMsg, ItemsSource, 
     MainMsg, MainMsgType, RendererMsg, RendererMsgType, 
     RestrictClose, RestrictMsg, RestrictResult, SendPath, Sort, MainFunctionMsg, BooleanResponse, 
-    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg, CopyMsg, InitMsg, CHANNEL_TO_RENDERER, MainAppMsgType } from "./model/model"
+    NumbersResponse, NumberResponse, IndexMsg, RendererFunctionMsg, ItemResponse, StringMsg, FileResultResponse, NumbersMsg, CopyMsg, InitMsg, CHANNEL_TO_RENDERER, MainAppMsgType, ConflictItemsResponse } from "./model/model"
 import { changeProcessor, CheckedPath, IProcessor } from "./processors/processor"
 import { ROOT } from "./processors/root"
 import { Initial } from "./processors/initial"
@@ -193,6 +193,14 @@ export class Folder {
                         method: RendererMsgType.FunctionReturn, 
                         value: copyResult,
                         id: copyMsg.id } as FileResultResponse)
+                    break
+                case MainMsgType.GetConflicts:
+                    const conflictsMsg = args as CopyMsg
+                    const conflicts = await this.processor.getConflicts(conflictsMsg.value, conflictsMsg.target)
+                    this.sendToRenderer({ 
+                        method: RendererMsgType.FunctionReturn, 
+                        value: conflicts,
+                        id: conflictsMsg.id } as ConflictItemsResponse)
                     break
                 }
         })

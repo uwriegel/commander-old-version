@@ -43,7 +43,7 @@ import {
     ItemsSource, GetItems, ItemsMsg, ActionMsg, SendPath, ChangePathMsg, RestrictMsg,
     RestrictResult, RestrictClose, Sort, BackTrackMsg, SelectedIndexMsg, MainFunctionMsg, BooleanResponse, 
     RendererFunctionMsg, NumbersResponse, IndexMsg, ItemResponse, 
-    Item, StringMsg, NumbersMsg, CopyMsg, FileResultResponse, FileResult } from "../../electron/src/model/model"
+    Item, StringMsg, NumbersMsg, CopyMsg, FileResultResponse, FileResult, ConflictItem, ConflictItemsResponse } from "../../electron/src/model/model"
 
 var selectionChangedIndex = 0
 
@@ -178,13 +178,21 @@ export default class FolderVue extends Vue {
             res(mkdirResponse.value)
         })
         this.eventBus.$on('copy', async (res: (res: FileResult)=>void, args: any[]) => {
-            const mkdirResponse = await this.callFunction({ 
+            const copyResponse = await this.callFunction({ 
                 method: MainMsgType.Copy, 
                 value: args[0] as number[],
                 move: args[1] as boolean,
                 target: args[2] as string
             } as CopyMsg) as FileResultResponse
-            res(mkdirResponse.value)
+            res(copyResponse.value)
+        })
+        this.eventBus.$on('getConflicts', async (res: (res: ConflictItem[])=>void, args: any[]) => {
+            const response = await this.callFunction({ 
+                method: MainMsgType.GetConflicts, 
+                value: args[0] as number[],
+                target: args[1] as string
+            } as CopyMsg) as ConflictItemsResponse
+            res(response.value)
         })
                         
         let resolves = new Map<number, (items: any[])=>void>()
