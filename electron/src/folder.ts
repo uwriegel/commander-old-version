@@ -263,6 +263,13 @@ export class Folder {
             this.sendToRenderer({ method: RendererMsgType.RestrictClose, itemsCount: this.processor.getItemsCount() } as RestrictClose )
     }
 
+    // TODO: cp: with node.js 
+    // TODO: cp: threadpool
+    // TODO: cp: cp links and symlinks
+    // TODO: cp: progress from pool
+    // TODO: mv: rename on same disk! 
+    // TODO: windows: vue-electron-titlebar without menu but settings
+    // TODO: linux: electron starts python gtk main window which captures seamless electon  main window
     // TODO: Integrate all progressDatas to one
     // TODO: change Folder: clear sort or sort
     // TODO: Default file for dark theme (Linux)
